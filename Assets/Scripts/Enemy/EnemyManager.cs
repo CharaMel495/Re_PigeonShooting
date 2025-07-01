@@ -184,6 +184,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     public void CreateSpiralEnemy(Vector3 center, int count, bool isRightSpiral)
     {
         int tableID = isRightSpiral ? 9 : 10;
+
+        var ratio = 360 / count;
         
         for (int i = 0; i < count; ++i)
         {
@@ -196,7 +198,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             // スコアを注入
             enemy.Score = enemyData.Score;
             // 移動情報を注入
-            var startAngle = 120 * (_createID % 3);
+            var startAngle = ratio * i;
             enemyData.MoveData.MoveDir = Quaternion.AngleAxis(
                 startAngle, Vector3.forward) * enemyData.MoveData.MoveDir;
             enemy.MoveData = enemyData.MoveData;

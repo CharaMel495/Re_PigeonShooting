@@ -67,7 +67,7 @@ public class Player : MonoBehaviour, ITargetProvider
             EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), Fire);
 
         // 最初は直進弾から
-        _currentShootType = PlayerBullet.ShootType.Lazer;
+        _currentShootType = PlayerBullet.ShootType.Wall;
 
         _timer = new();
 
