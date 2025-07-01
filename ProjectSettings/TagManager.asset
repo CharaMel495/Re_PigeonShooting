@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: BackGround
+    uniqueID: 2795375019
+    locked: 0
+  - name: BGObject
+    uniqueID: 3316120117
+    locked: 0
+  - name: Effects
+    uniqueID: 810241005
+    locked: 0
+  - name: Actors
+    uniqueID: 4050924545
+    locked: 0
+  - name: HitBox
+    uniqueID: 2245313487
+    locked: 0
+  - name: PostLayer
+    uniqueID: 1466666797
+    locked: 0
+  - name: UI
+    uniqueID: 1694885791
+    locked: 0
+  m_RenderingLayers:
+  - Default

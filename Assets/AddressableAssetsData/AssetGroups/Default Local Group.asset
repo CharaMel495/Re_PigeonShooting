@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_GUID: 7e1bac79df1af77478566c885fedef1d
+  m_SerializeEntries:
+  - m_GUID: 52917c355565cf44597220ef67c04962
+    m_Address: Assets/Textures/Player.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1051171d79b5274ca24b82eea2c7149
+    m_Address: Assets/Textures/PlayerLazer.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8896e1d03afe5945b5b64a3c2dff21b
+    m_Address: Assets/Textures/SimpleBullet.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df82e5758bc4afc43bc699cfa73c80ba
+    m_Address: Assets/Textures/Circle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f332d33e72d025044a8aec6333226e47
+    m_Address: Assets/Textures/EnemyOne.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fea5b27c801f98e40937484bc0be61fb
+    m_Address: Assets/ExternalResources/EnemyParamTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 35e9049fa0d09fa4f9e7d3608cab76f3, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6eadc3dabe22f41429bf08216b50664a, type: 2}
+    - {fileID: 11400000, guid: 3e24ca341f584554ab29e1f28c5a8089, type: 2}

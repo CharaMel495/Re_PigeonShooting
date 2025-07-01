@@ -1,0 +1,63 @@
+﻿using UnityEngine;
+
+/// <summary>
+/// プレイヤーを管理するクラス
+/// </summary>
+public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
+{
+    [SerializeField]
+    [Header("プレイヤー")]
+    private Player _player;
+    /// <summary>
+    /// プレイヤー
+    /// </summary>
+    public Player Player => _player;
+
+    /// <summary>
+    /// プレイヤーを移動させるクラス
+    /// </summary>
+    private PlayerMover _mover;
+
+    [SerializeField]
+    private float _moveSpeed;
+
+    [SerializeField]
+    private Rect _area;
+
+    /// <summary>
+    /// 初期化を行う関数
+    /// </summary>
+    public void Initialize()
+    {
+        _player.Initialize();
+        _player.Shooter = BulletManager.Instance.Shooter;
+        _mover = new(_moveSpeed, _area);
+        _mover.Initialize(_moveSpeed, _area);
+    }
+
+    private void Update()
+    {
+        //プレイヤーに関係するイベントの発火を見張る
+        CheckPlayerEvent();   
+    }
+
+    private void FixedUpdate()
+    {
+        _mover.MovePlayer(_player);
+    }
+
+    /// <summary>
+    /// プレイヤーに関係するイベントを見張るメソッド
+    /// </summary>
+    private void CheckPlayerEvent()
+    {
+        if (InputManager.CheckKey(InputManager.ShotKey, InputHandler.Player, isPrevious: true))
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), _player.GetBulletParameter());
+
+        if (InputManager.CheckKey(InputManager.BombKey, InputHandler.Player))
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnBombKeyPressed, "Player"));
+
+        if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.Player))
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnMenuKeyPressed, "Player"));
+    }
+}
