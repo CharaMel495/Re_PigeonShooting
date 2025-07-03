@@ -16,6 +16,8 @@ public class BulletMover
                     pos += moveData.MoveDir * moveData.MoveSpeed * Time.fixedDeltaTime;
                     // 座標を更新
                     bullet.transform.position = pos;
+
+                    bullet.MoveData.MoveSpeed += bullet.MoveData.Acceleration * Time.fixedDeltaTime;
                 }
                 break;
         }

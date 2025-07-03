@@ -15,7 +15,7 @@ public class EnemyParamTableReciever
 [System.Serializable]
 public class EnemyParamReciever
 {
-    public int Id;
+    public int ID;
     public float Size;
     public float BulletSize;
     public int SpriteID;

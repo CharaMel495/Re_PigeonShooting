@@ -25,6 +25,8 @@ namespace EnemyEnums
         Spiral_R,
         Spiral_L,
         ZigZag,
+        BarrierSpiral_R,
+        BarrierSpiral_L,
     }
 
     public enum EnemyActionType
@@ -34,7 +36,7 @@ namespace EnemyEnums
         ShootThreeWay,
         ShootFourWay,
         SpreadEight,
-        InverceThreeWay
+        InverceThreeWay,
     }
 }
 
@@ -231,6 +233,62 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         }
     }
 
+    public List<Enemy> CreateSpiralBarrierEnemy(Vector3 center, int count, bool isRightSpiral, Transform parent)
+    {
+        int tableID = isRightSpiral ? 11 : 12;
+
+        var ratio = 360 / count;
+
+        var returnList = new List<Enemy>();
+
+        for (int i = 0; i < count; ++i)
+        {
+            var enemyData = StructEnemyParamFromMasterData(tableID, EnemyEnums.EnemyType.Normal);
+            enemyData.Origin = center;
+            // 敵を生成
+            var enemy = Instantiate(_enemyPrefab, parent);
+            // 体力を注入
+            enemy.Life = enemyData.Life;
+            // スコアを注入
+            enemy.Score = enemyData.Score;
+            // 移動情報を注入
+            var startAngle = ratio * i;
+            enemyData.MoveData.MoveDir = Quaternion.AngleAxis(
+                startAngle, Vector3.forward) * enemyData.MoveData.MoveDir;
+            enemy.MoveData = enemyData.MoveData;
+            // 行動情報を注入
+            enemy.ActionData = enemyData.ActionData;
+            // 弾のサイズを設定
+            if (enemy.ActionData != null)
+                enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
+            // 初期化
+            enemy.Initialize(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
+            // 判定用の矩形を生成
+            var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
+            // アクタ名を登録
+            collider.ActorName = enemy.Name;
+            // 判定タイプを登録
+            collider.ColCategory = ColliderCategory.EnemyBody;
+            // 判定マネージャに登録通知を飛ばす
+            ColliderManager.Instance.AddCollider(collider);
+            // 生成した敵にコライダーの情報を記憶させる
+            enemy.Collider = collider;
+            // 管理対象として追加
+            _activeEnemys.Add(enemy);
+
+            ++_createID;
+
+            returnList.Add(enemy);
+
+            if (_createID < 100000)
+                continue;
+
+            _createID = 0;
+        }
+
+        return returnList;
+    }
+
     /// <summary>
     /// アクティブな弾の状態を更新するメソッド
     /// </summary>
@@ -277,19 +335,37 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             case EnemyEnums.EnemyMoveType.Spiral_R:
                 return new EnemyDataStructs.SpiralMove
                 {
-                    Acceleration = 0.2f,
+                    Acceleration = 0.8f,
                     MoveDir = Vector3.left,
                     MoveSpeed = 3.0f,
-                    SpiralRatio = 120.0f
+                    SpiralRatio = 60.0f
                 };
 
             case EnemyEnums.EnemyMoveType.Spiral_L:
                 return new EnemyDataStructs.SpiralMove
                 {
-                    Acceleration = 0.2f,
+                    Acceleration = 0.8f,
                     MoveDir = Vector3.right,
                     MoveSpeed = 3.0f,
-                    SpiralRatio = -120.0f
+                    SpiralRatio = -60.0f
+                };
+
+            case EnemyEnums.EnemyMoveType.BarrierSpiral_R:
+                return new EnemyDataStructs.SpiralMove
+                {
+                    Acceleration = 0.0f,
+                    MoveDir = Vector3.left,
+                    MoveSpeed = 15.0f,
+                    SpiralRatio = 7.5f
+                };
+
+            case EnemyEnums.EnemyMoveType.BarrierSpiral_L:
+                return new EnemyDataStructs.SpiralMove
+                {
+                    Acceleration = 0.0f,
+                    MoveDir = Vector3.right,
+                    MoveSpeed = 15.0f,
+                    SpiralRatio = -7.5f
                 };
         }
 
@@ -307,7 +383,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     ActionInterval = 1.0f,
                     BulletData = new BulletStructs.StaraightShoot
                     {
-                        MoveSpeed = 10.0f,
+                        MoveSpeed = 5.0f,
                         Scale = Vector3.one,
                         SpriteType = SpriteData.SpriteType.PlayerBullet,
                         ColCategory = ColliderCategory.EnemyBullet
@@ -321,7 +397,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     ActionInterval = 1.0f,
                     BulletData = new BulletStructs.ThreeWayShoot
                     {
-                        MoveSpeed = 10.0f,
+                        MoveSpeed = 5.0f,
                         Scale = Vector3.one,
                         SpriteType = SpriteData.SpriteType.PlayerBullet,
                         ColCategory = ColliderCategory.EnemyBullet,
@@ -336,7 +412,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     ActionInterval = 1.0f,
                     BulletData = new BulletStructs.FourWayShoot
                     {
-                        MoveSpeed = 10.0f,
+                        MoveSpeed = 5.0f,
                         Scale = Vector3.one,
                         SpriteType = SpriteData.SpriteType.PlayerBullet,
                         ColCategory = ColliderCategory.EnemyBullet,
@@ -351,7 +427,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     ActionInterval = 1.0f,
                     BulletData = new BulletStructs.SpreadEightShoot
                     {
-                        MoveSpeed = 10.0f,
+                        MoveSpeed = 5.0f,
                         Scale = Vector3.one,
                         SpriteType = SpriteData.SpriteType.PlayerBullet,
                         ColCategory = ColliderCategory.EnemyBullet,
@@ -365,7 +441,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     ActionInterval = 0.2f,
                     BulletData = new BulletStructs.ThreeWayShoot
                     {
-                        MoveSpeed = 4.0f,
+                        MoveSpeed = 5.0f,
+                        Acceleration = 0.0f,
                         Scale = Vector3.one * 0.25f,
                         SpriteType = SpriteData.SpriteType.PlayerBullet,
                         ColCategory = ColliderCategory.EnemyBullet,

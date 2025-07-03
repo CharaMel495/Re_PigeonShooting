@@ -42,7 +42,7 @@ public class Player : MonoBehaviour, ITargetProvider
     /// <summary>
     /// 弾の発射間隔
     /// </summary>
-    private const float _FIREINTERVAL = 3;
+    private const float _FIREINTERVAL = 0.1f;
 
     /// <summary>
     /// 現在の弾発射インターバル
@@ -67,7 +67,7 @@ public class Player : MonoBehaviour, ITargetProvider
             EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), Fire);
 
         // 最初は直進弾から
-        _currentShootType = PlayerBullet.ShootType.Wall;
+        _currentShootType = PlayerBullet.ShootType.MonoStraight;
 
         _timer = new();
 

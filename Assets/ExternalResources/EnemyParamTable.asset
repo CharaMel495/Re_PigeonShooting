@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyParamTable
   m_EditorClassIdentifier: 
   EnemyTable:
-  - Id: 0
+  - ID: 0
     Size: 1
     BulletSize: 0.5
     SpriteID: 1
@@ -22,7 +22,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 20
     Score: 100
-  - Id: 0
+  - ID: 1
     Size: 1
     BulletSize: 0.5
     SpriteID: 1
@@ -31,7 +31,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 2
     Size: 2
     BulletSize: 0.5
     SpriteID: 1
@@ -40,7 +40,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 3
     Size: 1
     BulletSize: 0.5
     SpriteID: 1
@@ -49,7 +49,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 4
     Size: 1
     BulletSize: 0.5
     SpriteID: 1
@@ -58,7 +58,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 5
     Size: 2
     BulletSize: 0.5
     SpriteID: 1
@@ -67,7 +67,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 6
     Size: 1
     BulletSize: 0.5
     SpriteID: 1
@@ -76,7 +76,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 7
     Size: 1
     BulletSize: 0.5
     SpriteID: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 8
     Size: 1
     BulletSize: 0.5
     SpriteID: 1
@@ -94,20 +94,38 @@ MonoBehaviour:
     ColliderType: 0
     Life: 10
     Score: 100
-  - Id: 0
+  - ID: 9
     Size: 1
     BulletSize: 0.5
-    SpriteID: 1
+    SpriteID: 4
     MoveType: 2
+    ActionType: 5
+    ColliderType: 0
+    Life: 5
+    Score: 500
+  - ID: 10
+    Size: 1
+    BulletSize: 0.5
+    SpriteID: 4
+    MoveType: 3
+    ActionType: 5
+    ColliderType: 0
+    Life: 5
+    Score: 500
+  - ID: 11
+    Size: 2
+    BulletSize: 0.5
+    SpriteID: 4
+    MoveType: 5
     ActionType: 5
     ColliderType: 0
     Life: 50
     Score: 500
-  - Id: 0
-    Size: 1
+  - ID: 12
+    Size: 2
     BulletSize: 0.5
-    SpriteID: 1
-    MoveType: 3
+    SpriteID: 4
+    MoveType: 6
     ActionType: 5
     ColliderType: 0
     Life: 50

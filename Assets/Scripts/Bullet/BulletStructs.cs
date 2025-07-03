@@ -4,13 +4,15 @@ namespace BulletStructs
 {
     public interface IBulletMoveData
     {
-
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
     }
 
     public struct StraightMove : IBulletMoveData
     {
         public Vector3 MoveDir { get; set; }
         public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
     }
 
     public interface IBulletCreateData
@@ -18,6 +20,7 @@ namespace BulletStructs
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public Vector3 Dir { get; set; }
+        public float Acceleration { get; set; }
         public SpriteData.SpriteType SpriteType { get; }
         public IBulletMoveData CreateMoveData();
         public ColliderCategory ColCategory { get; set; }
@@ -33,6 +36,7 @@ namespace BulletStructs
         public SpriteData.SpriteType SpriteType { get; set; } 
         public Vector3 Dir { get; set; }
         public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
         public ColliderCategory ColCategory { get; set; }
 
         public StaraightShoot GetData() => this;
@@ -41,7 +45,8 @@ namespace BulletStructs
             return new StraightMove
             {
                 MoveDir = Dir,
-                MoveSpeed = MoveSpeed
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
             };
         }
     }
@@ -53,6 +58,7 @@ namespace BulletStructs
         public SpriteData.SpriteType SpriteType { get; set; }
         public Vector3 Dir { get; set; }
         public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
         public float BulletSpan { get; set; }
         public ColliderCategory ColCategory { get; set; }
 
@@ -62,7 +68,8 @@ namespace BulletStructs
             return new StraightMove
             {
                 MoveDir = Dir,
-                MoveSpeed = MoveSpeed
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
             };
         }
     }
@@ -77,6 +84,7 @@ namespace BulletStructs
         public SpriteData.SpriteType SpriteType { get; set; }
         public Vector3 Dir { get; set; }
         public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
         public float AngleSpan { get; set; }
         public ColliderCategory ColCategory { get; set; }
 
@@ -86,7 +94,8 @@ namespace BulletStructs
             return new StraightMove
             {
                 MoveDir = Dir,
-                MoveSpeed = MoveSpeed
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
             };
         }
     }
@@ -101,6 +110,7 @@ namespace BulletStructs
         public SpriteData.SpriteType SpriteType { get; set; }
         public Vector3 Dir { get; set; }
         public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
         public float AngleSpan { get; set; }
         public ColliderCategory ColCategory { get; set; }
 
@@ -110,7 +120,8 @@ namespace BulletStructs
             return new StraightMove
             {
                 MoveDir = Dir,
-                MoveSpeed = MoveSpeed
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
             };
         }
     }
@@ -125,6 +136,7 @@ namespace BulletStructs
         public SpriteData.SpriteType SpriteType { get; set; }
         public Vector3 Dir { get; set; }
         public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
         public ColliderCategory ColCategory { get; set; }
 
         public SpreadEightShoot GetData() => this;
@@ -133,7 +145,8 @@ namespace BulletStructs
             return new StraightMove
             {
                 MoveDir = Dir,
-                MoveSpeed = MoveSpeed
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
             };
         }
     }
@@ -143,6 +156,7 @@ namespace BulletStructs
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public Vector3 Dir { get; set; }
+        public float Acceleration { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
         public IBulletMoveData CreateMoveData() => null;
         public ColliderCategory ColCategory { get; set; }
@@ -155,5 +169,4 @@ namespace BulletStructs
         public Vector3 Target { get; set; }
         public float Interval { get; set; }
     }
-
 }

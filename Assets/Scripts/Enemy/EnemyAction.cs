@@ -56,11 +56,19 @@ public class EnemyAction
                     var moveData = (EnemyDataStructs.SpiralMove)enemy.MoveData;
                     // 現在の座標を取得
                     var pos = enemy.transform.position;
+                    var euler = enemy.transform.localEulerAngles;
                     moveData.MoveDir = Quaternion.AngleAxis
                         (moveData.SpiralRatio * Time.fixedDeltaTime, Vector3.forward) * moveData.MoveDir;
                     moveData.MoveSpeed += moveData.ElaspedTime * moveData.Acceleration;
                     // 移動後座標を計算
                     pos += moveData.MoveDir * moveData.MoveSpeed * Time.fixedDeltaTime;
+                    // それっぽく見せる為に回転もかける
+                    euler.z += moveData.SpiralRatio * Time.fixedDeltaTime * 3.0f;
+                    if (euler.z > 180)
+                        euler.z -= 360;
+                    if (euler.z < -180)
+                        euler.z += 360;
+                    enemy.transform.localEulerAngles = euler;
                     // 座標を更新
                     enemy.transform.position = pos;
                     enemy.MoveData.MoveDir = moveData.MoveDir;

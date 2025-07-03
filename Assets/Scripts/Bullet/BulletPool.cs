@@ -1,28 +1,28 @@
-using System.Linq;
+ï»¿using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// ’e‚Ìƒv[ƒ‹‚ðˆµ‚¤ƒNƒ‰ƒX
+/// å¼¾ã®ãƒ—ãƒ¼ãƒ«ã‚’æ‰±ã†ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class BulletPool
 {
     /// <summary>
-    /// ¶¬‚µ‚½’e‚ðƒv[ƒŠƒ“ƒO‚µ‚Ä‚¨‚­•Ï”
+    /// ç”Ÿæˆã—ãŸå¼¾ã‚’ãƒ—ãƒ¼ãƒªãƒ³ã‚°ã—ã¦ãŠãå¤‰æ•°
     /// </summary>
     private Bullet[] _bulletPool;
 
     /// <summary>
-    /// ’e‚ÌƒvƒŒƒnƒu‚ð‚Ü‚Æ‚ß‚Ä‚¨‚­ƒIƒuƒWƒFƒNƒg‚Ìƒgƒ‰ƒ“ƒXƒtƒH[ƒ€
+    /// å¼¾ã®ãƒ—ãƒ¬ãƒãƒ–ã‚’ã¾ã¨ã‚ã¦ãŠãã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒˆãƒ©ãƒ³ã‚¹ãƒ•ã‚©ãƒ¼ãƒ 
     /// </summary>
     private Transform _root;
 
     /// <summary>
-    /// ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Í‹ÖŽ~
+    /// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯ç¦æ­¢
     /// </summary>
     private BulletPool() { }
 
     /// <summary>
-    /// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+    /// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     /// </summary>
     public BulletPool(Bullet bulletPrefab, Transform root)
     {
@@ -32,23 +32,23 @@ public class BulletPool
     }
 
     /// <summary>
-    /// ’e‚Ìƒv[ƒ‹‚ðì¬‚·‚éƒƒ\ƒbƒh
+    /// å¼¾ã®ãƒ—ãƒ¼ãƒ«ã‚’ä½œæˆã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
     public void CreatePool(Bullet bulletPrefab)
     {
         for (int idx = 0; idx < _bulletPool.Length; ++idx)
         {
-            // ’e‚ð¶¬
+            // å¼¾ã‚’ç”Ÿæˆ
             _bulletPool[idx] = Object.Instantiate(bulletPrefab, _root);
-            // ’e‚ð‰Šú‰»
+            // å¼¾ã‚’åˆæœŸåŒ–
             _bulletPool[idx].Initialize();
         }
     }
 
     /// <summary>
-    /// ’eƒv[ƒ‹‚©‚ç’e‚ðˆê‚ÂŽæ‚èo‚·ƒƒ\ƒbƒh
+    /// å¼¾ãƒ—ãƒ¼ãƒ«ã‹ã‚‰å¼¾ã‚’ä¸€ã¤å–ã‚Šå‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
-    /// <returns>ƒv[ƒ‹‚Ì“à”ñƒAƒNƒeƒBƒu‚ÈÅ‰‚Ì’e‚ð•Ô‚·</returns>
+    /// <returns>ãƒ—ãƒ¼ãƒ«ã®å†…éžã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªæœ€åˆã®å¼¾ã‚’è¿”ã™</returns>
     public Bullet GetBulletFromPool()
     {
         return _bulletPool.First(bullet => !bullet.IsActive);

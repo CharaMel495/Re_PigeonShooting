@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// 画面外の生存時間は5秒(300f)
     /// </summary>
-    private const int _LIFETIME = 300;
+    private const int _LIFETIME = 120;
 
     /// <summary>
     /// 残り生存期間
