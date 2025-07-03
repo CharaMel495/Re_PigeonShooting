@@ -355,8 +355,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                 {
                     Acceleration = 0.0f,
                     MoveDir = Vector3.left,
-                    MoveSpeed = 15.0f,
-                    SpiralRatio = 7.5f
+                    MoveSpeed = 5.0f,
+                    SpiralRatio = 180.0f
                 };
 
             case EnemyEnums.EnemyMoveType.BarrierSpiral_L:
@@ -364,8 +364,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                 {
                     Acceleration = 0.0f,
                     MoveDir = Vector3.right,
-                    MoveSpeed = 15.0f,
-                    SpiralRatio = -7.5f
+                    MoveSpeed = 5.0f,
+                    SpiralRatio = -180.0f
                 };
         }
 

@@ -25,7 +25,7 @@ public class Boss : MonoBehaviour
         _currentAction = new BossDataStructs.SpreadBarrage{
             SummonEnemyVal = 5,
             transform = this.transform,
-            ActionInterval = 6.0f,
+            ActionInterval = 60.0f,
             RemainInterval = 0.0f
         };
     }
