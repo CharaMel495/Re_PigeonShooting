@@ -20,7 +20,7 @@ public class Boss : MonoBehaviour
     public void Initialize()
     {
         _renderer.Initialize();
-        _renderer.SetSprite(SpriteManager.GetSprite(SpriteData.SpriteType.NormalEnemy));
+        _renderer.SetSprite(SpriteManager.GetSprite(SpriteData.SpriteType.BossShip));
 
         _currentAction = new BossDataStructs.SpreadBarrage{
             SummonEnemyVal = 5,

@@ -10,7 +10,8 @@ namespace SpriteData
         NormalEnemy,
         Player,
         PlayerLazer,
-        SpinningEnemy
+        SpinningEnemy,
+        BossShip
     }
 }
 
@@ -39,6 +40,7 @@ public class SpriteManager
                 SpriteData.SpriteType.Player => SummarizeResourceDirectory.PLAYER_TEX,
                 SpriteData.SpriteType.PlayerLazer => SummarizeResourceDirectory.PLAYERLAZER_TEX,
                 SpriteData.SpriteType.SpinningEnemy => SummarizeResourceDirectory.SPINNINGENEMY_TEX,
+                SpriteData.SpriteType.BossShip => SummarizeResourceDirectory.BOSSSHIP_TEX,
                 _ => null
             };
         }

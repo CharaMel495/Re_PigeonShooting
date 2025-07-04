@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 7e1bac79df1af77478566c885fedef1d
   m_SerializeEntries:
+  - m_GUID: 49aa25113f0390f409f5ee6c6a0e8bf1
+    m_Address: Assets/Textures/BossShip.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 52917c355565cf44597220ef67c04962
     m_Address: Assets/Textures/Player.png
     m_ReadOnly: 0
