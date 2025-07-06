@@ -23,7 +23,7 @@ namespace BossDataStructs
         }
 
         public int SummonEnemyVal { get; set; }
-        public Transform transform { get; set; }
+        public Transform Transform { get; set; }
         public float ActionInterval { get; set; }
         public float RemainInterval { get; set; }
         public List<Enemy> BarrierEnemyes { get; set; }
@@ -54,11 +54,11 @@ namespace BossDataStructs
         {
             if (RemainInterval < 0.1f)
                 BarrierEnemyes = EnemyManager.Instance.CreateSpiralBarrierEnemy(
-                    transform.position,
+                    Transform.position,
                     SummonEnemyVal,
                     3.0f,
                     UnityEngine.Random.Range(0, 100) % 2 == 0,
-                    transform);
+                    Transform);
 
             RemainInterval = ActionInterval;
 
@@ -75,6 +75,69 @@ namespace BossDataStructs
             }
 
             _currentMode = Mode.End;
+        }
+    }
+
+    public class ShootMissiles : IBossAction
+    {
+        public float ActionInterval { get; set; }
+        public float RemainInterval { get; set; }
+        public Transform Transform { get; set; }
+
+        public void Initialize()
+        {
+
+        }
+
+        public bool IsFinished()
+        {
+            return false;
+        }
+
+        public void Act()
+        {
+            EnemyManager.Instance.CreateEnemy(13, Transform.position, GetRandomAngle());
+
+            RemainInterval = ActionInterval;
+        }
+
+        private Vector3 GetRandomAngle()
+        {
+            float randomAngle = UnityEngine.Random.Range(-90f, 90f);
+            Vector3 dir = Quaternion.Euler(0, 0, randomAngle) * Vector3.right;
+
+            return dir;
+        }
+    }
+
+    public class DiscShot : IBossAction
+    {
+        public float ActionInterval { get; set; }
+        public float RemainInterval { get; set; }
+        public Transform Transform { get; set; }
+        public BulletStructs.RingShot LittleRing { get; set; }
+        public BulletStructs.RingShot BigRing { get; set; }
+
+        public void Initialize()
+        {
+
+        }
+        public bool IsFinished()
+        {
+            return false;
+        }
+
+        public void Act()
+        {
+            var bigRing = BigRing;
+            bigRing.Origin = Transform.position;
+            var littleRing = LittleRing;
+            littleRing.Origin = Transform.position;
+
+            BulletManager.Instance.Shooter.Shoot(bigRing);
+            BulletManager.Instance.Shooter.Shoot(littleRing);
+
+            RemainInterval = ActionInterval;
         }
     }
 

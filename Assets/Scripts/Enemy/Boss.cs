@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -6,10 +7,23 @@ using UnityEngine;
 /// </summary>
 public class Boss : MonoBehaviour
 {
+    private enum ActionType
+    {
+        SpreadBarrage,
+        ShootMissile,
+        DiscShot
+    }
+
     /// <summary>
     /// 現在のアクション
     /// </summary>
-    public BossDataStructs.IBossAction _currentAction;
+    private ActionType _currentAction;
+
+    private ActionType[] _actionPattern;
+
+    private int _currentPattern = 0;
+
+    private Dictionary<ActionType, BossDataStructs.IBossAction> _actions;
 
     [SerializeField]
     private SpriteRendererWrapper _renderer;
@@ -41,28 +55,91 @@ public class Boss : MonoBehaviour
         _timer = new();
         _timer.Initialize();
 
-        _currentAction = new BossDataStructs.SpreadBarrage{
-            SummonEnemyVal = 5,
-            transform = this.transform,
-            ActionInterval = 10.0f,
-            RemainInterval = 0.0f
+        _actions = new()
+        {
+            {
+                ActionType.SpreadBarrage,
+                new BossDataStructs.SpreadBarrage
+                {
+                    SummonEnemyVal = 5,
+                    Transform = this.transform,
+                    ActionInterval = 10.0f,
+                    RemainInterval = 0.0f
+                }
+            },
+
+            {
+                ActionType.ShootMissile,
+                new BossDataStructs.ShootMissiles
+                {
+                    ActionInterval = 0.8f,
+                    Transform = this.transform
+                }
+            },
+
+            {
+                ActionType.DiscShot,
+                new BossDataStructs.DiscShot
+                {
+                    ActionInterval = 0.75f,
+                    Transform = this.transform,
+                    LittleRing = new BulletStructs.RingShot
+                    {
+                        Acceleration = 0.1f,
+                        DisAcceleration = 0.5f,
+                        ColCategory = ColliderCategory.EnemyBullet,
+                        Dir = this.transform.right,
+                        MoveSpeed = 1.0f,
+                        Scale = Vector3.one * 0.75f,
+                        SpriteType = SpriteData.SpriteType.PlayerBullet
+                    },
+                    BigRing = new BulletStructs.RingShot
+                    {
+                        Acceleration = 0.0f,
+                        DisAcceleration = 2.0f,
+                        ColCategory = ColliderCategory.EnemyBullet,
+                        Dir = this.transform.right,
+                        MoveSpeed = 5.5f,
+                        Scale = Vector3.one * 1.0f,
+                        SpriteType = SpriteData.SpriteType.PlayerBullet
+                    }
+                }
+            }
         };
 
-        _currentAction.Initialize();
+        _actionPattern = new ActionType[]
+        {
+            ActionType.DiscShot,
+            ActionType.SpreadBarrage,
+            ActionType.ShootMissile,
+        };
+
+        foreach (var action in _actions.Values)
+            action.Initialize();
+
+        _currentPattern = 0;
+        _currentAction = _actionPattern[_currentPattern];
 
         EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, _rect.ActorName), OnHit);
     }
 
     private void FixedUpdate()
     {
-        if (_currentAction.RemainInterval > 0.0f)
-            _currentAction.RemainInterval -= Time.fixedDeltaTime;
+        _timer.Update();
+
+        var currentAction = _actions[_currentAction];
+
+        if (currentAction.RemainInterval > 0.0f)
+            currentAction.RemainInterval -= Time.fixedDeltaTime;
         else
             Action();
 
+        if (currentAction.IsFinished())
+            ChangeNextAction();
+
         this.transform.position = new Vector3
             (
-                Mathf.Cos(Time.fixedTime) + 3,
+                Mathf.Cos(Time.fixedTime) + 6,
                 Mathf.Sin(Time.fixedTime)
             );
 
@@ -79,7 +156,14 @@ public class Boss : MonoBehaviour
 
     public void Action()
     {
-        _currentAction.Act();
+        _actions[_currentAction].Act();
+    }
+
+    private void ChangeNextAction()
+    {
+        ++_currentPattern;
+        _currentAction = _actionPattern[_currentPattern];
+        _actions[_currentAction].Initialize();
     }
 
     public void OnHit(object data)

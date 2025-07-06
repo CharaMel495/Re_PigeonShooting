@@ -35,6 +35,9 @@ namespace EnemyDataStructs
         public Vector3 MoveDir { get; set; }
     }
 
+    /// <summary>
+    /// 指定ポイントに行ったら停止する敵
+    /// </summary>
     public struct StopPointMove : IEnemyMoveData
     {
         public float MoveSpeed { get; set; }
@@ -43,8 +46,12 @@ namespace EnemyDataStructs
         public Vector3 MoveDir { get; set; }
         public Vector3 TargetPoint { get; set; }
         public float StopThreshold { get; set; }
+        public IEnemyMoveData NextMove { get; set; }
     }
 
+    /// <summary>
+    /// 渦を巻くように動く敵
+    /// </summary>
     public struct SpiralMove : IEnemyMoveData
     {
         public float MoveSpeed { get; set; }
@@ -52,6 +59,21 @@ namespace EnemyDataStructs
         public float ElaspedTime { get; set; }
         public Vector3 MoveDir { get; set; }
         public float SpiralRatio { get; set; }
+    }
+
+    /// <summary>
+    /// プレイヤーにミサイルのように突っ込んでいく敵
+    /// </summary>
+    public struct MissileMove : IEnemyMoveData
+    {
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float DisAcceleration { get; set; }
+        public float ElaspedTime { get; set; }
+        public Vector3 MoveDir { get; set; }
+        public float TurnRate { get; set; }
+        public ITargetProvider Target { get; set; }
+        public bool IsStraight { get; set; }
     }
 
     /// <summary>

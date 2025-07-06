@@ -38,7 +38,7 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// 画面外の生存時間は5秒(300f)
     /// </summary>
-    private const int _LIFETIME = 120;
+    private const int _LIFETIME = 30;
 
     /// <summary>
     /// 残り生存期間
@@ -82,6 +82,9 @@ public class Enemy : MonoBehaviour
         _timer = new();
 
         EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
+
+        if (MoveData is EnemyDataStructs.MissileMove)
+            this.transform.up = MoveData.MoveDir;
     }
 
     private void FixedUpdate()

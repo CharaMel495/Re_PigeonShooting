@@ -34,8 +34,8 @@ public class EnemyAction
                     {
                         // 誤差を修正
                         enemy.transform.position = moveData.TargetPoint;
-                        // 移動情報を移動禁止に
-                        enemy.MoveData = new EnemyDataStructs.NoMove();
+                        // 移動情報を次のものに上書き
+                        enemy.MoveData = moveData.NextMove;
                         return;
                     }
 
@@ -74,6 +74,47 @@ public class EnemyAction
                     enemy.MoveData.MoveDir = moveData.MoveDir;
                 }
                 break;
+
+            case EnemyDataStructs.MissileMove:
+                {
+                    // 移動データを取得
+                    var moveData = (EnemyDataStructs.MissileMove)enemy.MoveData;
+
+                    if (moveData.IsStraight)
+                    {
+                        // 現在の移動速度を経過時間から計算
+                        moveData.MoveSpeed += moveData.Acceleration * moveData.ElaspedTime;
+
+                        // 移動（前方向へ）
+                        enemy.transform.position += enemy.transform.up *
+                            moveData.MoveSpeed * Time.fixedDeltaTime;
+                    }
+                    else
+                    {
+                        Vector3 dir = (moveData.Target.GetPostion() - enemy.transform.position).normalized;
+                        Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, dir);
+
+                        // 徐々に向く
+                        enemy.transform.rotation = Quaternion.RotateTowards(
+                            enemy.transform.rotation,
+                            targetRotation,
+                            moveData.TurnRate * Time.fixedDeltaTime
+                        );
+
+                        // 現在の移動速度を経過時間から計算
+                        moveData.MoveSpeed += moveData.DisAcceleration * Time.fixedDeltaTime;
+
+                        // 移動（前方向へ）
+                        enemy.transform.position += enemy.transform.up *
+                            moveData.MoveSpeed * Time.fixedDeltaTime;
+
+                        // 速度が負の値にまで落ちたら直進に切替
+                        moveData.IsStraight = enemy.MoveData.MoveSpeed < 0.0f;
+                    }
+
+                    enemy.MoveData = moveData;
+                }
+                break;
         }
     }
 
@@ -101,6 +142,9 @@ public class EnemyAction
 
                     if (enemy.MoveData is EnemyDataStructs.SpiralMove)
                         data.BulletData.Dir = -((EnemyDataStructs.SpiralMove)enemy.MoveData).MoveDir;
+
+                    if (enemy.MoveData is EnemyDataStructs.MissileMove)
+                        data.BulletData.Dir = -enemy.transform.up;
 
                     shooter.Shoot(data.BulletData);
                 }

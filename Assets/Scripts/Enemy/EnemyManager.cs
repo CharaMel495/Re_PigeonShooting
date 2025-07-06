@@ -27,6 +27,7 @@ namespace EnemyEnums
         ZigZag,
         BarrierSpiral_R,
         BarrierSpiral_L,
+        Missile
     }
 
     public enum EnemyActionType
@@ -122,7 +123,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         FlashActiveBulletsList();
     }
 
-    public void CreateEnemy(int tableID, Vector3 createPos)
+    public void CreateEnemy(int tableID, Vector3 createPos, Vector3 moveDir = new())
     {
         var enemyData = StructEnemyParamFromMasterData(tableID,EnemyEnums.EnemyType.Normal);
         enemyData.Origin = createPos;
@@ -134,6 +135,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         // スコアを注入
         enemy.Score = enemyData.Score;
         // 移動情報を注入
+        if (moveDir != Vector3.zero)
+            enemyData.MoveData.MoveDir = moveDir;
         if (enemyData.MoveData is EnemyDataStructs.StopPointMove)
         {
             var data = (EnemyDataStructs.StopPointMove)enemyData.MoveData;
@@ -325,6 +328,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     {
         switch (moveType)
         {
+            // 0
             case EnemyEnums.EnemyMoveType.Straight:
                 return new EnemyDataStructs.StrainghtNormalMove
                 {
@@ -333,13 +337,16 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     MoveSpeed = 3.0f
                 };
 
+            // 1
             case EnemyEnums.EnemyMoveType.StopPoint:
                 return new EnemyDataStructs.StopPointMove
                 {
                     MoveSpeed = 2.0f,
-                    StopThreshold = 0.1f
+                    StopThreshold = 0.1f,
+                    NextMove = new EnemyDataStructs.NoMove()
                 };
 
+            // 2
             case EnemyEnums.EnemyMoveType.Spiral_R:
                 return new EnemyDataStructs.SpiralMove
                 {
@@ -349,6 +356,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     SpiralRatio = 60.0f
                 };
 
+            // 3
             case EnemyEnums.EnemyMoveType.Spiral_L:
                 return new EnemyDataStructs.SpiralMove
                 {
@@ -358,6 +366,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     SpiralRatio = -60.0f
                 };
 
+            // 5
             case EnemyEnums.EnemyMoveType.BarrierSpiral_R:
                 return new EnemyDataStructs.SpiralMove
                 {
@@ -367,6 +376,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     SpiralRatio = 180.0f
                 };
 
+            // 6
             case EnemyEnums.EnemyMoveType.BarrierSpiral_L:
                 return new EnemyDataStructs.SpiralMove
                 {
@@ -374,6 +384,18 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     MoveDir = Vector3.right,
                     MoveSpeed = 3.0f,
                     SpiralRatio = -180.0f
+                };
+
+            // 7
+            case EnemyEnums.EnemyMoveType.Missile:
+                return new EnemyDataStructs.MissileMove
+                {
+                    MoveSpeed = 2.5f,
+                    Acceleration = 0.15f,
+                    DisAcceleration = -0.7f,
+                    Target = PlayerManager.Instance.Player,
+                    TurnRate = 80.0f,
+                    IsStraight = false,
                 };
         }
 

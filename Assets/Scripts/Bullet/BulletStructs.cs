@@ -15,6 +15,17 @@ namespace BulletStructs
         public float Acceleration { get; set; }
     }
 
+    public struct StraightAndAimingMove : IBulletMoveData
+    {
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float DisAcceleration { get; set; }
+        public Vector3 MoveDir { get; set; }
+        public Vector3 SecondDir { get; set; }
+        public ITargetProvider Target { get; set; }
+        public bool IsStraight { get; set; }
+    }
+
     public interface IBulletCreateData
     {
         public Vector3 Origin { get; set; }
@@ -127,7 +138,7 @@ namespace BulletStructs
     }
 
     /// <summary>
-    /// 4方向スプレッド弾
+    /// 8方向スプレッド弾
     /// </summary>
     public struct SpreadEightShoot : IBulletCreateData
     {
@@ -147,6 +158,88 @@ namespace BulletStructs
                 MoveDir = Dir,
                 MoveSpeed = MoveSpeed,
                 Acceleration = Acceleration
+            };
+        }
+    }
+
+    /// <summary>
+    /// 直進で動く弾用の構造体
+    /// </summary>
+    public struct StraightAimingShoot : IBulletCreateData
+    {
+        public Vector3 Origin { get; set; }
+        public Vector3 Scale { get; set; }
+        public SpriteData.SpriteType SpriteType { get; set; }
+        public Vector3 Dir { get; set; }
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float DisAcceleration { get; set; }
+        public ColliderCategory ColCategory { get; set; }
+
+        public StraightAimingShoot GetData() => this;
+        public IBulletMoveData CreateMoveData()
+        {
+            return new StraightAndAimingMove
+            {
+                MoveDir = Dir,
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration,
+                DisAcceleration = DisAcceleration,
+                Target = PlayerManager.Instance.Player
+            };
+        }
+    }
+
+    /// <summary>
+    /// 8方向スプレッド弾
+    /// </summary>
+    public struct SpreadEightAimingShoot : IBulletCreateData
+    {
+        public Vector3 Origin { get; set; }
+        public Vector3 Scale { get; set; }
+        public SpriteData.SpriteType SpriteType { get; set; }
+        public Vector3 Dir { get; set; }
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float DisAcceleration { get; set; }
+        public ColliderCategory ColCategory { get; set; }
+
+        public SpreadEightAimingShoot GetData() => this;
+        public IBulletMoveData CreateMoveData()
+        {
+            return new StraightAndAimingMove
+            {
+                MoveDir = Dir,
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration,
+                DisAcceleration = DisAcceleration,
+                Target = PlayerManager.Instance.Player
+            };
+        }
+    }
+
+    public struct RingShot : IBulletCreateData
+    {
+        public Vector3 Origin { get; set; }
+        public Vector3 Scale { get; set; }
+        public SpriteData.SpriteType SpriteType { get; set; }
+        public Vector3 Dir { get; set; }
+        public Vector3 SecondDir { get; set; }
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float DisAcceleration { get; set; }
+        public ColliderCategory ColCategory { get; set; }
+
+        public RingShot GetData() => this;
+        public IBulletMoveData CreateMoveData()
+        {
+            return new StraightAndAimingMove
+            {
+                MoveDir = Dir,
+                SecondDir = SecondDir,
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration,
+                DisAcceleration = DisAcceleration
             };
         }
     }

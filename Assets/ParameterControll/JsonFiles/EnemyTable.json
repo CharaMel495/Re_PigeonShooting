@@ -142,6 +142,28 @@
 			"ColliderType":"0",
 			"Life":"50",
 			"Score":"500"
+		},
+		{
+			"ID":"13",
+			"Size":"1",
+			"BulletSize":"0.5",
+			"SpriteID":"6",
+			"MoveType":"7",
+			"ActionType":"5",
+			"ColliderType":"0",
+			"Life":"5",
+			"Score":"200"
+		},
+		{
+			"ID":"14",
+			"Size":"0.8",
+			"BulletSize":"0.5",
+			"SpriteID":"6",
+			"MoveType":"7",
+			"ActionType":"5",
+			"ColliderType":"0",
+			"Life":"5",
+			"Score":"200"
 		}
 	]
 }

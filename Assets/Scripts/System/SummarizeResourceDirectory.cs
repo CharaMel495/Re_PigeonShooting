@@ -13,6 +13,7 @@ public class SummarizeResourceDirectory
     public const string PLAYERLAZER_TEX = "Assets/Textures/PlayerLazer.png";
     public const string SPINNINGENEMY_TEX = "Assets/Textures/CandyBall.png";
     public const string BOSSSHIP_TEX = "Assets/Textures/BossShip.png";
+    public const string MISSILE_TEX = "Assets/Textures/IceMissile.png";
 
     // ScriptableObjectDirectory
 
