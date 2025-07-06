@@ -46,6 +46,10 @@ namespace EnemyEnums
 public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 {
     [SerializeField]
+    [Header("今はテスト用、将来的にはプレハブにする")]
+    private Boss Hoge;
+
+    [SerializeField]
     [Header("敵プレハブ")]
     private Enemy _enemyPrefab;
 
@@ -87,6 +91,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         _tableAsset = Addressables.LoadAssetAsync<EnemyParamTableAsset>
             (SummarizeResourceDirectory.ENEMYTABLEASSET_PATH).WaitForCompletion();
         _createID = 0;
+
+        Hoge.Initialize();
     }
 
     private void FixedUpdate()
@@ -233,7 +239,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         }
     }
 
-    public List<Enemy> CreateSpiralBarrierEnemy(Vector3 center, int count, bool isRightSpiral, Transform parent)
+    public List<Enemy> CreateSpiralBarrierEnemy(Vector3 center, int count, float radius, bool isRightSpiral, Transform parent)
     {
         int tableID = isRightSpiral ? 11 : 12;
 
@@ -253,9 +259,11 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             enemy.Score = enemyData.Score;
             // 移動情報を注入
             var startAngle = ratio * i;
-            enemyData.MoveData.MoveDir = Quaternion.AngleAxis(
+            EnemyDataStructs.SpiralMove moveData = (EnemyDataStructs.SpiralMove)enemyData.MoveData;
+            moveData.MoveDir = Quaternion.AngleAxis(
                 startAngle, Vector3.forward) * enemyData.MoveData.MoveDir;
-            enemy.MoveData = enemyData.MoveData;
+            moveData.SpiralRatio = (moveData.MoveSpeed / radius) * Mathf.Rad2Deg;
+            enemy.MoveData = moveData;
             // 行動情報を注入
             enemy.ActionData = enemyData.ActionData;
             // 弾のサイズを設定
@@ -355,7 +363,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                 {
                     Acceleration = 0.0f,
                     MoveDir = Vector3.left,
-                    MoveSpeed = 5.0f,
+                    MoveSpeed = 3.0f,
                     SpiralRatio = 180.0f
                 };
 
@@ -364,7 +372,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                 {
                     Acceleration = 0.0f,
                     MoveDir = Vector3.right,
-                    MoveSpeed = 5.0f,
+                    MoveSpeed = 3.0f,
                     SpiralRatio = -180.0f
                 };
         }
