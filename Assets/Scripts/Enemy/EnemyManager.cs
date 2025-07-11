@@ -93,7 +93,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             (SummarizeResourceDirectory.ENEMYTABLEASSET_PATH).WaitForCompletion();
         _createID = 0;
 
-        Hoge.Initialize();
+        //Hoge.Initialize();
     }
 
     private void FixedUpdate()

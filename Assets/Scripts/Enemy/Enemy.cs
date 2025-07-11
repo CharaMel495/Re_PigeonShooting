@@ -137,6 +137,7 @@ public class Enemy : MonoBehaviour
         if (Life < 1)
         {
             IsDestroyWaiting = true;
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnSmashed, "Player"), 1);
             return;
         }
 

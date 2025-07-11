@@ -55,6 +55,7 @@ public static class EventNames
         {
             Events.OnHit => $"{eventOwner}OnDamaged",
             Events.OnDead => $"{eventOwner}OnDead",
+            Events.OnSmashed => $"{eventOwner}OnSmashed",
             Events.OnShotKeyPressed => $"{eventOwner}OnShotKeyPressed",
             Events.OnSubShotKeyPressed => $"{eventOwner}OnSubShotKeyPressed",
             Events.OnBombKeyPressed => $"{eventOwner}OnBombKeyPressed",
@@ -69,6 +70,7 @@ public enum Events
 {
     OnHit,
     OnDead,
+    OnSmashed,
     OnShotKeyPressed,
     OnSubShotKeyPressed,
     OnBombKeyPressed,

@@ -244,6 +244,32 @@ namespace BulletStructs
         }
     }
 
+    /// <summary>
+    /// 5方向スプレッド弾+後方単発
+    /// </summary>
+    public struct FiveWayAndBackMonoShoot : IBulletCreateData
+    {
+        public Vector3 Origin { get; set; }
+        public Vector3 Scale { get; set; }
+        public SpriteData.SpriteType SpriteType { get; set; }
+        public Vector3 Dir { get; set; }
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float AngleSpan { get; set; }
+        public ColliderCategory ColCategory { get; set; }
+
+        public FiveWayAndBackMonoShoot GetData() => this;
+        public IBulletMoveData CreateMoveData()
+        {
+            return new StraightMove
+            {
+                MoveDir = Dir,
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
+            };
+        }
+    }
+
     public struct LazerParam : IBulletCreateData
     {
         public Vector3 Origin { get; set; }
