@@ -130,6 +130,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
         // 敵を生成
         var enemy = Instantiate(_enemyPrefab, enemyData.Origin, Quaternion.identity);
+        enemy.transform.localScale = enemyData.Scale;
         // 体力を注入
         enemy.Life = enemyData.Life;
         // スコアを注入
@@ -390,9 +391,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             case EnemyEnums.EnemyMoveType.Missile:
                 return new EnemyDataStructs.MissileMove
                 {
-                    MoveSpeed = 2.5f,
+                    MoveSpeed = 5.0f,
                     Acceleration = 0.15f,
-                    DisAcceleration = -0.7f,
+                    DisAcceleration = -2.0f,
                     Target = PlayerManager.Instance.Player,
                     TurnRate = 80.0f,
                     IsStraight = false,

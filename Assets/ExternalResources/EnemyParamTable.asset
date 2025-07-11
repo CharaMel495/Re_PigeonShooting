@@ -131,8 +131,8 @@ MonoBehaviour:
     Life: 50
     Score: 500
   - ID: 13
-    Size: 1
-    BulletSize: 0.5
+    Size: 2.5
+    BulletSize: 1
     SpriteID: 6
     MoveType: 7
     ActionType: 5

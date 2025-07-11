@@ -37,6 +37,9 @@ namespace BossDataStructs
                 { Mode.SpawnEnemys, SpawnEnemys },
                 { Mode.ReleaseEnemys, ReleaseEnemys }
             };
+
+            _currentMode = Mode.SpawnEnemys;
+            RemainInterval = 0.0f;
         }
 
         public bool IsFinished()
@@ -71,6 +74,7 @@ namespace BossDataStructs
             {
                 EnemyDataStructs.SpiralMove moveData = (EnemyDataStructs.SpiralMove)enemy.MoveData;
                 moveData.SpiralRatio = moveData.SpiralRatio * 0.2f;
+                moveData.MoveSpeed = moveData.MoveSpeed * 3.0f;
                 enemy.MoveData = moveData;
             }
 
@@ -83,15 +87,17 @@ namespace BossDataStructs
         public float ActionInterval { get; set; }
         public float RemainInterval { get; set; }
         public Transform Transform { get; set; }
+        private int ShotCount { get; set; }
+        public int ShotValue { get; set; }
 
         public void Initialize()
         {
-
+            ShotCount = 0;
         }
 
         public bool IsFinished()
         {
-            return false;
+            return ShotCount >= ShotValue;
         }
 
         public void Act()
@@ -99,6 +105,8 @@ namespace BossDataStructs
             EnemyManager.Instance.CreateEnemy(13, Transform.position, GetRandomAngle());
 
             RemainInterval = ActionInterval;
+
+            ++ShotCount;
         }
 
         private Vector3 GetRandomAngle()
@@ -117,14 +125,17 @@ namespace BossDataStructs
         public Transform Transform { get; set; }
         public BulletStructs.RingShot LittleRing { get; set; }
         public BulletStructs.RingShot BigRing { get; set; }
+        private int ShotCount { get; set; }
+        public int ShotValue { get; set; }
 
         public void Initialize()
         {
-
+            ShotCount = 0;
         }
+
         public bool IsFinished()
         {
-            return false;
+            return ShotCount >= ShotValue;
         }
 
         public void Act()
@@ -138,6 +149,8 @@ namespace BossDataStructs
             BulletManager.Instance.Shooter.Shoot(littleRing);
 
             RemainInterval = ActionInterval;
+
+            ++ShotCount;
         }
     }
 

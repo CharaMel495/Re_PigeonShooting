@@ -8,6 +8,7 @@ namespace PlayerBullet
     {
         MonoStraight,
         ThreeWay,
+        FourWayAndBackMono,
         TwoWay,
         Lazer,
         Wall,
@@ -54,6 +55,11 @@ public class Player : MonoBehaviour, ITargetProvider
     /// </summary>
     private PlayerBullet.ShootType _currentShootType;
 
+    /// <summary>
+    /// 現在のサブ弾発射タイプ
+    /// </summary>
+    private PlayerBullet.ShootType _currentSubShootType;
+
     private const float _INVINCIBLETIME = 0.5f;
 
     private bool _isInvincible = false;
@@ -66,8 +72,12 @@ public class Player : MonoBehaviour, ITargetProvider
         EventDispatcher.Instance.Subscribe(
             EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), Fire);
 
+        EventDispatcher.Instance.Subscribe(
+            EventNames.GetEventName(Events.OnSubShotKeyPressed, "Player"), Fire);
+
         // 最初は直進弾から
         _currentShootType = PlayerBullet.ShootType.MonoStraight;
+        _currentSubShootType = PlayerBullet.ShootType.Lazer;
 
         _timer = new();
 
@@ -212,6 +222,18 @@ public class Player : MonoBehaviour, ITargetProvider
     public object GetBulletParameter()
     {
         var data = _bulletData[_currentShootType];
+
+        data.Origin = this.transform.position;
+
+        return data;
+    }
+
+    /// <summary>
+    /// 弾を作る為のデータを作成するメソッド
+    /// </summary>
+    public object GetSubBulletParameter()
+    {
+        var data = _bulletData[_currentSubShootType];
 
         data.Origin = this.transform.position;
 

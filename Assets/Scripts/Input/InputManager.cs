@@ -35,10 +35,16 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     private static InputHandler _remainingHandler;
 
     /// <summary>
-    /// 決定キー
+    /// 通常ショット
     /// </summary>
     public static KeyCode ShotKey
     { get => IsGamePadMode ? KeyCode.JoystickButton0 : KeyCode.Space; }
+
+    /// <summary>
+    /// サブショット
+    /// </summary>
+    public static KeyCode SubShotKey
+    { get => IsGamePadMode ? KeyCode.JoystickButton5 : KeyCode.X; }
 
     /// <summary>
     /// キャンセルキー

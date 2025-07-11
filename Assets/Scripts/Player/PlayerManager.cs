@@ -54,6 +54,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         if (InputManager.CheckKey(InputManager.ShotKey, InputHandler.Player, isPrevious: true))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), _player.GetBulletParameter());
 
+        if (InputManager.CheckKey(InputManager.SubShotKey, InputHandler.Player, isPrevious: true))
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnSubShotKeyPressed, "Player"), _player.GetSubBulletParameter());
+
         if (InputManager.CheckKey(InputManager.BombKey, InputHandler.Player))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnBombKeyPressed, "Player"));
 

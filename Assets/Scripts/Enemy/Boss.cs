@@ -42,6 +42,8 @@ public class Boss : MonoBehaviour
     public int Score
     { get; set; }
 
+    private int hoge = 0;
+
     public void Initialize()
     {
         _renderer.Initialize();
@@ -63,7 +65,7 @@ public class Boss : MonoBehaviour
                 {
                     SummonEnemyVal = 5,
                     Transform = this.transform,
-                    ActionInterval = 10.0f,
+                    ActionInterval = 30.0f,
                     RemainInterval = 0.0f
                 }
             },
@@ -72,8 +74,9 @@ public class Boss : MonoBehaviour
                 ActionType.ShootMissile,
                 new BossDataStructs.ShootMissiles
                 {
-                    ActionInterval = 0.8f,
-                    Transform = this.transform
+                    ActionInterval = 1.0f,
+                    Transform = this.transform,
+                    ShotValue = 30
                 }
             },
 
@@ -83,6 +86,7 @@ public class Boss : MonoBehaviour
                 {
                     ActionInterval = 0.75f,
                     Transform = this.transform,
+                    ShotValue = 20,
                     LittleRing = new BulletStructs.RingShot
                     {
                         Acceleration = 0.1f,
@@ -109,9 +113,9 @@ public class Boss : MonoBehaviour
 
         _actionPattern = new ActionType[]
         {
-            ActionType.DiscShot,
             ActionType.SpreadBarrage,
             ActionType.ShootMissile,
+            ActionType.DiscShot,
         };
 
         foreach (var action in _actions.Values)
@@ -162,6 +166,11 @@ public class Boss : MonoBehaviour
     private void ChangeNextAction()
     {
         ++_currentPattern;
+        if (_currentPattern >= _actionPattern.Length)
+        {
+            _currentPattern = 0;
+            Debug.Log(hoge);
+        }
         _currentAction = _actionPattern[_currentPattern];
         _actions[_currentAction].Initialize();
     }
@@ -174,6 +183,8 @@ public class Boss : MonoBehaviour
         _isInvincible = true;
 
         --Life;
+
+        ++hoge;
 
         if (Life < 1)
         {

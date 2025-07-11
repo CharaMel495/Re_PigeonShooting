@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMover
 {
@@ -8,13 +8,13 @@ public class PlayerMover
 
     public PlayerMover(float moveSpeed, Rect area)
     {
-        _moveSpeed = 5.0f;
+        _moveSpeed = moveSpeed;
         _playerArea = area;
     }
 
     public void Initialize(float moveSpeed, Rect area)
     {
-        _moveSpeed = 5.0f;
+        _moveSpeed = moveSpeed;
         _playerArea = area;
     }
 
