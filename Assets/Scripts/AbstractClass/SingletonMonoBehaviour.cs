@@ -1,73 +1,39 @@
 ﻿using UnityEngine;
-using System;
 
 /// <summary>
-/// シングルトンでMonoBehaviorを継承する際の基底クラス
+/// シングルトン化したMonoBehaviour基底クラス（FindObjectOfType不使用）
 /// </summary>
 /// <typeparam name="T">クラステンプレート</typeparam>
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
-    //インスタンス
-    private static T instance;
+    private static T _instance;
 
-    public static T Instance
+    /// <summary>
+    /// シングルトンインスタンス
+    /// </summary>
+    public static T Instance => _instance;
+
+    /// <summary>
+    /// Awake時にシングルトン登録
+    /// </summary>
+    protected virtual void Awake()
     {
-        get
+        if (_instance == null)
         {
-            //もしインスタンスがnullだったら
-            if (instance == null)
-            {
-                //自身の型を取得
-                Type t = typeof(T);
-
-                //同じ型を持つオブジェクトを探して、インスタンス登録
-                instance = (T)FindObjectOfType(t);
-
-                //下はアタッチされてない時にエラーログを出せる
-                //(全てのシーンに全てのスクリプトをいれたくないので今はコメント化してる)
-                //if (instance == null)
-                //{
-                //    Debug.LogError(t + " をアタッチしているGameObjectはありません");
-                //}
-
-                //return null;
-            }
-
-            //インスタンスを返す
-            return instance;
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject); // シーンを跨いで生存させる
         }
-    }
-
-    virtual protected void Awake()
-    {
-        //複数にアタッチされてないか調べる
-        CheckInstance();
+        else if (_instance != this)
+        {
+            Destroy(gameObject); // 他のインスタンスを破棄
+        }
     }
 
     /// <summary>
-    /// 他のゲームオブジェクトにアタッチされているか調べ
-    /// アタッチされている場合は破棄する。
+    /// アプリ終了時にインスタンスをリセット
     /// </summary>
-    protected bool CheckInstance()
+    protected virtual void OnApplicationQuit()
     {
-        //インスタンスがnull(自分だけがこのクラスを持っていれば)
-        if (instance == null)
-        {
-            //インスタンスの型を自身の型にキャスト
-            instance = this as T;
-
-            return true;
-        }
-        else if (Instance == this)
-        {
-            return true;
-        }
-
-        //他にインスタンスが見つかった場合は自身を削除する
-        Destroy(this);
-
-        return false;
+        _instance = null;
     }
-
-
 }
