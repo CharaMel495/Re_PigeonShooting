@@ -72,6 +72,8 @@ public class Player : MonoBehaviour, ITargetProvider
     private const int _LEVELBORDER = 10;
     private const int _MAXLEVEL = 5;
 
+    private float _slopeCondition;
+
     /// <summary>
     /// 経験値
     /// </summary>
@@ -165,7 +167,7 @@ public class Player : MonoBehaviour, ITargetProvider
         }
 
         // 弾を発射する
-        Shooter.Shoot(data as BulletStructs.IBulletCreateData);
+        Shooter.Shoot(data as BulletStructs.IBulletCreateData, _slopeCondition);
     }
 
     public void ShootLazer(BulletStructs.LazerParam param)
@@ -181,9 +183,9 @@ public class Player : MonoBehaviour, ITargetProvider
     {
         _shootTypeList = new[]
         {
+            PlayerBullet.ShootType.ThreeWay,
             PlayerBullet.ShootType.MonoStraight,
             PlayerBullet.ShootType.TwoWay,
-            PlayerBullet.ShootType.ThreeWay,
             PlayerBullet.ShootType.FiveWayAndBackMono,
         };
     }
@@ -222,7 +224,7 @@ public class Player : MonoBehaviour, ITargetProvider
                 Scale = new(0.5f, 0.5f),
                 Dir = transform.right,
                 MoveSpeed = 50.0f,
-                AngleSpan = 5.0f,
+                AngleSpan = 90.0f,
                 ColCategory = ColliderCategory.PlayerBullet
             });
 
@@ -260,11 +262,14 @@ public class Player : MonoBehaviour, ITargetProvider
     /// <summary>
     /// 弾を作る為のデータを作成するメソッド
     /// </summary>
-    public object GetBulletParameter()
+    public object GetBulletParameter(Vector2 shotDir, float slopeCondition)
     {
         var data = _bulletData[_shootTypeList[_level]];
 
         data.Origin = this.transform.position;
+        data.Dir = shotDir;
+
+        _slopeCondition = slopeCondition;
 
         return data;
     }

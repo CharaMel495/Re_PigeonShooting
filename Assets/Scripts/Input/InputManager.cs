@@ -34,11 +34,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     private static InputHandler _remainingHandler;
 
-    /// <summary>
-    /// 通常ショット
-    /// </summary>
-    public static KeyCode ShotKey
-    { get => IsGamePadMode ? KeyCode.JoystickButton0 : KeyCode.Space; }
+    ///// <summary>
+    ///// 通常ショット
+    ///// </summary>
+    //public static KeyCode ShotKey
+    //{ get => IsGamePadMode ? KeyCode.JoystickButton0 : KeyCode.Space; }
 
     /// <summary>
     /// サブショット
@@ -71,6 +71,8 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
 
     private static Vector2 _inputDir;
 
+    private static float _STICKDEADZONE_SQRT = 0.1f;
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -86,6 +88,20 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         _timer?.Update();
 
         IsGamePadMode = CheckConnectController();
+    }
+
+    public static bool IsShotKeyDowning(out Vector2 joyStickMap, out float slopeCondition)
+    {
+        float inputValX = Input.GetAxis("RightStickHorizontal");
+        float inputValY = Input.GetAxis("RightStickVertical");
+
+        joyStickMap.x = inputValX;
+        joyStickMap.y = -inputValY;
+
+        slopeCondition = Mathf.Min(joyStickMap.magnitude, 1);
+        joyStickMap.Normalize();
+
+        return slopeCondition > _STICKDEADZONE_SQRT;
     }
 
     private bool CheckConnectController()
