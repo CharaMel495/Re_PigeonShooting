@@ -137,6 +137,30 @@ namespace BulletStructs
         }
     }
 
+    public struct MultiWayShot : IBulletCreateData
+    {
+        public Vector3 Origin { get; set; }
+        public Vector3 Scale { get; set; }
+        public SpriteData.SpriteType SpriteType { get; set; }
+        public Vector3 Dir { get; set; }
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float AngleSpan { get; set; }
+        public ColliderCategory ColCategory { get; set; }
+        public int ShotValue { get; set; }
+
+        public MultiWayShot GetData() => this;
+        public IBulletMoveData CreateMoveData()
+        {
+            return new StraightMove
+            {
+                MoveDir = Dir,
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
+            };
+        }
+    }
+
     /// <summary>
     /// 8方向スプレッド弾
     /// </summary>

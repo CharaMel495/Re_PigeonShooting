@@ -5,6 +5,7 @@ namespace PlayerBullet
 {
     public enum ShootType
     {
+        MultiWayShot,
         MonoStraight,
         ThreeWay,
         FiveWayAndBackMono,
@@ -89,7 +90,12 @@ public class Player : MonoBehaviour, ITargetProvider
             _exp -= _LEVELBORDER;
 
             if (_level < _MAXLEVEL)
-                ++_level;
+            {
+                // TODO あとでレベルアップの仕組みをちゃんと作り込む
+                BulletStructs.MultiWayShot mul = (BulletStructs.MultiWayShot)_bulletData[PlayerBullet.ShootType.MultiWayShot];
+                ++mul.ShotValue;
+                _bulletData[PlayerBullet.ShootType.MultiWayShot] = mul;
+            }
             else
                 return;//TODO:ここにレベル上限でレベルアップ時に追加スコアの記述をする
         }
@@ -183,6 +189,7 @@ public class Player : MonoBehaviour, ITargetProvider
     {
         _shootTypeList = new[]
         {
+            PlayerBullet.ShootType.MultiWayShot,
             PlayerBullet.ShootType.ThreeWay,
             PlayerBullet.ShootType.MonoStraight,
             PlayerBullet.ShootType.TwoWay,
@@ -196,6 +203,19 @@ public class Player : MonoBehaviour, ITargetProvider
     public void CreateBulletParameter()
     {
         _bulletData ??= new();
+
+        _bulletData.Add(PlayerBullet.ShootType.MultiWayShot,
+            new BulletStructs.MultiWayShot
+            {
+                Origin = this.transform.position,
+                Scale = new(3.0f, 1.5f),
+                Dir = transform.right,
+                MoveSpeed = 30.0f,
+                AngleSpan = 90.0f,
+                ColCategory = ColliderCategory.PlayerBullet,
+                ShotValue = 3,
+                SpriteType = SpriteData.SpriteType.PlayerBullet,
+            });
 
         _bulletData.Add(PlayerBullet.ShootType.MonoStraight, 
             new BulletStructs.StaraightShoot{

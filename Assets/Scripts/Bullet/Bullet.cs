@@ -54,7 +54,7 @@ public class Bullet : MonoBehaviour
     public void Initialize()
     {
         _renderer.Initialize();
-        this.gameObject.SetActive(false);
+        _renderer.SetEnabled(false);
     }
 
     public void EnActive(Sprite sprite, string name)
@@ -62,7 +62,10 @@ public class Bullet : MonoBehaviour
         // 異なるスプライトになる場合のみスプライトを切り替える
         if (_renderer.CurrentSprite != sprite)
             _renderer.SetSprite(sprite);
-        this.gameObject.SetActive(true);
+        var pos = this.transform.position;
+        pos += this.transform.right * (this.transform.localScale.x * 0.5f);
+        transform.position = pos;
+        _renderer.SetEnabled(true);
         this.transform.parent = null;
         RemainLifeTime = _LIFETIME;
         IsActive = true;
@@ -82,7 +85,7 @@ public class Bullet : MonoBehaviour
 
     public void Destroy(Transform poolRoot)
     {
-        this.gameObject.SetActive(false);
+        _renderer.SetEnabled(false);
         this.transform.parent = poolRoot;
         RemainLifeTime = _LIFETIME;
         IsActive = false;

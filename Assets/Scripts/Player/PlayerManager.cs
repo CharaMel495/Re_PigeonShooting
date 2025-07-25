@@ -21,9 +21,6 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     [SerializeField]
     private float _moveSpeed;
 
-    [SerializeField]
-    private Rect _area;
-
     /// <summary>
     /// 初期化を行う関数
     /// </summary>
@@ -31,8 +28,8 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     {
         _player.Initialize();
         _player.Shooter = BulletManager.Instance.Shooter;
-        _mover = new(_moveSpeed, _area);
-        _mover.Initialize(_moveSpeed, _area);
+        _mover = new(_moveSpeed, StageManager.Instance.PlayArea);
+        _mover.Initialize(_moveSpeed, StageManager.Instance.PlayArea);
     }
 
     private void Update()

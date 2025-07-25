@@ -2,7 +2,6 @@
 using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace EnemyEnums
 {
@@ -57,6 +56,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [SerializeField]
     private Transform _stoppableArea;
 
+    [SerializeField]
+    private Transform _poolRoot;
+
     /// <summary>
     /// 現在アクティブな弾
     /// </summary>
@@ -68,6 +70,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     private Queue<Enemy> _destroyRegister;
 
     private EnemyAction _action;
+
+    private EnemyPool _pool;
 
     /// <summary>
     /// 弾発射クラス
@@ -92,6 +96,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         _tableAsset = Addressables.LoadAssetAsync<EnemyParamTableAsset>
             (SummarizeResourceDirectory.ENEMYTABLEASSET_PATH).WaitForCompletion();
         _createID = 0;
+        _pool = new(_enemyPrefab, _poolRoot);
 
         //Hoge.Initialize();
     }
@@ -112,7 +117,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             _action.Action(enemy, Shooter);
 
             // 画面内に収まってたらここで終了
-            if (enemy.IsInCamera)
+            if (enemy.IsInArea)
                 continue;
 
             // 画面外の処理
@@ -120,7 +125,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         }
 
         // リストを更新
-        FlashActiveBulletsList();
+        FlashActiveEnemysList();
     }
 
     public void CreateEnemy(int tableID, Vector3 createPos, Vector3 moveDir = new())
@@ -129,7 +134,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         enemyData.Origin = createPos;
 
         // 敵を生成
-        var enemy = Instantiate(_enemyPrefab, enemyData.Origin, Quaternion.identity);
+        var enemy = _pool.GetEnemyFromPool();
         enemy.transform.localScale = enemyData.Scale;
         // 体力を注入
         enemy.Life = enemyData.Life;
@@ -141,7 +146,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         if (enemyData.MoveData is EnemyDataStructs.StopPointMove)
         {
             var data = (EnemyDataStructs.StopPointMove)enemyData.MoveData;
-            data.TargetPoint = GetRandomStopPos();
+            data.TargetPoint = StageManager.Instance.GetRandomPositionInArea();
             enemy.MoveData = data;
         }
         else
@@ -152,7 +157,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         if (enemy.ActionData != null)
             enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
         // 初期化
-        enemy.Initialize(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
+        enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
         // 判定用の矩形を生成
         var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
         // アクタ名を登録
@@ -204,7 +209,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             var enemyData = StructEnemyParamFromMasterData(tableID, EnemyEnums.EnemyType.Normal);
             enemyData.Origin = center;
             // 敵を生成
-            var enemy = Instantiate(_enemyPrefab, enemyData.Origin, Quaternion.identity);
+            var enemy = _pool.GetEnemyFromPool();
             // 体力を注入
             enemy.Life = enemyData.Life;
             // スコアを注入
@@ -220,7 +225,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             if (enemy.ActionData != null)
                 enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
             // 初期化
-            enemy.Initialize(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
+            enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
             // 判定用の矩形を生成
             var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
             // アクタ名を登録
@@ -256,7 +261,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             var enemyData = StructEnemyParamFromMasterData(tableID, EnemyEnums.EnemyType.Normal);
             enemyData.Origin = center;
             // 敵を生成
-            var enemy = Instantiate(_enemyPrefab, parent);
+            var enemy = _pool.GetEnemyFromPool();
             // 体力を注入
             enemy.Life = enemyData.Life;
             // スコアを注入
@@ -274,7 +279,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             if (enemy.ActionData != null)
                 enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
             // 初期化
-            enemy.Initialize(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
+            enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
             // 判定用の矩形を生成
             var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
             // アクタ名を登録
@@ -304,7 +309,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     /// <summary>
     /// アクティブな弾の状態を更新するメソッド
     /// </summary>
-    private void FlashActiveBulletsList()
+    private void FlashActiveEnemysList()
     {
     // 再起する代わりのラベル
     MethodTop:
@@ -318,7 +323,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
         //弾を破棄し、リストからも削除する
         ColliderManager.Instance.RemoveCollider(destroyEnemy.Collider);
-        Destroy(destroyEnemy.gameObject);
+        destroyEnemy.Destroy(_poolRoot);
         _activeEnemys.Remove(destroyEnemy);
 
         // メソッドの最初に飛ぶ

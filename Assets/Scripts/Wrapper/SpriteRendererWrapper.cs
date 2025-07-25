@@ -105,4 +105,7 @@ public class SpriteRendererWrapper : MonoBehaviour
     /// </summary>
     public void SetSpriteAlpha(float value)
         => _renderer.color = new(_renderer.color.r, _renderer.color.g, _renderer.color.b, value);
+
+    public void SetEnabled(bool value)
+        => _renderer.enabled = value;
 }

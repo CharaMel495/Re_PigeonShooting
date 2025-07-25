@@ -12,10 +12,10 @@ public class Enemy : MonoBehaviour
     private SpriteRendererWrapper _renderer;
 
     /// <summary>
-    /// カメラに映ってるか
+    /// プレイエリア内に入ってるか
     /// </summary>
-    public bool IsInCamera
-        => _renderer.IsInCamera;
+    public bool IsInArea
+        => StageManager.Instance.PlayArea.Contains(this.transform.position);
 
     /// <summary>
     /// 移動情報
@@ -70,16 +70,24 @@ public class Enemy : MonoBehaviour
     public int Score
     { get; set; }
 
-    public void Initialize(Sprite sprite, string name)
+    public void Initialize()
     {
         _renderer.Initialize();
-        _renderer.SetSprite(sprite);
-        RemainLifeTime = _LIFETIME;
-        Name = name;
-        if (ActionData != null)
-            SetActionInterval();
-
+        _renderer.SetEnabled(false);
         _timer = new();
+        _timer.Initialize();
+    }
+
+    public void EnActive(Sprite sprite, string name)
+    {
+        if (_renderer.CurrentSprite != sprite)
+            _renderer.SetSprite(sprite);
+        _renderer.SetEnabled(true);
+        this.transform.parent = null;
+        RemainLifeTime = _LIFETIME;
+        IsActive = true;
+        IsDestroyWaiting = false;
+        Name = name;
 
         EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
 
@@ -89,6 +97,9 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsActive)
+            return;
+
         _timer.Update();
 
         if (MoveData != null)
@@ -144,8 +155,15 @@ public class Enemy : MonoBehaviour
         _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
     }
 
-    private void OnDestroy()
+    public void Destroy(Transform poolRoot)
     {
-        EventDispatcher.Instance?.Unsubscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
+        _renderer.SetEnabled(false);
+        this.transform.parent = poolRoot;
+        RemainLifeTime = _LIFETIME;
+        IsActive = false;
+        IsDestroyWaiting = false;
+        _timer.Initialize();
+        _isInvincible = false;
+        EventDispatcher.Instance.Unsubscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
     }
 }

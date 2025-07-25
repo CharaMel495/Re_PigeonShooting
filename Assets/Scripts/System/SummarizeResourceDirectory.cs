@@ -7,7 +7,7 @@ public class SummarizeResourceDirectory
 {
     // TextureDirectory : Addressables
 
-    public const string PLAYERBULLET_TEX = "Assets/Textures/SimpleBullet.png";
+    public const string PLAYERBULLET_TEX = "Assets/Textures/PlayerShot.png";
     public const string SIMPLEENEMY_TEX = "Assets/Textures/EnemyOne.png";
     public const string PLAYER_TEX = "Assets/Textures/Player.png";
     public const string PLAYERLAZER_TEX = "Assets/Textures/PlayerLazer.png";

@@ -24,6 +24,7 @@ public class SerializeVisualizer : Editor
 
         // クラスに定義されているフィールドを順番に描画
         var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
         foreach (var field in fields)
         {
             // 変数がReadOnlyAttributeを継承しているかを確認

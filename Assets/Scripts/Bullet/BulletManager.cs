@@ -95,8 +95,7 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
         var bullet = _pool.GetBulletFromPool();
         // 移動情報を与える
         bullet.MoveData = bulletData.CreateMoveData();
-        // アクティブ化
-        bullet.EnActive(SpriteManager.GetSprite(bulletData.SpriteType), $"Bullet_{_createID}");
+        bullet.transform.right = bulletData.Dir;
         // 判定用の矩形を生成
         var collider = ColliderManager.Instance.CreateCollider(bullet.transform, ColliderType.Rectangle);
         // アクタ名を登録
@@ -111,6 +110,9 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
         bullet.transform.localScale = bulletData.Scale;
         // リストに登録
         _activeBullets.Add(bullet);
+
+        // アクティブ化
+        bullet.EnActive(SpriteManager.GetSprite(bulletData.SpriteType), $"Bullet_{_createID}");
 
         ++_createID;
 
