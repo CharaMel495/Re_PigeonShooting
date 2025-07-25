@@ -76,6 +76,7 @@ public class Enemy : MonoBehaviour
         _renderer.SetEnabled(false);
         _timer = new();
         _timer.Initialize();
+        
     }
 
     public void EnActive(Sprite sprite, string name)
