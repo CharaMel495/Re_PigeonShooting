@@ -71,8 +71,11 @@ public class Bullet : MonoBehaviour
         IsActive = true;
         IsDestroyWaiting = false;
         Name = name;
+        Collider.ActorName = Name;
 
-        EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
+        EventDispatcher.Instance.Bind(this, Name);
+
+        //EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
     }
 
     public void OutOfView()
@@ -93,6 +96,7 @@ public class Bullet : MonoBehaviour
         EventDispatcher.Instance.Unsubscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
     }
 
+    [CallableEvent("OnHit")]
     public void OnHit(object data)
     {
         IsDestroyWaiting = true;

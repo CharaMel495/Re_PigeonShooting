@@ -13,7 +13,12 @@ public class EventDispatcher : SingletonMonoBehaviour<EventDispatcher>
     /// </summary>
     private Dictionary<string, Action<object>> _eventTable = new();
 
-    private EventBinder _binder = new(Instance);
+    private EventBinder _binder;
+
+    public void Initialize()
+    {
+        _binder = new(Instance);
+    }
 
     public void BulkResisterMethod(MethodInfo[] methods, object owner)
     {
@@ -93,7 +98,7 @@ public static class EventNames
     {
         return eventType switch
         {
-            Events.OnHit => $"{eventOwner}OnDamaged",
+            Events.OnHit => $"{eventOwner}OnHit",
             Events.OnDead => $"{eventOwner}OnDead",
             Events.OnSmashed => $"{eventOwner}OnSmashed",
             Events.OnShotKeyPressed => $"{eventOwner}OnShotKeyPressed",

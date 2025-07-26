@@ -25,7 +25,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     {
         if (_remainInterval < 0)
         {
-            EnemyManager.Instance.CreateEnemy(0, GetRandomPositionInArea());
+            EnemyManager.Instance.CreateEnemy(0, GetRandomPositionInArea(5));
             _remainInterval = _spawnInterval;
         }
         else

@@ -98,8 +98,6 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
         bullet.transform.right = bulletData.Dir;
         // 判定用の矩形を生成
         var collider = ColliderManager.Instance.CreateCollider(bullet.transform, ColliderType.Rectangle);
-        // アクタ名を登録
-        collider.ActorName = bullet.Name;
         // 判定タイプを登録
         collider.ColCategory = bulletData.ColCategory;
         // 判定マネージャに登録通知を飛ばす

@@ -389,8 +389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5ae757188c580b46ab1102cdd2b5b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  task: 0
-  status: ReadOnly
 --- !u!4 &558082508
 Transform:
   m_ObjectHideFlags: 0

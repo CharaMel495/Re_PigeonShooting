@@ -43,8 +43,7 @@ public class EventBinder
                 try
                 {
                     var action = (Action<object>)Delegate.CreateDelegate(typeof(Action<object>), owner, method);
-                    _dispatcher.Subscribe($"{attr.EventName}{prefix}", action);
-                    Debug.Log($"[EventBinder] {method.Name} を {attr.EventName} にバインドしました。");
+                    _dispatcher.Subscribe($"{prefix}{attr.EventName}", action);
                 }
                 catch (Exception ex)
                 {
