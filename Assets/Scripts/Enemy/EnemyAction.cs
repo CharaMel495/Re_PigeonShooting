@@ -75,6 +75,35 @@ public class EnemyAction
                 }
                 break;
 
+            case EnemyDataStructs.SlavedSpiralMove:
+                {
+                    // 移動データを取得
+                    var moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
+                    float spinDir = moveData.IsRightSpin ? 1 : -1;
+                    // 現在の座標を取得
+                    var pos = enemy.transform.localPosition;
+                    var euler = enemy.transform.localEulerAngles;
+                    moveData.MoveDir = Quaternion.AngleAxis
+                        (moveData.MoveSpeed * Time.fixedDeltaTime, Vector3.forward) * moveData.MoveDir;
+                    moveData.MoveSpeed += moveData.ElaspedTime * moveData.Acceleration;
+                    // 移動後座標を計算
+                    var time = Time.fixedTime * spinDir;
+                    var addtionalTime = moveData.AddtionalTime * spinDir;
+                    pos.x = Mathf.Cos(time + addtionalTime) * moveData.Distance;
+                    pos.y = Mathf.Sin(time + addtionalTime) * moveData.Distance;
+                    // それっぽく見せる為に回転もかける
+                    euler.z += moveData.MoveSpeed * Time.fixedDeltaTime * 3.0f;
+                    if (euler.z > 180)
+                        euler.z -= 360;
+                    if (euler.z < -180)
+                        euler.z += 360;
+                    enemy.transform.localEulerAngles = euler;
+                    // 座標を更新
+                    enemy.transform.localPosition = pos;
+                    enemy.MoveData.MoveDir = moveData.MoveDir;
+                }
+                break;
+
             case EnemyDataStructs.MissileMove:
                 {
                     // 移動データを取得
@@ -83,11 +112,14 @@ public class EnemyAction
                     if (moveData.IsStraight)
                     {
                         // 現在の移動速度を経過時間から計算
-                        moveData.MoveSpeed += moveData.Acceleration * moveData.ElaspedTime;
+                        moveData.SecondMoveSpeed += moveData.Acceleration * moveData.ElaspedTime;
+
+                        // 最高速を超えないように
+                        moveData.SecondMoveSpeed = Mathf.Min(moveData.SecondMoveSpeed, moveData.MaxMoveSpeed);
 
                         // 移動（前方向へ）
                         enemy.transform.position += enemy.transform.up *
-                            moveData.MoveSpeed * Time.fixedDeltaTime;
+                            moveData.SecondMoveSpeed * Time.fixedDeltaTime;
                     }
                     else
                     {
@@ -110,7 +142,37 @@ public class EnemyAction
 
                         // 速度が負の値にまで落ちたら直進に切替
                         moveData.IsStraight = enemy.MoveData.MoveSpeed < 0.0f;
+
+                        // 直進に切り替わったら経過時間をリセット
+                        if (moveData.IsStraight)
+                            moveData.ElaspedTime = 0.0f;
                     }
+
+                    enemy.MoveData = moveData;
+                }
+                break;
+
+            case EnemyDataStructs.TrackPlayer:
+                {
+                    // 移動データを取得
+                    var moveData = (EnemyDataStructs.TrackPlayer)enemy.MoveData;
+
+                    Vector3 dir = (moveData.Target.GetPostion() - enemy.transform.position).normalized;
+                    Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, dir);
+
+                    // 徐々に向く
+                    enemy.transform.rotation = Quaternion.RotateTowards(
+                        enemy.transform.rotation,
+                        targetRotation,
+                        moveData.TurnRate * Time.fixedDeltaTime
+                    );
+
+                    // 現在の移動速度を経過時間から計算
+                    moveData.MoveSpeed += moveData.Acceleration * Time.fixedDeltaTime;
+
+                    // 移動（前方向へ）
+                    enemy.transform.position += enemy.transform.up *
+                        moveData.MoveSpeed * Time.fixedDeltaTime;
 
                     enemy.MoveData = moveData;
                 }

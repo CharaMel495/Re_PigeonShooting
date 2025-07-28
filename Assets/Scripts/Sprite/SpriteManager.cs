@@ -6,13 +6,17 @@ namespace SpriteData
 {
     public enum SpriteType
     {
+        // プレイヤー系　0番台
+        Player = 0,
         PlayerBullet,
-        NormalEnemy,
-        Player,
         PlayerLazer,
+        // 敵系　100番台
+        NormalEnemy = 100,
+        Missile,
         SpinningEnemy,
         BossShip,
-        Missile
+        // アイテム系　200番台
+        // システム(UI)系 300番台
     }
 }
 

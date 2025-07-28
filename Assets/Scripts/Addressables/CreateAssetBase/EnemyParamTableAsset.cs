@@ -19,8 +19,6 @@ public class EnemyParamReciever
     public float Size;
     public float BulletSize;
     public int SpriteID;
-    public int MoveType;
-    public int ActionType;
     public int ColliderType;
     public int Life;
     public int Score;

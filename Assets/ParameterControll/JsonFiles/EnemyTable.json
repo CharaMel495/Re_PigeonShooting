@@ -3,167 +3,101 @@
 		{
 			"ID":"0",
 			"Size":"1",
-			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"0",
+			"BulletSize":"0",
+			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"20",
+			"Life":"10",
 			"Score":"100"
 		},
 		{
 			"ID":"1",
 			"Size":"1",
 			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"1",
+			"SpriteID":"100",
 			"ColliderType":"0",
 			"Life":"10",
 			"Score":"100"
 		},
 		{
 			"ID":"2",
-			"Size":"2",
-			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"2",
+			"Size":"1",
+			"BulletSize":"0",
+			"SpriteID":"101",
 			"ColliderType":"0",
-			"Life":"10",
-			"Score":"100"
+			"Life":"3",
+			"Score":"30"
 		},
 		{
 			"ID":"3",
 			"Size":"1",
 			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"3",
+			"SpriteID":"101",
 			"ColliderType":"0",
-			"Life":"10",
-			"Score":"100"
+			"Life":"3",
+			"Score":"30"
 		},
 		{
 			"ID":"4",
-			"Size":"1",
-			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"4",
+			"Size":"2",
+			"BulletSize":"0",
+			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"10",
-			"Score":"100"
+			"Life":"20",
+			"Score":"150"
 		},
 		{
 			"ID":"5",
 			"Size":"2",
-			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"4",
+			"BulletSize":"1",
+			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"10",
-			"Score":"100"
+			"Life":"20",
+			"Score":"150"
 		},
 		{
 			"ID":"6",
-			"Size":"1",
-			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"1",
+			"Size":"2",
+			"BulletSize":"0",
+			"SpriteID":"102",
 			"ColliderType":"0",
-			"Life":"10",
-			"Score":"100"
+			"Life":"500",
+			"Score":"300"
 		},
 		{
 			"ID":"7",
-			"Size":"1",
+			"Size":"2",
 			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"2",
+			"SpriteID":"102",
 			"ColliderType":"0",
-			"Life":"10",
-			"Score":"100"
+			"Life":"200",
+			"Score":"200"
 		},
 		{
 			"ID":"8",
-			"Size":"1",
+			"Size":"2",
 			"BulletSize":"0.5",
-			"SpriteID":"1",
-			"MoveType":"1",
-			"ActionType":"3",
+			"SpriteID":"102",
 			"ColliderType":"0",
-			"Life":"10",
-			"Score":"100"
+			"Life":"200",
+			"Score":"200"
 		},
 		{
 			"ID":"9",
-			"Size":"1",
-			"BulletSize":"0.5",
-			"SpriteID":"4",
-			"MoveType":"2",
-			"ActionType":"5",
+			"Size":"2",
+			"BulletSize":"0",
+			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"5",
-			"Score":"500"
+			"Life":"100",
+			"Score":"300"
 		},
 		{
 			"ID":"10",
-			"Size":"1",
-			"BulletSize":"0.5",
-			"SpriteID":"4",
-			"MoveType":"3",
-			"ActionType":"5",
-			"ColliderType":"0",
-			"Life":"5",
-			"Score":"500"
-		},
-		{
-			"ID":"11",
 			"Size":"2",
-			"BulletSize":"0.5",
-			"SpriteID":"4",
-			"MoveType":"5",
-			"ActionType":"5",
-			"ColliderType":"0",
-			"Life":"50",
-			"Score":"500"
-		},
-		{
-			"ID":"12",
-			"Size":"2",
-			"BulletSize":"0.5",
-			"SpriteID":"4",
-			"MoveType":"6",
-			"ActionType":"5",
-			"ColliderType":"0",
-			"Life":"50",
-			"Score":"500"
-		},
-		{
-			"ID":"13",
-			"Size":"2.5",
 			"BulletSize":"1",
-			"SpriteID":"6",
-			"MoveType":"7",
-			"ActionType":"5",
+			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"5",
-			"Score":"200"
-		},
-		{
-			"ID":"14",
-			"Size":"0.8",
-			"BulletSize":"0.5",
-			"SpriteID":"6",
-			"MoveType":"7",
-			"ActionType":"5",
-			"ColliderType":"0",
-			"Life":"5",
-			"Score":"200"
+			"Life":"100",
+			"Score":"300"
 		}
 	]
 }

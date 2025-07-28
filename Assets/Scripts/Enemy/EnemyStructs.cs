@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace EnemyDataStructs
 {
@@ -62,11 +64,28 @@ namespace EnemyDataStructs
     }
 
     /// <summary>
+    /// 渦を巻くように動く敵
+    /// ただし中心となるTransformに隷属し、SinとCosから座標を決定する
+    /// </summary>
+    public struct SlavedSpiralMove : IEnemyMoveData
+    {
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float ElaspedTime { get; set; }
+        public Vector3 MoveDir { get; set; }
+        public float Distance { get; set; }
+        public float AddtionalTime { get; set; }
+        public bool IsRightSpin { get; set; }
+    }
+
+    /// <summary>
     /// プレイヤーにミサイルのように突っ込んでいく敵
     /// </summary>
     public struct MissileMove : IEnemyMoveData
     {
         public float MoveSpeed { get; set; }
+        public float SecondMoveSpeed { get; set; }
+        public float MaxMoveSpeed { get; set; }
         public float Acceleration { get; set; }
         public float DisAcceleration { get; set; }
         public float ElaspedTime { get; set; }
@@ -76,10 +95,28 @@ namespace EnemyDataStructs
         public bool IsStraight { get; set; }
     }
 
+    public struct TrackPlayer : IEnemyMoveData
+    {
+        public float MoveSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float ElaspedTime { get; set; }
+        public Vector3 MoveDir { get; set; }
+        public float TurnRate { get; set; }
+        public ITargetProvider Target { get; set; }
+    }
+
     /// <summary>
     /// 敵の行動情報をまとめたクラス
     /// </summary>
     public interface IEnemyActionData
+    {
+        public float ActionInterval { get; set; }
+        public float CurrentInterval { get; set; }
+        public ITargetProvider Target { get; set; }
+        public BulletStructs.IBulletCreateData BulletData { get; set; }
+    }
+
+    public struct NoAction : IEnemyActionData
     {
         public float ActionInterval { get; set; }
         public float CurrentInterval { get; set; }
@@ -96,6 +133,18 @@ namespace EnemyDataStructs
         public float CurrentInterval { get; set; }
         public ITargetProvider Target { get; set; }
         public BulletStructs.IBulletCreateData BulletData { get; set; }
+    }
+
+    /// <summary>
+    /// 敵を召喚する敵行動
+    /// </summary>
+    public struct SummonEnemy : IEnemyActionData
+    {
+        public float ActionInterval { get; set; }
+        public float CurrentInterval { get; set; }
+        public ITargetProvider Target { get; set; }
+        public BulletStructs.IBulletCreateData BulletData { get; set; }
+        public Action<int, Vector3, Vector3> SummonMethod { get; set; }
     }
 
     /// <summary>

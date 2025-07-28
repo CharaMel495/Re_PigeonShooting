@@ -17,26 +17,19 @@ namespace EnemyEnums
     /// <summary>
     /// 敵の行動タイプ
     /// </summary>
-    public enum EnemyMoveType
+    public enum EnemyID
     {
-        Straight,
-        StopPoint,
-        Spiral_R,
-        Spiral_L,
-        ZigZag,
-        BarrierSpiral_R,
-        BarrierSpiral_L,
-        Missile
-    }
-
-    public enum EnemyActionType
-    {
-        None,
-        ShootMono,
-        ShootThreeWay,
-        ShootFourWay,
-        SpreadEight,
-        InverceThreeWay,
+        キホンの雑魚敵,
+        キホンの弾を撃つ敵,
+        プレイヤーに突っ込んでくるミサイル敵,
+        プレイヤーに突っ込んでくるミサイル敵_弾あり,
+        ミサイル敵を撃つ敵,
+        輪っか弾を撃つ敵,
+        渦巻ぐるぐる敵,
+        渦巻ぐるぐる敵_自機狙い単発弾,
+        渦巻ぐるぐる敵_後方3way,
+        バリア突進敵,
+        レーザー発射敵
     }
 }
 
@@ -73,6 +66,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
     private EnemyPool _pool;
 
+    private EnemyMoveParameterCreator _moveParamCreator;
+    private EnemyActionParameterCreater _actionParamCreator;
+
     /// <summary>
     /// 弾発射クラス
     /// 外部から参照はできるようにする
@@ -97,6 +93,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             (SummarizeResourceDirectory.ENEMYTABLEASSET_PATH).WaitForCompletion();
         _createID = 0;
         _pool = new(_enemyPrefab, _poolRoot);
+        _moveParamCreator = new();
+        _actionParamCreator = new();
 
         //Hoge.Initialize();
     }
@@ -330,166 +328,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         goto MethodTop;
     }
 
-    public EnemyDataStructs.IEnemyMoveData GetEnemyMoveData(EnemyEnums.EnemyMoveType moveType)
-    {
-        switch (moveType)
-        {
-            // 0
-            case EnemyEnums.EnemyMoveType.Straight:
-                return new EnemyDataStructs.StrainghtNormalMove
-                {
-                    Acceleration = 0.0f,
-                    MoveDir = -Vector3.right,
-                    MoveSpeed = 3.0f
-                };
+    
 
-            // 1
-            case EnemyEnums.EnemyMoveType.StopPoint:
-                return new EnemyDataStructs.StopPointMove
-                {
-                    MoveSpeed = 2.0f,
-                    StopThreshold = 0.1f,
-                    NextMove = new EnemyDataStructs.NoMove()
-                };
-
-            // 2
-            case EnemyEnums.EnemyMoveType.Spiral_R:
-                return new EnemyDataStructs.SpiralMove
-                {
-                    Acceleration = 0.8f,
-                    MoveDir = Vector3.left,
-                    MoveSpeed = 3.0f,
-                    SpiralRatio = 60.0f
-                };
-
-            // 3
-            case EnemyEnums.EnemyMoveType.Spiral_L:
-                return new EnemyDataStructs.SpiralMove
-                {
-                    Acceleration = 0.8f,
-                    MoveDir = Vector3.right,
-                    MoveSpeed = 3.0f,
-                    SpiralRatio = -60.0f
-                };
-
-            // 5
-            case EnemyEnums.EnemyMoveType.BarrierSpiral_R:
-                return new EnemyDataStructs.SpiralMove
-                {
-                    Acceleration = 0.0f,
-                    MoveDir = Vector3.left,
-                    MoveSpeed = 3.0f,
-                    SpiralRatio = 180.0f
-                };
-
-            // 6
-            case EnemyEnums.EnemyMoveType.BarrierSpiral_L:
-                return new EnemyDataStructs.SpiralMove
-                {
-                    Acceleration = 0.0f,
-                    MoveDir = Vector3.right,
-                    MoveSpeed = 3.0f,
-                    SpiralRatio = -180.0f
-                };
-
-            // 7
-            case EnemyEnums.EnemyMoveType.Missile:
-                return new EnemyDataStructs.MissileMove
-                {
-                    MoveSpeed = 5.0f,
-                    Acceleration = 0.15f,
-                    DisAcceleration = -2.0f,
-                    Target = PlayerManager.Instance.Player,
-                    TurnRate = 80.0f,
-                    IsStraight = false,
-                };
-        }
-
-
-        return null;
-    }
-
-    public EnemyDataStructs.IEnemyActionData GetEnemyActionData(EnemyEnums.EnemyActionType actionType)
-    {
-        switch (actionType)
-        {
-            case EnemyEnums.EnemyActionType.ShootMono:
-                return new EnemyDataStructs.SimpleAction
-                {
-                    ActionInterval = 1.0f,
-                    BulletData = new BulletStructs.StaraightShoot
-                    {
-                        MoveSpeed = 5.0f,
-                        Scale = Vector3.one,
-                        SpriteType = SpriteData.SpriteType.PlayerBullet,
-                        ColCategory = ColliderCategory.EnemyBullet
-                    },
-                    Target = PlayerManager.Instance.Player
-                };
-
-            case EnemyEnums.EnemyActionType.ShootThreeWay:
-                return new EnemyDataStructs.SimpleAction
-                {
-                    ActionInterval = 1.0f,
-                    BulletData = new BulletStructs.ThreeWayShoot
-                    {
-                        MoveSpeed = 5.0f,
-                        Scale = Vector3.one,
-                        SpriteType = SpriteData.SpriteType.PlayerBullet,
-                        ColCategory = ColliderCategory.EnemyBullet,
-                        AngleSpan = 30.0f
-                    },
-                    Target = PlayerManager.Instance.Player
-                };
-
-            case EnemyEnums.EnemyActionType.ShootFourWay:
-                return new EnemyDataStructs.SimpleAction
-                {
-                    ActionInterval = 1.0f,
-                    BulletData = new BulletStructs.FourWayShoot
-                    {
-                        MoveSpeed = 5.0f,
-                        Scale = Vector3.one,
-                        SpriteType = SpriteData.SpriteType.PlayerBullet,
-                        ColCategory = ColliderCategory.EnemyBullet,
-                        AngleSpan = 20.0f
-                    },
-                    Target = PlayerManager.Instance.Player
-                };
-
-            case EnemyEnums.EnemyActionType.SpreadEight:
-                return new EnemyDataStructs.SimpleAction
-                {
-                    ActionInterval = 1.0f,
-                    BulletData = new BulletStructs.SpreadEightShoot
-                    {
-                        MoveSpeed = 5.0f,
-                        Scale = Vector3.one,
-                        SpriteType = SpriteData.SpriteType.PlayerBullet,
-                        ColCategory = ColliderCategory.EnemyBullet,
-                        Dir = Vector3.right
-                    },
-                };
-
-            case EnemyEnums.EnemyActionType.InverceThreeWay:
-                return new EnemyDataStructs.SimpleAction
-                {
-                    ActionInterval = 0.2f,
-                    BulletData = new BulletStructs.ThreeWayShoot
-                    {
-                        MoveSpeed = 5.0f,
-                        Acceleration = 0.0f,
-                        Scale = Vector3.one * 0.25f,
-                        SpriteType = SpriteData.SpriteType.PlayerBullet,
-                        ColCategory = ColliderCategory.EnemyBullet,
-                        AngleSpan = 20.0f
-                    },
-                };
-        }
-
-        return null;
-    }
-
+    
     public EnemyDataStructs.IEnemyParam StructEnemyParamFromMasterData(int tableID, EnemyEnums.EnemyType enemyType)
     {
         if (_tableAsset.EnemyTable.Count < tableID || tableID < 0)
@@ -507,8 +348,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
                     Scale = new Vector3(data.Size, data.Size, data.Size),
                     BulletSize = new Vector3(data.BulletSize, data.BulletSize, data.BulletSize),
                     SpriteType = (SpriteData.SpriteType)data.SpriteID,
-                    MoveData = GetEnemyMoveData((EnemyEnums.EnemyMoveType)data.MoveType),
-                    ActionData = GetEnemyActionData((EnemyEnums.EnemyActionType)data.ActionType),
+                    MoveData = _moveParamCreator.GetEnemyMoveData((EnemyEnums.EnemyID)data.ID),
+                    ActionData = _actionParamCreator.GetEnemyActionData((EnemyEnums.EnemyID)data.ID),
                     ColliderType = (ColliderType)data.ColliderType
                 };
         }
