@@ -26,6 +26,14 @@ public class Player : MonoBehaviour, ITargetProvider
     [SerializeField]
     private Transform _hitBox;
 
+    [SerializeField]
+    private Animator _animator;
+    /// <summary>
+    /// アニメーション管理クラス
+    /// </summary>
+    public Animator Animator
+        => _animator;
+
     public BulletShooter Shooter
     { get; set; }
 
@@ -74,6 +82,10 @@ public class Player : MonoBehaviour, ITargetProvider
     private const int _MAXLEVEL = 5;
 
     private float _slopeCondition;
+
+    // パラメータ名（Animator Controller内で設定したもの）
+    private readonly int _animParamX = Animator.StringToHash("X");
+    private readonly int _animParamY = Animator.StringToHash("Y");
 
     /// <summary>
     /// 経験値
@@ -288,6 +300,8 @@ public class Player : MonoBehaviour, ITargetProvider
 
         data.Origin = this.transform.position;
         data.Dir = shotDir;
+        _animator.SetFloat(_animParamX, shotDir.x);
+        _animator.SetFloat(_animParamY, shotDir.y);
 
         _slopeCondition = slopeCondition;
 

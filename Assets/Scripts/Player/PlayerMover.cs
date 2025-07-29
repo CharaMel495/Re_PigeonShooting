@@ -20,7 +20,7 @@ public class PlayerMover
 
     public void MovePlayer(Player player)
     {
-        var inputDir = InputManager.GetInputDirection(InputHandler.Player);
+        var inputDir = InputManager.GetInputDirection(InputHandler.Player).normalized;
 
         var transform = player.transform;
         var pos = transform.position;
