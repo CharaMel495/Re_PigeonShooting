@@ -144,7 +144,7 @@ namespace EnemyDataStructs
         public float CurrentInterval { get; set; }
         public ITargetProvider Target { get; set; }
         public BulletStructs.IBulletCreateData BulletData { get; set; }
-        public Action<int, Vector3, Vector3> SummonMethod { get; set; }
+        public EnemyEnums.EnemyID SummonID { get; set; }
     }
 
     /// <summary>

@@ -152,7 +152,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         // 行動情報を注入
         enemy.ActionData = enemyData.ActionData;
         // 弾のサイズを設定
-        if (enemy.ActionData != null)
+        if (enemy.ActionData.BulletData != null)
             enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
         // 初期化
         enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
@@ -208,6 +208,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             enemyData.Origin = center;
             // 敵を生成
             var enemy = _pool.GetEnemyFromPool();
+            enemy.transform.localScale = enemyData.Scale;
             // 体力を注入
             enemy.Life = enemyData.Life;
             // スコアを注入
@@ -246,11 +247,10 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         }
     }
 
-    public List<Enemy> CreateSpiralBarrierEnemy(Vector3 center, int count, float radius, bool isRightSpiral, Transform parent)
+    public List<Enemy> CreateSpiralBarrierEnemy(int tableID, Vector3 center, int count, float radius, bool isRightSpiral, Transform parent)
     {
-        int tableID = isRightSpiral ? 11 : 12;
-
-        var ratio = 360 / count;
+        float ratio = 360f / count;
+        float currentTime = Time.time;
 
         var returnList = new List<Enemy>();
 
@@ -258,47 +258,48 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         {
             var enemyData = StructEnemyParamFromMasterData(tableID, EnemyEnums.EnemyType.Normal);
             enemyData.Origin = center;
+
             // 敵を生成
             var enemy = _pool.GetEnemyFromPool();
-            // 体力を注入
+            var parentOffset = parent.localScale.x;
+            enemy.transform.localScale = enemyData.Scale * (1 / parentOffset);
+
+            // ステータス注入
             enemy.Life = enemyData.Life;
-            // スコアを注入
             enemy.Score = enemyData.Score;
-            // 移動情報を注入
-            var startAngle = ratio * i;
-            EnemyDataStructs.SpiralMove moveData = (EnemyDataStructs.SpiralMove)enemyData.MoveData;
-            moveData.MoveDir = Quaternion.AngleAxis(
-                startAngle, Vector3.forward) * enemyData.MoveData.MoveDir;
-            moveData.SpiralRatio = (moveData.MoveSpeed / radius) * Mathf.Rad2Deg;
+
+            // 既にある MoveData を取り出して設定追加
+            var moveData = (EnemyDataStructs.SlavedSpiralMove)enemyData.MoveData;
+
+            moveData.Distance = radius;
+            moveData.AddtionalTime = ratio * i * Mathf.Deg2Rad;
+            moveData.IsRightSpin = isRightSpiral;
+
             enemy.MoveData = moveData;
-            // 行動情報を注入
+
+            // 行動情報注入
             enemy.ActionData = enemyData.ActionData;
-            // 弾のサイズを設定
             if (enemy.ActionData != null)
                 enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
-            // 初期化
+
+            // 初期化処理
             enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
-            // 判定用の矩形を生成
+            enemy.transform.parent = parent;
+
+            // コライダー生成＆登録
             var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
-            // アクタ名を登録
             collider.ActorName = enemy.Name;
-            // 判定タイプを登録
             collider.ColCategory = ColliderCategory.EnemyBody;
-            // 判定マネージャに登録通知を飛ばす
             ColliderManager.Instance.AddCollider(collider);
-            // 生成した敵にコライダーの情報を記憶させる
             enemy.Collider = collider;
-            // 管理対象として追加
+
+            // 管理リストへ追加
             _activeEnemys.Add(enemy);
-
-            ++_createID;
-
             returnList.Add(enemy);
 
-            if (_createID < 100000)
-                continue;
-
-            _createID = 0;
+            ++_createID;
+            if (_createID >= 100000)
+                _createID = 0;
         }
 
         return returnList;

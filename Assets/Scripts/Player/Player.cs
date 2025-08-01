@@ -56,7 +56,7 @@ public class Player : MonoBehaviour, ITargetProvider
     /// <summary>
     /// 弾の発射間隔
     /// </summary>
-    private const float _FIREINTERVAL = 0.1f;
+    private const float _FIREINTERVAL = 0.04f;
 
     /// <summary>
     /// 現在の弾発射インターバル
@@ -220,7 +220,7 @@ public class Player : MonoBehaviour, ITargetProvider
             new BulletStructs.MultiWayShot
             {
                 Origin = this.transform.position,
-                Scale = new(3.0f, 1.5f),
+                Scale = new(1.0f, 1.3f),
                 Dir = transform.right,
                 MoveSpeed = 30.0f,
                 AngleSpan = 90.0f,

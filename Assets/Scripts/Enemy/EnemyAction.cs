@@ -77,30 +77,27 @@ public class EnemyAction
 
             case EnemyDataStructs.SlavedSpiralMove:
                 {
-                    // 移動データを取得
                     var moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
-                    float spinDir = moveData.IsRightSpin ? 1 : -1;
-                    // 現在の座標を取得
+                    float spinDir = moveData.IsRightSpin ? 1f : -1f;
+
+                    // ローカルな時間経過
+                    float elapsed = moveData.ElaspedTime + moveData.AddtionalTime;
+
+                    // 回転角（等角速度回転）
+                    float angleRad = (elapsed * moveData.MoveSpeed) * spinDir * Time.fixedDeltaTime;
+
                     var pos = enemy.transform.localPosition;
-                    var euler = enemy.transform.localEulerAngles;
-                    moveData.MoveDir = Quaternion.AngleAxis
-                        (moveData.MoveSpeed * Time.fixedDeltaTime, Vector3.forward) * moveData.MoveDir;
-                    moveData.MoveSpeed += moveData.ElaspedTime * moveData.Acceleration;
-                    // 移動後座標を計算
-                    var time = Time.fixedTime * spinDir;
-                    var addtionalTime = moveData.AddtionalTime * spinDir;
-                    pos.x = Mathf.Cos(time + addtionalTime) * moveData.Distance;
-                    pos.y = Mathf.Sin(time + addtionalTime) * moveData.Distance;
-                    // それっぽく見せる為に回転もかける
-                    euler.z += moveData.MoveSpeed * Time.fixedDeltaTime * 3.0f;
-                    if (euler.z > 180)
-                        euler.z -= 360;
-                    if (euler.z < -180)
-                        euler.z += 360;
-                    enemy.transform.localEulerAngles = euler;
-                    // 座標を更新
+                    pos.x = Mathf.Cos(angleRad) * moveData.Distance;
+                    pos.y = Mathf.Sin(angleRad) * moveData.Distance;
                     enemy.transform.localPosition = pos;
-                    enemy.MoveData.MoveDir = moveData.MoveDir;
+
+                    // 回転演出（好みに合わせて）
+                    var euler = enemy.transform.localEulerAngles;
+                    euler.z += moveData.MoveSpeed * Time.fixedDeltaTime * 3.0f;
+                    if (euler.z > 180f) euler.z -= 360f;
+                    if (euler.z < -180f) euler.z += 360f;
+                    enemy.transform.localEulerAngles = euler;
+
                 }
                 break;
 
@@ -158,21 +155,12 @@ public class EnemyAction
                     var moveData = (EnemyDataStructs.TrackPlayer)enemy.MoveData;
 
                     Vector3 dir = (moveData.Target.GetPostion() - enemy.transform.position).normalized;
-                    Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, dir);
-
-                    // 徐々に向く
-                    enemy.transform.rotation = Quaternion.RotateTowards(
-                        enemy.transform.rotation,
-                        targetRotation,
-                        moveData.TurnRate * Time.fixedDeltaTime
-                    );
-
+                  
                     // 現在の移動速度を経過時間から計算
-                    moveData.MoveSpeed += moveData.Acceleration * Time.fixedDeltaTime;
+                    moveData.MoveSpeed = moveData.MoveSpeed + moveData.Acceleration * moveData.ElaspedTime;
 
                     // 移動（前方向へ）
-                    enemy.transform.position += enemy.transform.up *
-                        moveData.MoveSpeed * Time.fixedDeltaTime;
+                    enemy.transform.position += dir * moveData.MoveSpeed * Time.fixedDeltaTime;
 
                     enemy.MoveData = moveData;
                 }
@@ -208,7 +196,41 @@ public class EnemyAction
                     if (enemy.MoveData is EnemyDataStructs.MissileMove)
                         data.BulletData.Dir = -enemy.transform.up;
 
+                    data.BulletData.Origin = enemy.transform.position;
+
                     shooter.Shoot(data.BulletData);
+                }
+                break;
+
+            case EnemyDataStructs.SummonEnemy:
+                {
+                    EnemyDataStructs.SummonEnemy data = (EnemyDataStructs.SummonEnemy)enemy.ActionData;
+
+                    if (data.CurrentInterval > 0)
+                    {
+                        enemy.AdvanceInterval();
+                        return;
+                    }
+                    else
+                        enemy.SetActionInterval();
+
+                    if (data.Target != null)
+                        data.BulletData.Dir = (data.Target.GetPostion() - enemy.transform.position).normalized;
+
+                    if (data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵 ||
+                        data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵_自機狙い単発弾 ||
+                        data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way)
+                        EnemyManager.Instance.CreateSpiralBarrierEnemy(
+                            (int)data.SummonID,
+                            enemy.transform.position,
+                            5,
+                            1.0f,
+                            isRightSpiral: true,
+                            enemy.transform);
+
+                    if (data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵 ||
+                        data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵_弾あり)
+                        EnemyManager.Instance.CreateEnemy((int)data.SummonID, enemy.transform.position, -enemy.MoveData.MoveDir);
                 }
                 break;
         }

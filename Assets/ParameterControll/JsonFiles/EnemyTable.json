@@ -87,7 +87,7 @@
 			"BulletSize":"0",
 			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"100",
+			"Life":"40",
 			"Score":"300"
 		},
 		{

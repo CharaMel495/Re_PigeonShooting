@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// ステージ管理クラス
@@ -13,6 +14,9 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     [SerializeField]
     private float _spawnInterval;
 
+    [SerializeField]
+    private EnemyEnums.EnemyID[] _spawnableEnemys;
+
     private float _remainInterval = 0;
 
     public void Initialize()
@@ -25,7 +29,9 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     {
         if (_remainInterval < 0)
         {
-            //EnemyManager.Instance.CreateEnemy(0, GetRandomPositionInArea(5));
+            var id = _spawnableEnemys[Random.Range(0, _spawnableEnemys.Length)];
+
+            EnemyManager.Instance.CreateEnemy((int)id, GetRandomPositionInArea(8));
             _remainInterval = _spawnInterval;
         }
         else

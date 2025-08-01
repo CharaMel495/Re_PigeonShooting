@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
     /// 破棄待ちフラグ
     /// </summary>
     public bool IsDestroyWaiting
-    { get; private set; }
+    { get; set; }
 
     public string Name
     { get; private set; }
@@ -116,7 +116,7 @@ public class Enemy : MonoBehaviour
         else if (_renderer.GetSpriteAlpha() < 0.1f)
             _renderer.SetSpriteAlpha(1.0f);
 
-        if (ActionData == null)
+        if (ActionData.BulletData == null)
             return;
 
         var bulletData = ActionData.BulletData;
@@ -166,5 +166,20 @@ public class Enemy : MonoBehaviour
         _timer.Initialize();
         _isInvincible = false;
         EventDispatcher.Instance.Unsubscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
+        this.transform.localScale = Vector3.one;
+        this.transform.rotation = Quaternion.identity;
+
+        if (this.transform.childCount < 1)
+            return;
+
+        int count = this.transform.childCount;
+
+        for (int i = 0; i < count; ++i)
+        {
+            var child = this.transform.GetChild(i).gameObject;
+            var enemy = child.GetComponent<Enemy>();
+            if (enemy != null)
+                enemy.IsDestroyWaiting = true;
+        }
     }
 }

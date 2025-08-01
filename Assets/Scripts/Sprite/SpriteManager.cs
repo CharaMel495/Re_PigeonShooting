@@ -15,6 +15,7 @@ namespace SpriteData
         Missile,
         SpinningEnemy,
         BossShip,
+        EnemyBullet,
         // アイテム系　200番台
         // システム(UI)系 300番台
     }
@@ -47,6 +48,7 @@ public class SpriteManager
                 SpriteData.SpriteType.SpinningEnemy => SummarizeResourceDirectory.SPINNINGENEMY_TEX,
                 SpriteData.SpriteType.BossShip => SummarizeResourceDirectory.BOSSSHIP_TEX,
                 SpriteData.SpriteType.Missile => SummarizeResourceDirectory.MISSILE_TEX,
+                SpriteData.SpriteType.EnemyBullet => SummarizeResourceDirectory.ENEMYBULLET01_TEX,
                 _ => null
             };
         }

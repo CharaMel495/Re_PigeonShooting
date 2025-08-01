@@ -57,6 +57,7 @@ namespace BossDataStructs
         {
             if (RemainInterval < 0.1f)
                 BarrierEnemyes = EnemyManager.Instance.CreateSpiralBarrierEnemy(
+                    (int)EnemyEnums.EnemyID.渦巻ぐるぐる敵,
                     Transform.position,
                     SummonEnemyVal,
                     3.0f,
