@@ -77,6 +77,9 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
         // 使用する全てのキューシートを読み込む
         await _cueSheetManager.LoadAllCueSheetsAsync(_destroyToken);
 
+        ChangeMasterVolume(0.5f);
+        ChangeBGMVolume(0.25f);
+        ChangeSEVolume(1.0f);
         PlayBGM(BGM.MainStage);
     }
 
