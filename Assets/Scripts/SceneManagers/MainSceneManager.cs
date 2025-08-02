@@ -12,6 +12,8 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
         PlayerManager.Instance.Initialize();
         EnemyManager.Instance.Initialize();
 
+        _ = CRISoundManager.Instance.Initialize();
+
         //EnemyManager.Instance.CreateEnemy(0, new Vector3(3.0f, 1.5f, 0.0f));
         //EnemyManager.Instance.CreateEnemy(0, new Vector3(1.5f, -1.5f, 0.0f));
         //EnemyManager.Instance.CreateEnemy(0, new Vector3(4.5f, -1.5f, 0.0f));

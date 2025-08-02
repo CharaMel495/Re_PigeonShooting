@@ -186,6 +186,7 @@ public class Player : MonoBehaviour, ITargetProvider
 
         // 弾を発射する
         Shooter.Shoot(data as BulletStructs.IBulletCreateData, _slopeCondition);
+        CRISoundManager.Instance.PlaySE(SFX.PlayerShot);
     }
 
     public void ShootLazer(BulletStructs.LazerParam param)

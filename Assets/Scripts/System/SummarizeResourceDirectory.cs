@@ -20,4 +20,9 @@ public class SummarizeResourceDirectory
 
     public const string ENEMYTABLE_PATH = "/ParameterControll/JsonFiles/EnemyTable.json";
     public const string ENEMYTABLEASSET_PATH = "Assets/ExternalResources/EnemyParamTable.asset";
+
+    ///CRIPath///
+    
+    public const string CRI_ACFFILE_PATH = "Assets/StreamingAssets/CRIAssets/Re_PegionShooting.acf";
+    public const string CRI_ACBFILE_PATH_TEMPLATE = "CRIAssets/";
 }
