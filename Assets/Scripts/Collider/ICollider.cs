@@ -11,6 +11,7 @@ public interface ICollider
     Vector3 Position { get; }
     ColliderCategory ColCategory { get; set; }
     string ActorName { get; set; }
+    public IColliderbleObject Owner { get; set; }
 
     public bool Equals(ICollider other)
     {

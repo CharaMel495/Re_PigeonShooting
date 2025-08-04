@@ -40,8 +40,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void Initialize()
     {
-        MainSceneManager.Instance.Initialize();
         EventDispatcher.Instance.Initialize();
+        MainSceneManager.Instance.Initialize();
     }
 
     private void Update()

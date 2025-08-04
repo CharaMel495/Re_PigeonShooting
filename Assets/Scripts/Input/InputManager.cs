@@ -41,16 +41,16 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     //{ get => IsGamePadMode ? KeyCode.JoystickButton0 : KeyCode.Space; }
 
     /// <summary>
-    /// サブショット
+    /// 吸引キー
     /// </summary>
-    public static KeyCode SubShotKey
-    { get => IsGamePadMode ? KeyCode.JoystickButton5 : KeyCode.X; }
+    public static KeyCode VacuumKey
+    { get => IsGamePadMode ? KeyCode.JoystickButton4 : KeyCode.X; }
 
     /// <summary>
-    /// キャンセルキー
+    /// 回避ダッシュキー
     /// </summary>
-    public static KeyCode BombKey
-    { get => IsGamePadMode ? KeyCode.JoystickButton1 : KeyCode.C; }
+    public static KeyCode DashKey
+    { get => IsGamePadMode ? KeyCode.JoystickButton5 : KeyCode.LeftShift; }
 
     /// <summary>
     /// キャンセルキー

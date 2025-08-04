@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// ボスの本体クラス
 /// </summary>
-public class Boss : MonoBehaviour
+public class Boss : MonoBehaviour, IColliderbleObject
 {
     private enum ActionType
     {
@@ -44,14 +44,28 @@ public class Boss : MonoBehaviour
 
     private int hoge = 0;
 
+    public ICollider Collider => _rect;
+
+    public object TriggerEnterEventData
+        => null;
+
+    public object TriggerStayEventData
+        => null;
+
+    public object TriggerExitEventData
+        => null;
+
     public void Initialize()
     {
         _renderer.Initialize();
         _renderer.SetSprite(SpriteManager.GetSprite(SpriteData.SpriteType.BossShip));
 
-        _rect = new(this.transform);
-        _rect.ColCategory = ColliderCategory.EnemyBody;
-        _rect.ActorName = "BossShip";
+        _rect = new(this.transform)
+        {
+            ColCategory = ColliderCategory.EnemyBody,
+            ActorName = "BossShip",
+            Owner = this
+        };
         ColliderManager.Instance.AddCollider(_rect);
 
         _timer = new();
@@ -124,7 +138,7 @@ public class Boss : MonoBehaviour
         _currentPattern = 0;
         _currentAction = _actionPattern[_currentPattern];
 
-        EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, _rect.ActorName), OnHit);
+        EventDispatcher.Instance.Bind(this, _rect.ActorName);
     }
 
     private void FixedUpdate()
@@ -175,6 +189,7 @@ public class Boss : MonoBehaviour
         _actions[_currentAction].Initialize();
     }
 
+    [CallableEvent("OnTriggerEnter")]
     public void OnHit(object data)
     {
         if (_isInvincible)
@@ -189,6 +204,7 @@ public class Boss : MonoBehaviour
         if (Life < 1)
         {
             //IsDestroyWaiting = true;
+            EventDispatcher.Instance.Unbind(this, _rect.ActorName);
             return;
         }
 

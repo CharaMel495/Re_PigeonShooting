@@ -18,8 +18,11 @@ namespace PlayerBullet
 /// <summary>
 /// プレイヤーの本体クラス
 /// </summary>
-public class Player : MonoBehaviour, ITargetProvider
+public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 {
+    [SerializeField]
+    private PlayerFollowCamera _camera;
+
     [SerializeField]
     private SpriteRendererWrapper _renderer;
 
@@ -33,6 +36,10 @@ public class Player : MonoBehaviour, ITargetProvider
     /// </summary>
     public Animator Animator
         => _animator;
+
+    [SerializeField]
+    //ひとまずの動作てすと
+    private SpriteRendererWrapper _vacuume;
 
     public BulletShooter Shooter
     { get; set; }
@@ -72,6 +79,8 @@ public class Player : MonoBehaviour, ITargetProvider
 
     private bool _isInvincible = false;
 
+    private bool _isVacuuming = false;
+
     private Timer _timer;
 
     private int _exp;
@@ -86,6 +95,20 @@ public class Player : MonoBehaviour, ITargetProvider
     // パラメータ名（Animator Controller内で設定したもの）
     private readonly int _animParamX = Animator.StringToHash("X");
     private readonly int _animParamY = Animator.StringToHash("Y");
+    private readonly int _animParamVacuume = Animator.StringToHash("IsVacuuming");
+
+    // コライダー関係
+    private SelfMade.Circle _circle;
+    public ICollider Collider => _circle;
+
+    public object TriggerEnterEventData
+        => null;
+
+    public object TriggerStayEventData
+        => null;
+
+    public object TriggerExitEventData
+        => null;
 
     /// <summary>
     /// 経験値
@@ -115,13 +138,6 @@ public class Player : MonoBehaviour, ITargetProvider
 
     public void Initialize()
     {
-        // 弾発射イベントを登録
-        EventDispatcher.Instance.Subscribe(
-            EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), Fire);
-
-        EventDispatcher.Instance.Subscribe(
-            EventNames.GetEventName(Events.OnSubShotKeyPressed, "Player"), Fire);
-
         _exp = 0;
         _level = 0;
 
@@ -136,13 +152,32 @@ public class Player : MonoBehaviour, ITargetProvider
         CreateBulletParameter();
         CreatePlayerShotList();
 
-        SelfMade.Circle circle = new SelfMade.Circle(_hitBox);
-        circle.ActorName = "Player";
-        circle.ColCategory = ColliderCategory.PlayerBody;
-        ColliderManager.Instance.AddCollider(circle);
+        _circle = new SelfMade.Circle(_hitBox)
+        {
+            ActorName = "Player",
+            ColCategory = ColliderCategory.PlayerBody,
+            Owner = this
+        };
+        ColliderManager.Instance.AddCollider(_circle);
 
-        EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, "Player"), OnHit);
+        // 自動でバインドできるものをイベント登録
+        EventDispatcher.Instance.Bind(this, "Player");
+        // ラムダを使ってて自動バインドできないものを登録
+        // 経験値取得イベント
         EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnSmashed, "Player"), (object data) => Exp += (int)data);
+        // 吸引イベント
+        EventDispatcher.Instance.Subscribe(
+            EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"), (object _) => { Vacuume(); });
+        EventDispatcher.Instance.Subscribe(
+            EventNames.GetEventName(Events.OnVacuumKeyReleased, "Player"), (object _) => { EndVacuume(); });
+        // ダッシュイベント
+        EventDispatcher.Instance.Subscribe(
+            EventNames.GetEventName(Events.OnDashKeyPressed, "Player"), (object _) => { Dash(); });
+        // エアーバスター
+        EventDispatcher.Instance.Subscribe(
+            EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"), (object _) => { AirBaster(); });
+
+        _vacuume.Initialize();
     }
 
     private void FixedUpdate()
@@ -168,10 +203,12 @@ public class Player : MonoBehaviour, ITargetProvider
     /// 弾を撃つメソッド
     /// </summary>
     /// <param name="data">弾に渡すデータ</param>
+    [CallableEvent("OnShotKeyPressed")]
     public void Fire(object data)
     {
         // インターバル中は弾を撃たない
-        if (IsInterval)
+        // 吸引中も弾を撃たない
+        if (IsInterval || _isVacuuming)
             return;
 
         // インターバルをセット
@@ -187,6 +224,30 @@ public class Player : MonoBehaviour, ITargetProvider
         // 弾を発射する
         Shooter.Shoot(data as BulletStructs.IBulletCreateData, _slopeCondition);
         CRISoundManager.Instance.PlaySE(SFX.PlayerShot);
+    }
+
+    public void Vacuume()
+    {
+        _vacuume.SetEnabled(true);
+        _isVacuuming = true;
+        _animator.SetBool(_animParamVacuume, _isVacuuming);
+    }
+
+    public void EndVacuume()
+    {
+        _vacuume.SetEnabled(false);
+        _isVacuuming = false;
+        _animator.SetBool(_animParamVacuume, _isVacuuming);
+    }
+
+    public void AirBaster()
+    {
+
+    }
+
+    public void Dash()
+    {
+
     }
 
     public void ShootLazer(BulletStructs.LazerParam param)
@@ -328,10 +389,13 @@ public class Player : MonoBehaviour, ITargetProvider
     public Vector3 GetPostion()
         => this.transform.position;
 
-    public void OnHit(object data)
+    [CallableEvent("OnTriggerEnter")]
+    public void OnAnyEnter(object data)
     {
         if (_isInvincible)
             return;
+
+        _camera.Shake(0.1f, 0.2f);
 
         _isInvincible = true;
 

@@ -98,14 +98,19 @@ public static class EventNames
     {
         return eventType switch
         {
+            Events.OnTriggerEnter => $"{eventOwner}OnTriggerEnter",
+            Events.OnTriggerStay => $"{eventOwner}OnTriggerStay",
+            Events.OnTriggerExit => $"{eventOwner}OnTriggerExit",
             Events.OnHit => $"{eventOwner}OnHit",
             Events.OnDead => $"{eventOwner}OnDead",
             Events.OnSmashed => $"{eventOwner}OnSmashed",
             Events.OnShotKeyPressed => $"{eventOwner}OnShotKeyPressed",
-            Events.OnSubShotKeyPressed => $"{eventOwner}OnSubShotKeyPressed",
-            Events.OnBombKeyPressed => $"{eventOwner}OnBombKeyPressed",
+            Events.OnVacuumKeyPressed => $"{eventOwner}OnVacuumKeyPressed",
+            Events.OnVacuumKeyReleased => $"{eventOwner}OnVacuumKeyReleased",
+            Events.OnDashKeyPressed => $"{eventOwner}OnDashKeyPressed",
             Events.OnMenuKeyPressed => $"{eventOwner}OnMenuKeyPressed",
             Events.OnGameEnd => $"{eventOwner}OnGameEnd",
+            Events.OnAirBasterKeyPressed => $"{eventOwner}OnAirBasterKeyPressed",
             _ => null
         };
     }
@@ -113,12 +118,17 @@ public static class EventNames
 
 public enum Events
 {
+    OnTriggerEnter,
+    OnTriggerStay,
+    OnTriggerExit,
     OnHit,
     OnDead,
     OnSmashed,
     OnShotKeyPressed,
-    OnSubShotKeyPressed,
-    OnBombKeyPressed,
+    OnVacuumKeyPressed,
+    OnVacuumKeyReleased,
+    OnDashKeyPressed,
+    OnAirBasterKeyPressed,
     OnMenuKeyPressed,
     OnGameEnd,
 }

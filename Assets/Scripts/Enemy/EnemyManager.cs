@@ -162,6 +162,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         collider.ActorName = enemy.Name;
         // 判定タイプを登録
         collider.ColCategory = ColliderCategory.EnemyBody;
+        // オーナー登録
+        collider.Owner = enemy;
         // 判定マネージャに登録通知を飛ばす
         ColliderManager.Instance.AddCollider(collider);
         // 生成した敵にコライダーの情報を記憶させる
@@ -231,6 +233,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             collider.ActorName = enemy.Name;
             // 判定タイプを登録
             collider.ColCategory = ColliderCategory.EnemyBody;
+            // オーナー登録
+            collider.Owner = enemy;
             // 判定マネージャに登録通知を飛ばす
             ColliderManager.Instance.AddCollider(collider);
             // 生成した敵にコライダーの情報を記憶させる
@@ -290,6 +294,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
             collider.ActorName = enemy.Name;
             collider.ColCategory = ColliderCategory.EnemyBody;
+            // オーナー登録
+            collider.Owner = enemy;
             ColliderManager.Instance.AddCollider(collider);
             enemy.Collider = collider;
 

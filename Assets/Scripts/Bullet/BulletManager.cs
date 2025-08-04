@@ -100,6 +100,8 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
         var collider = ColliderManager.Instance.CreateCollider(bullet.transform, ColliderType.Rectangle);
         // 判定タイプを登録
         collider.ColCategory = bulletData.ColCategory;
+        // オーナー登録
+        collider.Owner = bullet;
         // 判定マネージャに登録通知を飛ばす
         ColliderManager.Instance.AddCollider(collider);
         bullet.Collider = collider;

@@ -5,7 +5,7 @@ using EnemyEnums;
 /// 敵の本体クラス
 /// (ただし、実体的にはデータ指向設計の為、概ねデータクラスである)
 /// </summary>
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IColliderbleObject
 {
     [SerializeField]
     [Header("画像描画するやつ")]
@@ -70,6 +70,15 @@ public class Enemy : MonoBehaviour
     public int Score
     { get; set; }
 
+    public object TriggerEnterEventData 
+        => null;
+
+    public object TriggerStayEventData 
+        => null;
+
+    public object TriggerExitEventData 
+        => null;
+
     public void Initialize()
     {
         _renderer.Initialize();
@@ -90,7 +99,7 @@ public class Enemy : MonoBehaviour
         IsDestroyWaiting = false;
         Name = name;
 
-        EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
+        EventDispatcher.Instance.Bind(this, Name);
 
         if (MoveData is EnemyDataStructs.MissileMove)
             this.transform.up = MoveData.MoveDir;
@@ -137,6 +146,7 @@ public class Enemy : MonoBehaviour
             IsDestroyWaiting = true;
     }
 
+    [CallableEvent("OnTriggerEnter")]
     public void OnHit(object data)
     {
         if (_isInvincible)
@@ -165,7 +175,7 @@ public class Enemy : MonoBehaviour
         IsDestroyWaiting = false;
         _timer.Initialize();
         _isInvincible = false;
-        EventDispatcher.Instance.Unsubscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
+        EventDispatcher.Instance.Unbind(this, Name);
         this.transform.localScale = Vector3.one;
         this.transform.rotation = Quaternion.identity;
 

@@ -4,7 +4,7 @@
 /// 弾クラス。ただ、実体はデータ指向のため
 /// ほとんどデータクラス
 /// </summary>
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, IColliderbleObject
 {
     [SerializeField]
     [Header("画像描画するやつ")]
@@ -51,6 +51,15 @@ public class Bullet : MonoBehaviour
     public ICollider Collider
     { get; set; }
 
+    public object TriggerEnterEventData
+        => null;
+
+    public object TriggerStayEventData
+        => null;
+
+    public object TriggerExitEventData
+        => null;
+
     public void Initialize()
     {
         _renderer.Initialize();
@@ -93,10 +102,12 @@ public class Bullet : MonoBehaviour
         RemainLifeTime = _LIFETIME;
         IsActive = false;
         IsDestroyWaiting = false;
-        EventDispatcher.Instance.Unsubscribe(EventNames.GetEventName(Events.OnHit, Name), OnHit);
+        EventDispatcher.Instance.Unbind(this, Name);
+        this.transform.localScale = Vector3.one;
+        this.transform.rotation = Quaternion.identity;
     }
 
-    [CallableEvent("OnHit")]
+    [CallableEvent("OnTriggerEnter")]
     public void OnHit(object data)
     {
         IsDestroyWaiting = true;

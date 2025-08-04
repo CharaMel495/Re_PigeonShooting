@@ -49,6 +49,8 @@ namespace SelfMade
         public float LocalScale_Y
         { get; private set; }
 
+        public IColliderbleObject Owner { get; set; }
+
         /// <summary>
         /// コンストラクタ
         /// </summary>

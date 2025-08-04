@@ -28,6 +28,8 @@ namespace SelfMade
         public float RadiusPowered
             => Radius * Radius;
 
+        public IColliderbleObject Owner { get; set; }
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
