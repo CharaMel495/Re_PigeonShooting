@@ -42,6 +42,9 @@ public class Boss : MonoBehaviour, IColliderbleObject
     public int Score
     { get; set; }
 
+    public bool IsDestroyWaiting
+    { get; private set; }
+
     private int hoge = 0;
 
     public ICollider Collider => _rect;

@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     [Header("画像描画するやつ")]
     private SpriteRendererWrapper _renderer;
 
+    [SerializeField]
+    private Item _dropItem;
+
     /// <summary>
     /// プレイエリア内に入ってるか
     /// </summary>
@@ -71,7 +74,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     { get; set; }
 
     public object TriggerEnterEventData 
-        => null;
+        => new DamageEventData { Damage = 1 };
 
     public object TriggerStayEventData 
         => null;
@@ -152,14 +155,22 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         if (_isInvincible)
             return;
 
-        _isInvincible = true;
+        if (!(data is DamageEventData damageData))
+            return;
+        else
+        {
+            _isInvincible = true;
 
-        --Life;
+            Life -= damageData.Damage;
+        }
 
         if (Life < 1)
         {
             IsDestroyWaiting = true;
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnSmashed, "Player"), 1);
+            var item = Instantiate(_dropItem, this.transform.position, Quaternion.identity);
+            item.Initialize(ItemType.Battery_Green);
+            item.Dir = this.MoveData.MoveDir;
             return;
         }
 

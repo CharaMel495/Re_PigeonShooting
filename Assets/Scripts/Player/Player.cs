@@ -15,6 +15,11 @@ namespace PlayerBullet
     }
 }
 
+public struct DamageEventData
+{
+    public int Damage { get; set; }
+}
+
 /// <summary>
 /// プレイヤーの本体クラス
 /// </summary>
@@ -38,8 +43,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         => _animator;
 
     [SerializeField]
-    //ひとまずの動作てすと
-    private SpriteRendererWrapper _vacuume;
+    private ItemVacuumer _vacuume;
 
     public BulletShooter Shooter
     { get; set; }
@@ -79,6 +83,11 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private bool _isInvincible = false;
 
+    public bool IsDash
+    { get; private set; } = false;
+
+    private readonly float _dashTime = 0.1f;
+
     private bool _isVacuuming = false;
 
     private Timer _timer;
@@ -91,6 +100,13 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private const int _MAXLEVEL = 5;
 
     private float _slopeCondition;
+
+    private int _dustValue;
+    public int Life
+    { get; private set; }
+
+    public bool IsDestroyWaiting
+    { get; private set; }
 
     // パラメータ名（Animator Controller内で設定したもの）
     private readonly int _animParamX = Animator.StringToHash("X");
@@ -177,7 +193,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         EventDispatcher.Instance.Subscribe(
             EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"), (object _) => { AirBaster(); });
 
-        _vacuume.Initialize();
+        _vacuume.Initialize("Player", this.transform);
     }
 
     private void FixedUpdate()
@@ -208,7 +224,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     {
         // インターバル中は弾を撃たない
         // 吸引中も弾を撃たない
-        if (IsInterval || _isVacuuming)
+        // ダッシュ中も弾を撃たない
+        if (IsInterval || _isVacuuming || IsDash)
             return;
 
         // インターバルをセット
@@ -228,14 +245,20 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void Vacuume()
     {
-        _vacuume.SetEnabled(true);
+        if (_isVacuuming)
+            return;
+
+        _vacuume.EnActive();
         _isVacuuming = true;
         _animator.SetBool(_animParamVacuume, _isVacuuming);
     }
 
     public void EndVacuume()
     {
-        _vacuume.SetEnabled(false);
+        if (!_isVacuuming)
+            return;
+
+        _vacuume.DisActive();
         _isVacuuming = false;
         _animator.SetBool(_animParamVacuume, _isVacuuming);
     }
@@ -247,7 +270,19 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void Dash()
     {
+        if (IsDash || _isVacuuming)
+            return;
 
+        IsDash = true;
+        ColliderManager.Instance.RemoveCollider(_circle);
+
+        _timer.CreateTask(EndDash, _dashTime);
+    }
+
+    private void EndDash()
+    {
+        IsDash = false;
+        ColliderManager.Instance.AddCollider(_circle);
     }
 
     public void ShootLazer(BulletStructs.LazerParam param)
@@ -395,10 +430,51 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         if (_isInvincible)
             return;
 
+        switch (data)
+        {
+            case DamageEventData:
+                GetDamage((DamageEventData)data);
+                break;
+
+            case GetItemEventData:
+                GetItem((GetItemEventData)data);
+                break;
+        }
+    }
+
+    private void GetItem(GetItemEventData item)
+    {
+        switch (item.ItemType)
+        {
+            case ItemType.Battery_Green:
+                HealHP(1);
+                break;
+            case ItemType.Battery_Red:
+                Exp += 1;
+                break;
+            case ItemType.Garbage:
+                _dustValue += 1;
+                break;
+        }
+    }
+
+    private void GetDamage(DamageEventData data)
+    {
+        Life -= data.Damage;
+
         _camera.Shake(0.1f, 0.2f);
 
         _isInvincible = true;
 
         _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
+    }
+
+    private void HealHP(int value)
+        => Life += value;
+
+    [CallableEvent("OnGetItem")]
+    public void OnItemGet(object data)
+    {
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -30,6 +31,8 @@ public enum ColliderCategory
     PlayerBomb,
     EnemyBody,
     EnemyBullet,
+    Item,
+    ItemVacuumer
 }
 
 /// <summary>
@@ -69,6 +72,8 @@ public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
         DefineCollision(ColliderCategory.EnemyBody, ColliderCategory.PlayerBullet);
         DefineCollision(ColliderCategory.EnemyBody, ColliderCategory.PlayerBomb);
         DefineCollision(ColliderCategory.EnemyBullet, ColliderCategory.PlayerBomb);
+        DefineCollision(ColliderCategory.Item, ColliderCategory.PlayerBody);
+        DefineCollision(ColliderCategory.Item, ColliderCategory.ItemVacuumer);
     }
 
     /// <summary>
@@ -164,6 +169,19 @@ public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
 
         // 衝突状態を次フレームに持ち越し（差分抽出のため）
         (_previousCollisions, _currentCollisions) = (_currentCollisions, _previousCollisions);
+
+        foreach (var obj in _colliders.ToArray())
+        {
+            if (!obj.Owner.IsDestroyWaiting)
+                continue;
+
+            var type = obj.Owner.GetType();
+            bool hasAttr = Attribute.IsDefined(type, typeof(StandAloneObjectAttribute));
+            if (!hasAttr)
+                continue;
+            // もしマネージャー無しのクラスならここで消す
+            obj.Owner.DestroyByColliderManager();
+        }
     }
 
     /// <summary>
@@ -190,8 +208,8 @@ public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
             };
 
             // EventDispatcher にてイベント名を生成・発火
-            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(CastToEventName(type), a.ActorName), dataA);
-            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(CastToEventName(type), b.ActorName), dataB);
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(CastToEventName(type), a.ActorName), dataB);
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(CastToEventName(type), b.ActorName), dataA);
         }
     }
 

@@ -111,6 +111,7 @@ public static class EventNames
             Events.OnMenuKeyPressed => $"{eventOwner}OnMenuKeyPressed",
             Events.OnGameEnd => $"{eventOwner}OnGameEnd",
             Events.OnAirBasterKeyPressed => $"{eventOwner}OnAirBasterKeyPressed",
+            Events.OnGetItem => $"{eventOwner}OnGetItem",
             _ => null
         };
     }
@@ -131,4 +132,5 @@ public enum Events
     OnAirBasterKeyPressed,
     OnMenuKeyPressed,
     OnGameEnd,
+    OnGetItem,
 }

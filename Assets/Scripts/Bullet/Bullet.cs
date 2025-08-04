@@ -52,7 +52,7 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     { get; set; }
 
     public object TriggerEnterEventData
-        => null;
+        => new DamageEventData { Damage = 1 };
 
     public object TriggerStayEventData
         => null;

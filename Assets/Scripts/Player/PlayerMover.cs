@@ -6,6 +6,12 @@ public class PlayerMover
 
     private Rect _playerArea;
 
+    private Vector3 _inputDir;
+
+    private bool _inputLock = false;
+
+    private float _dashMag = 5.0f;
+
     public PlayerMover(float moveSpeed, Rect area)
     {
         _moveSpeed = moveSpeed;
@@ -20,13 +26,16 @@ public class PlayerMover
 
     public void MovePlayer(Player player)
     {
-        var inputDir = InputManager.GetInputDirection(InputHandler.Player).normalized;
+        if (!_inputLock)
+            _inputDir = InputManager.GetInputDirection(InputHandler.Player).normalized;
+
+        _inputLock = player.IsDash;
 
         var transform = player.transform;
         var pos = transform.position;
         var scale = transform.localScale;
         var halfScale = scale * 0.5f;
-        pos += (Vector3)inputDir * _moveSpeed * Time.fixedDeltaTime;
+        pos += _inputDir * _moveSpeed * Time.fixedDeltaTime * (player.IsDash ? _dashMag : 1);
 
         if (CheckArea(pos, halfScale))
             CrrectInArea(ref pos, halfScale);
