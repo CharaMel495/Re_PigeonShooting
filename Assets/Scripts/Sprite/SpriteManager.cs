@@ -17,6 +17,9 @@ namespace SpriteData
         BossShip,
         EnemyBullet,
         // アイテム系　200番台
+        HealItem = 200,
+        PowItem,
+        Dust
         // システム(UI)系 300番台
     }
 }
@@ -49,6 +52,9 @@ public class SpriteManager
                 SpriteData.SpriteType.BossShip => SummarizeResourceDirectory.BOSSSHIP_TEX,
                 SpriteData.SpriteType.Missile => SummarizeResourceDirectory.MISSILE_TEX,
                 SpriteData.SpriteType.EnemyBullet => SummarizeResourceDirectory.ENEMYBULLET01_TEX,
+                SpriteData.SpriteType.HealItem => SummarizeResourceDirectory.HEALITEM_TEX,
+                SpriteData.SpriteType.PowItem => SummarizeResourceDirectory.POWITEM_TEX,
+                SpriteData.SpriteType.Dust => SummarizeResourceDirectory.DUSTITEM_TEX,
                 _ => null
             };
         }

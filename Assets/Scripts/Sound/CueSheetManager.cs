@@ -17,6 +17,7 @@ public enum SFX
 {
     // SEのキーをここに追加する
     PlayerShot,
+    AirBaster,
 }
 
 

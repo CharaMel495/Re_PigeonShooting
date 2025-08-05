@@ -45,6 +45,12 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     [SerializeField]
     private ItemVacuumer _vacuume;
 
+    [SerializeField]
+    private AirBaster _airBaster;
+
+    [SerializeField]
+    private ImageWrapper _lifeImage;
+
     public BulletShooter Shooter
     { get; set; }
 
@@ -67,7 +73,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     /// <summary>
     /// 弾の発射間隔
     /// </summary>
-    private const float _FIREINTERVAL = 0.04f;
+    private const float _MINFIREINTERVAL = 0.04f;
+
+    private const float _MAXFIREINTERVAL = 0.4f;
 
     /// <summary>
     /// 現在の弾発射インターバル
@@ -87,6 +95,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     { get; private set; } = false;
 
     private readonly float _dashTime = 0.1f;
+    private readonly float _bombTime = 0.1f;
 
     private bool _isVacuuming = false;
 
@@ -101,9 +110,18 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private float _slopeCondition;
 
+    private readonly int _maxDustValue = 15;
     private int _dustValue;
+    private readonly int _maxLife = 100;
+    private int _life;
     public int Life
-    { get; private set; }
+    { get => _life;
+        private set
+        {
+            _life = value;
+            UpdateLifeUI(_life / (float)_maxLife);
+        }    
+    }
 
     public bool IsDestroyWaiting
     { get; private set; }
@@ -164,6 +182,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _renderer.Initialize();
         _renderer.SetSprite(SpriteManager.GetSprite(SpriteData.SpriteType.Player));
 
+        _lifeImage.Initialize();
+        Life = _maxLife;
+
         // 弾を発射する為の構造体はここで作っちゃう
         CreateBulletParameter();
         CreatePlayerShotList();
@@ -194,6 +215,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
             EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"), (object _) => { AirBaster(); });
 
         _vacuume.Initialize("Player", this.transform);
+        _airBaster.Initialize("Player");
     }
 
     private void FixedUpdate()
@@ -228,8 +250,12 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         if (IsInterval || _isVacuuming || IsDash)
             return;
 
+        // ほこりの量が最大の時も打たない
+        if (_dustValue >= _maxDustValue)
+            return;
+
         // インターバルをセット
-        _intervalTime = _FIREINTERVAL;
+        _intervalTime = Mathf.Lerp(_MINFIREINTERVAL, _MAXFIREINTERVAL, (_dustValue / (float)_maxDustValue));
 
         // 特殊弾の分岐：レーザー
         if (data is BulletStructs.LazerParam)
@@ -265,7 +291,19 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void AirBaster()
     {
+        if (_dustValue < _maxDustValue)
+            return;
 
+        _camera.Shake(_bombTime * 10, 1.0f);
+
+        _dustValue = 0;
+
+        _airBaster.EnActive();
+
+        _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
+
+        CRISoundManager.Instance.PlaySE(SFX.AirBaster);
+        CRISoundManager.Instance.BombEffect(_bombTime * 30);
     }
 
     public void Dash()
@@ -442,18 +480,27 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         }
     }
 
+    [CallableEvent("OnGetItem")]
+    public void OnGetItem(object data)
+    {
+        if (data is GetItemEventData itemData)
+            GetItem(itemData);
+    }
+
     private void GetItem(GetItemEventData item)
     {
         switch (item.ItemType)
         {
             case ItemType.Battery_Green:
-                HealHP(1);
+                HealHP(item.Value);
                 break;
             case ItemType.Battery_Red:
-                Exp += 1;
+                Exp += item.Value;
                 break;
             case ItemType.Garbage:
-                _dustValue += 1;
+                _dustValue += item.Value;
+                _dustValue = Mathf.Min(_dustValue, _maxDustValue);
+                Debug.Log(_dustValue);
                 break;
         }
     }
@@ -472,9 +519,29 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private void HealHP(int value)
         => Life += value;
 
-    [CallableEvent("OnGetItem")]
-    public void OnItemGet(object data)
+    private void UpdateLifeUI(float ratio)
     {
+        // 0～1で clamping
+        ratio = Mathf.Clamp01(ratio);
 
+        // ゲージの進行
+        _lifeImage.SetFillAmount(ratio);
+
+        // 色の変化（緑→黄→赤）
+        Color newColor;
+        if (ratio > 0.5f)
+        {
+            // 緑→黄（0.5～1.0）
+            float t = (ratio - 0.5f) * 2f;
+            newColor = Color.Lerp(Color.yellow, Color.green, t);
+        }
+        else
+        {
+            // 黄→赤（0.0～0.5）
+            float t = ratio * 2f;
+            newColor = Color.Lerp(Color.red, Color.yellow, t);
+        }
+
+        _lifeImage.SetImageColor(newColor);
     }
 }

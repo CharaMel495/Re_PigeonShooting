@@ -169,7 +169,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
             IsDestroyWaiting = true;
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnSmashed, "Player"), 1);
             var item = Instantiate(_dropItem, this.transform.position, Quaternion.identity);
-            item.Initialize(ItemType.Battery_Green);
+            item.Initialize(ItemType.Garbage);
             item.Dir = this.MoveData.MoveDir;
             return;
         }

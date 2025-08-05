@@ -13,6 +13,10 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
     /// BGMの再生を担うプレイヤー
     /// </summary>
     private CriAtomExPlayer _bgmPlayer;
+    /// <summary>
+    /// BGMの再生中に制御を行う構造体
+    /// </summary>
+    private CriAtomExPlayback _bgmPlayback;
 
     /// <summary>
     /// 立体音響を使わない(SEを鳴らすときに使用する音源の指定がない)
@@ -47,9 +51,12 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
     // SEボリューム
     public static float SEVolume { get; set; } = 0.75f;
 
+    private Durator _durator;
+
     private void FixedUpdate()
     {
         //_cueSheetManager?.Update();
+        _durator?.Update();
     }
 
     /// <summary>
@@ -78,9 +85,12 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
         await _cueSheetManager.LoadAllCueSheetsAsync(_destroyToken);
 
         ChangeMasterVolume(0.5f);
-        ChangeBGMVolume(0.25f);
+        ChangeBGMVolume(0.5f);
         ChangeSEVolume(1.0f);
         PlayBGM(BGM.MainStage);
+
+        _durator = new();
+        _durator.Initialize();
     }
 
     /// <summary>
@@ -103,6 +113,9 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
         var cueSheet = _cueSheetManager.GetCueSheet(se);
         if (cueSheet == null) 
             return;
+
+        foreach (var item in cueSheet.Acb.GetCueInfoList())
+            Debug.Log(item.name);
 
         // 鳴らすキューを文字列で指定し再生
         source.cueSheet = cueSheet.Name;
@@ -133,7 +146,7 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
         // キューをセット
         _bgmPlayer.SetCue(_currentBgmAcb, bgm.ToString());
         // 再生開始
-        _bgmPlayer.Start();
+        _bgmPlayback = _bgmPlayer.Start();
     }
 
     /// <summary>
@@ -168,7 +181,9 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
     public void ChangeBGMVolume(float volume)
     {
         BGMVolume = Mathf.Clamp01(volume);
-        _bgmPlayer?.SetVolume(BGMVolume * MasterVolume);
+
+        _bgmPlayer.SetVolume(BGMVolume * MasterVolume);
+        _bgmPlayer.Update(_bgmPlayback);
     }
 
     /// <summary>
@@ -207,5 +222,22 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
     public void ResetPlaySpeed()
     {
         _bgmPlayer.SetPlaybackRatio(1.0f);
+    }
+
+    public void BombEffect(float duration)
+    {
+        var currentVolume = BGMVolume;
+
+        ChangeBGMVolume(0.0f);
+
+        _durator.CreateTask((float _elapsedTime, float _endTime) => ZeroToCurrent(_elapsedTime, _endTime, currentVolume),
+            () => ChangeBGMVolume(currentVolume), duration);
+    }
+
+    public void ZeroToCurrent(float _elapsedTime, float _endTime, float volume)
+    {
+        var ratio = _elapsedTime / _endTime;
+
+        ChangeBGMVolume(Mathf.Lerp(0, volume, ratio));
     }
 }

@@ -57,4 +57,12 @@ public class ImageWrapper : MonoBehaviour
     /// </summary>
     public void SetImageAlpha(float value)
         => _image.color = new(_image.color.r, _image.color.g, _image.color.b, value);
+
+    public void SetFillAmount(float value)
+    {
+        if (_image.type != Image.Type.Filled)
+            return;
+
+        _image.fillAmount = Mathf.Clamp01(value);
+    }
 }

@@ -22,6 +22,9 @@ public class Item : MonoBehaviour, IColliderbleObject
     [SerializeField]
     private float _moveSpeed;
 
+    [SerializeField]
+    private SpriteRendererWrapper _renderer;
+
     /// <summary>
     /// 吸引されてる対象
     /// 吸引された時に、寄れるように
@@ -53,6 +56,8 @@ public class Item : MonoBehaviour, IColliderbleObject
 
     public void Initialize(ItemType type, int value = 1)
     {
+        _renderer.Initialize();
+
         _circle = new SelfMade.Circle(this.transform)
         {
             ActorName = $"Item{_createID}",
@@ -69,6 +74,18 @@ public class Item : MonoBehaviour, IColliderbleObject
 
         _type = type;
         _value = value;
+        _renderer.SetSprite(SpriteManager.GetSprite(CastSpriteType()));
+
+        SpriteData.SpriteType CastSpriteType()
+        {
+            return type switch
+            {
+                ItemType.Battery_Green => SpriteData.SpriteType.HealItem,
+                ItemType.Battery_Red => SpriteData.SpriteType.PowItem,
+                ItemType.Garbage => SpriteData.SpriteType.Dust,
+                _ => SpriteData.SpriteType.Dust
+            };
+        }
     }
 
     private void FixedUpdate()
@@ -114,7 +131,6 @@ public class Item : MonoBehaviour, IColliderbleObject
                 Value = _value
             });
         IsDestroyWaiting = true;
-        Debug.Log("アイテムゲット！");
     }
 
     public void DestroyByColliderManager()
