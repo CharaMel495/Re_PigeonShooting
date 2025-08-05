@@ -110,7 +110,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private float _slopeCondition;
 
-    private readonly int _maxDustValue = 15;
+    private readonly int _maxDustValue = 10;
     private int _dustValue;
     private readonly int _maxLife = 100;
     private int _life;
@@ -303,7 +303,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
 
         CRISoundManager.Instance.PlaySE(SFX.AirBaster);
-        CRISoundManager.Instance.BombEffect(_bombTime * 30);
+        CRISoundManager.Instance.BombEffect(_bombTime * 100);
     }
 
     public void Dash()

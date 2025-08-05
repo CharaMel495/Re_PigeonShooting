@@ -45,7 +45,7 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
     private CancellationToken _destroyToken;
 
     // マスターボリューム
-    public static float MasterVolume { get; set; } = 1f;
+    public static float MasterVolume { get; set; } = 0.5f;
     // BGMボリューム
     public static float BGMVolume { get; set; } = 0.5f;
     // SEボリューム
