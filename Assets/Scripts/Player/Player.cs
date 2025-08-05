@@ -51,6 +51,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     [SerializeField]
     private ImageWrapper _lifeImage;
 
+    [SerializeField]
+    private CleanerUI _cleanerUI;
+
     public BulletShooter Shooter
     { get; set; }
 
@@ -216,6 +219,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         _vacuume.Initialize("Player", this.transform);
         _airBaster.Initialize("Player");
+
+        _cleanerUI.UpdataValue(0.0f);
     }
 
     private void FixedUpdate()
@@ -304,6 +309,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         CRISoundManager.Instance.PlaySE(SFX.AirBaster);
         CRISoundManager.Instance.BombEffect(_bombTime * 100);
+        _cleanerUI.UpdataValue(0.0f);
     }
 
     public void Dash()
@@ -500,7 +506,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
             case ItemType.Garbage:
                 _dustValue += item.Value;
                 _dustValue = Mathf.Min(_dustValue, _maxDustValue);
-                Debug.Log(_dustValue);
+                _cleanerUI.UpdataValue(_dustValue / (float)_maxDustValue);
                 break;
         }
     }

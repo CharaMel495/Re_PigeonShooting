@@ -114,9 +114,6 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
         if (cueSheet == null) 
             return;
 
-        foreach (var item in cueSheet.Acb.GetCueInfoList())
-            Debug.Log(item.name);
-
         // 鳴らすキューを文字列で指定し再生
         source.cueSheet = cueSheet.Name;
         source.Play(se.ToString());

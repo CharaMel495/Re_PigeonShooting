@@ -14,6 +14,9 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     [SerializeField]
     private Item _dropItem;
 
+    [SerializeField]
+    private ParticleController _particle;
+
     /// <summary>
     /// プレイエリア内に入ってるか
     /// </summary>
@@ -189,6 +192,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         EventDispatcher.Instance.Unbind(this, Name);
         this.transform.localScale = Vector3.one;
         this.transform.rotation = Quaternion.identity;
+        _particle.PlayParticle();
 
         if (this.transform.childCount < 1)
             return;
