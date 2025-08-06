@@ -18,6 +18,7 @@ namespace BulletStructs
     public struct StraightAndAimingMove : IBulletMoveData
     {
         public float MoveSpeed { get; set; }
+        public float SecondMoveSpeed { get; set; }
         public float Acceleration { get; set; }
         public float DisAcceleration { get; set; }
         public Vector3 MoveDir { get; set; }
@@ -34,6 +35,20 @@ namespace BulletStructs
         public float Acceleration { get; set; }
         public SpriteData.SpriteType SpriteType { get; }
         public IBulletMoveData CreateMoveData();
+        public ColliderCategory ColCategory { get; set; }
+    }
+
+    /// <summary>
+    /// 直進で動く弾用の構造体
+    /// </summary>
+    public struct NoBullet : IBulletCreateData
+    {
+        public Vector3 Origin { get; set; }
+        public Vector3 Scale { get; set; }
+        public Vector3 Dir { get; set; }
+        public float Acceleration { get; set; }
+        public SpriteData.SpriteType SpriteType { get; }
+        public IBulletMoveData CreateMoveData() { return null; }
         public ColliderCategory ColCategory { get; set; }
     }
 
@@ -250,6 +265,7 @@ namespace BulletStructs
         public Vector3 Dir { get; set; }
         public Vector3 SecondDir { get; set; }
         public float MoveSpeed { get; set; }
+        public float SecondMoveSpeed { get; set; }
         public float Acceleration { get; set; }
         public float DisAcceleration { get; set; }
         public ColliderCategory ColCategory { get; set; }
@@ -260,6 +276,7 @@ namespace BulletStructs
             return new StraightAndAimingMove
             {
                 MoveDir = Dir,
+                SecondMoveSpeed = SecondMoveSpeed,
                 SecondDir = SecondDir,
                 MoveSpeed = MoveSpeed,
                 Acceleration = Acceleration,

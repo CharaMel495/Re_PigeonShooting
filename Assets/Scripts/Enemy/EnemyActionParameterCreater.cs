@@ -9,7 +9,7 @@ public class EnemyActionParameterCreater
             // 0
             case EnemyEnums.EnemyID.キホンの雑魚敵:
                 return new EnemyDataStructs.NoAction
-                { BulletData = new BulletStructs.StaraightShoot { } };
+                { BulletData = new BulletStructs.NoBullet { } };
 
             // 1
             case EnemyEnums.EnemyID.キホンの弾を撃つ敵:
@@ -29,7 +29,7 @@ public class EnemyActionParameterCreater
             // 2
             case EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵:
                 return new EnemyDataStructs.NoAction
-                { BulletData = new BulletStructs.StaraightShoot { } };
+                { BulletData = new BulletStructs.NoBullet { } };
 
             // 3
             case EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵_弾あり:
@@ -54,7 +54,7 @@ public class EnemyActionParameterCreater
                     ActionInterval = 5.0f,
                     Target = PlayerManager.Instance.Player,
                     SummonID = EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵,
-                    BulletData = new BulletStructs.StaraightShoot { }
+                    BulletData = new BulletStructs.NoBullet { }
                 };
 
             // 5
@@ -66,9 +66,10 @@ public class EnemyActionParameterCreater
                     BulletData = new BulletStructs.RingShot
                     {
                         Acceleration = 0.0f,
-                        DisAcceleration = 2.0f,
+                        DisAcceleration = 4.0f,
                         ColCategory = ColliderCategory.EnemyBullet,
                         MoveSpeed = 5.5f,
+                        SecondMoveSpeed = 7.0f,
                         Scale = Vector3.one * 1.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet
                     }
@@ -77,7 +78,7 @@ public class EnemyActionParameterCreater
             // 6
             case EnemyEnums.EnemyID.渦巻ぐるぐる敵:
                 return new EnemyDataStructs.NoAction
-                { BulletData = new BulletStructs.StaraightShoot { } };
+                { BulletData = new BulletStructs.NoBullet { } };
 
             // 7
             case EnemyEnums.EnemyID.渦巻ぐるぐる敵_自機狙い単発弾:
@@ -98,11 +99,11 @@ public class EnemyActionParameterCreater
             case EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way:
                 return new EnemyDataStructs.SimpleAction
                 {
-                    ActionInterval = 1.0f,
+                    ActionInterval = 0.5f,
                     Target = PlayerManager.Instance.Player,
                     BulletData = new BulletStructs.ThreeWayShoot
                     {
-                        MoveSpeed = 3.0f,
+                        MoveSpeed = 10.0f,
                         Acceleration = 0.0f,
                         AngleSpan = 30.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
@@ -117,7 +118,7 @@ public class EnemyActionParameterCreater
                     ActionInterval = 9999.0f,
                     Target = PlayerManager.Instance.Player,
                     SummonID = EnemyEnums.EnemyID.渦巻ぐるぐる敵,
-                    BulletData = new BulletStructs.StaraightShoot { }
+                    BulletData = new BulletStructs.NoBullet { }
                 };
 
             // 10
@@ -137,6 +138,22 @@ public class EnemyActionParameterCreater
                         Length = 20.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
                         ColCategory = ColliderCategory.EnemyBullet,
+                    }
+                };
+
+            // 11
+            case EnemyEnums.EnemyID.バリア突進中ボス:
+                return new EnemyDataStructs.SummonEnemy
+                {
+                    ActionInterval = 9999.0f,
+                    Target = PlayerManager.Instance.Player,
+                    SummonID = EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way,
+                    BulletData = new BulletStructs.SpreadEightShoot
+                    {
+                        MoveSpeed = 4.0f,
+                        Acceleration = 0.5f,
+                        SpriteType = SpriteData.SpriteType.EnemyBullet,
+                        ColCategory = ColliderCategory.EnemyBullet
                     }
                 };
         }

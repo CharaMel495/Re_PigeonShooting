@@ -44,7 +44,10 @@ public class BulletMover
                         if (moveData.Target != null)
                             moveData.MoveDir = moveData.Target.GetPostion() - bullet.transform.position;
                         else
-                            moveData.MoveDir = moveData.SecondDir;
+                        {
+                            moveData.MoveDir = (PlayerManager.Instance.Player.GetPostion() - pos).normalized;
+                            moveData.MoveSpeed = moveData.SecondMoveSpeed;
+                        }
                     }
 
                     bullet.MoveData = moveData;

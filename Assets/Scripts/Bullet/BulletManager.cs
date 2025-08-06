@@ -95,6 +95,10 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
         var bullet = _pool.GetBulletFromPool();
         // 移動情報を与える
         bullet.MoveData = bulletData.CreateMoveData();
+        // なぞにオイラーのｚに回転かかってることがあったので、強制修正をかける
+        Vector3 dir = bulletData.Dir;
+        dir.z = 0.0f;
+        bulletData.Dir = dir;
         bullet.transform.right = bulletData.Dir;
         // 判定用の矩形を生成
         var collider = ColliderManager.Instance.CreateCollider(bullet.transform, ColliderType.Rectangle);

@@ -65,8 +65,8 @@
 		},
 		{
 			"ID":"7",
-			"Size":"2",
-			"BulletSize":"0.5",
+			"Size":"4",
+			"BulletSize":"2",
 			"SpriteID":"102",
 			"ColliderType":"0",
 			"Life":"200",
@@ -74,8 +74,8 @@
 		},
 		{
 			"ID":"8",
-			"Size":"2",
-			"BulletSize":"0.5",
+			"Size":"2.5",
+			"BulletSize":"1.5",
 			"SpriteID":"102",
 			"ColliderType":"0",
 			"Life":"200",
@@ -98,6 +98,15 @@
 			"ColliderType":"0",
 			"Life":"100",
 			"Score":"300"
+		},
+		{
+			"ID":"11",
+			"Size":"3",
+			"BulletSize":"0",
+			"SpriteID":"100",
+			"ColliderType":"0",
+			"Life":"300",
+			"Score":"2000"
 		}
 	]
 }

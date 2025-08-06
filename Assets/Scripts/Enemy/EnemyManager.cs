@@ -29,7 +29,8 @@ namespace EnemyEnums
         渦巻ぐるぐる敵_自機狙い単発弾,
         渦巻ぐるぐる敵_後方3way,
         バリア突進敵,
-        レーザー発射敵
+        レーザー発射敵,
+        バリア突進中ボス
     }
 }
 
@@ -266,7 +267,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             // 敵を生成
             var enemy = _pool.GetEnemyFromPool();
             var parentOffset = parent.localScale.x;
-            enemy.transform.localScale = enemyData.Scale * (1 / parentOffset);
+            enemy.transform.localScale = enemyData.Scale;
 
             // ステータス注入
             enemy.Life = enemyData.Life;

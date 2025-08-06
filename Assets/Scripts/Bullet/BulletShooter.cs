@@ -118,7 +118,7 @@ public class BulletShooter
                     var data = (BulletStructs.RingShot)shootData;
                     // シフト演算でサクッと計算(360 ÷ 8)
                     float angleSpan = (float)(360 >> 3);
-                    data.SecondDir = PlayerManager.Instance.Player.GetPostion();
+                    data.SecondDir = (PlayerManager.Instance.Player.GetPostion() - data.Origin).normalized;
 
                     BulletManager.Instance.CreateBullet(data);
                     data.Dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * data.Dir;

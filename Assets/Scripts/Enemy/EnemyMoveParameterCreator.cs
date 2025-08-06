@@ -109,6 +109,15 @@ public class EnemyMoveParameterCreator
                 {
 
                 };
+
+            // 11
+            case EnemyEnums.EnemyID.バリア突進中ボス:
+                return new EnemyDataStructs.TrackPlayer
+                {
+                    MoveSpeed = 3.0f,
+                    Target = PlayerManager.Instance.Player,
+                    TurnRate = 80.0f,
+                };
         }
 
 

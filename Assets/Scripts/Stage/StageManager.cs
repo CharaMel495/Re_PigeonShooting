@@ -17,7 +17,14 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     [SerializeField]
     private EnemyEnums.EnemyID[] _spawnableEnemys;
 
-    private float _remainInterval = 0;
+    [SerializeField]
+    private EnemyEnums.EnemyID[] _middleBosses;
+
+    private float _remainInterval = 999;
+
+    private bool _isBossMode = false;
+
+    private float _bossInterval = 10.0f;
 
     public void Initialize()
     {
@@ -36,7 +43,19 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         }
         else
             _remainInterval -= Time.fixedDeltaTime;
+
+        if (_bossInterval < 0)
+        {
+            var id = _middleBosses[Random.Range(0, _middleBosses.Length)];
+
+            EnemyManager.Instance.CreateEnemy((int)id, GetRandomPositionInArea(8));
+            _bossInterval = 300.0f;
+        }
+        else
+            _bossInterval -= Time.fixedDeltaTime;
     }
+
+
 
     public Vector3 GetRandomPositionInArea(float minDistanceFromPlayer = 0)
     {
@@ -54,7 +73,9 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             safetyLoop++;
             if (safetyLoop > 100) break; // 無限ループ対策
 
-        } while (Vector3.Distance(spawnPos, player.GetPostion()) < minDistanceFromPlayer);
+            Debug.Log(Vector3.Distance(spawnPos, player.GetPostion()));
+
+        } while (Vector3.Distance(spawnPos, player.GetPostion()) * 0.01 < minDistanceFromPlayer);
 
         return spawnPos;
     }

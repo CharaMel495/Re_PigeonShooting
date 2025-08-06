@@ -78,7 +78,7 @@ public class EnemyAction
             case EnemyDataStructs.SlavedSpiralMove:
                 {
                     var moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
-                    float spinDir = moveData.IsRightSpin ? 1f : -1f;
+                    float spinDir = (moveData.IsRightSpin ? 1f : -1f);
 
                     // ローカルな時間経過
                     float elapsed = moveData.ElaspedTime + moveData.AddtionalTime;
@@ -89,6 +89,7 @@ public class EnemyAction
                     var pos = enemy.transform.localPosition;
                     pos.x = Mathf.Cos(angleRad) * moveData.Distance;
                     pos.y = Mathf.Sin(angleRad) * moveData.Distance;
+                    enemy.MoveData.MoveDir = (pos - enemy.transform.localPosition).normalized;
                     enemy.transform.localPosition = pos;
 
                     // 回転演出（好みに合わせて）
@@ -193,10 +194,16 @@ public class EnemyAction
                     if (enemy.MoveData is EnemyDataStructs.SpiralMove)
                         data.BulletData.Dir = -((EnemyDataStructs.SpiralMove)enemy.MoveData).MoveDir;
 
+                    if (enemy.MoveData is EnemyDataStructs.SlavedSpiralMove)
+                        data.BulletData.Dir = -((EnemyDataStructs.SlavedSpiralMove)enemy.MoveData).MoveDir;
+
                     if (enemy.MoveData is EnemyDataStructs.MissileMove)
                         data.BulletData.Dir = -enemy.transform.up;
 
                     data.BulletData.Origin = enemy.transform.position;
+
+                    if (data.BulletData is BulletStructs.NoBullet)
+                        return;
 
                     shooter.Shoot(data.BulletData);
                 }
@@ -231,6 +238,11 @@ public class EnemyAction
                     if (data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵 ||
                         data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵_弾あり)
                         EnemyManager.Instance.CreateEnemy((int)data.SummonID, enemy.transform.position, -enemy.MoveData.MoveDir);
+
+                    if (data.BulletData is BulletStructs.NoBullet)
+                        return;
+
+                    shooter.Shoot(data.BulletData);
                 }
                 break;
         }
