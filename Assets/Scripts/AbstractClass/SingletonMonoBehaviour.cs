@@ -21,7 +21,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
         if (_instance == null)
         {
             _instance = this as T;
-            DontDestroyOnLoad(gameObject); // シーンを跨いで生存させる
+            //DontDestroyOnLoad(gameObject); // シーンを跨いで生存させる
         }
         else if (_instance != this)
         {

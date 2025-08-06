@@ -90,7 +90,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     /// </summary>
     private PlayerBullet.ShootType _currentSubShootType;
 
-    private const float _INVINCIBLETIME = 0.5f;
+    private const float _INVINCIBLETIME = 0.1f;
 
     private bool _isInvincible = false;
 

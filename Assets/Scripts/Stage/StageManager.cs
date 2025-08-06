@@ -20,7 +20,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     [SerializeField]
     private EnemyEnums.EnemyID[] _middleBosses;
 
-    private float _remainInterval = 999;
+    private float _remainInterval = 0;
 
     private bool _isBossMode = false;
 

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 方向指定用のenum
@@ -16,11 +17,22 @@ public enum Direction
     UpLeft
 }
 
+public enum Scenes
+{
+    Title,
+    MainScene,
+    Tutorial,
+    GameOver
+}
+
 /// <summary>
 /// ゲーム全体の管理クラス
 /// </summary>
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
+    [SerializeField]
+    private Scenes _currentScene;
+
     /// <summary>
     /// １フレームの秒数
     /// </summary>
@@ -41,7 +53,21 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     public void Initialize()
     {
         EventDispatcher.Instance.Initialize();
-        MainSceneManager.Instance.Initialize();
+        _ = InputManager.Instance.Initialize();
+        InitializeScene();
+    }
+
+    private void InitializeScene()
+    {
+        switch (_currentScene)
+        {
+            case Scenes.Title:
+                TitleSceneManager.Instance.Initialize();
+                break;
+            case Scenes.MainScene:
+                MainSceneManager.Instance.Initialize();
+                break;
+        }
     }
 
     private void Update()

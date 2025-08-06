@@ -34,17 +34,23 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     private static InputHandler _remainingHandler;
 
-    ///// <summary>
-    ///// 通常ショット
-    ///// </summary>
-    //public static KeyCode ShotKey
-    //{ get => IsGamePadMode ? KeyCode.JoystickButton0 : KeyCode.Space; }
+    /// <summary>
+    /// 決定
+    /// </summary>
+    public static KeyCode DesideKey
+    { get => IsGamePadMode ? KeyCode.JoystickButton0 : KeyCode.Z; }
+
+    /// <summary>
+    /// キャンセル
+    /// </summary>
+    public static KeyCode CancelKey
+    { get => IsGamePadMode ? KeyCode.JoystickButton1 : KeyCode.X; }
 
     /// <summary>
     /// 吸引キー
     /// </summary>
     public static KeyCode VacuumKey
-    { get => IsGamePadMode ? KeyCode.JoystickButton4 : KeyCode.X; }
+    { get => IsGamePadMode ? KeyCode.JoystickButton4 : KeyCode.Space; }
 
     /// <summary>
     /// 回避ダッシュキー
