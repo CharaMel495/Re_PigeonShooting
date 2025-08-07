@@ -322,7 +322,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void Dash()
     {
-        if (IsDash || _isVacuuming)
+        if (IsDash || _isVacuuming || !_arrowedActions[Tutorials.Dash])
             return;
 
         IsDash = true;
@@ -588,5 +588,12 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         this.gameObject.SetActive(false);
         _cleanerUI.gameObject.SetActive(false);
         IsActive = false;
+    }
+
+    [CallableEvent("EndTutorial")]
+    public void WhenEndTutorial(object data)
+    {
+        _animator.SetFloat(_animParamX, 0.0f);
+        _animator.SetFloat(_animParamY, -1.0f);
     }
 }

@@ -48,6 +48,13 @@ public class TutorialUI : MonoBehaviour
         _nextText.Initialize();
         IsPlaying = false;
         _tutorialTexts = tutorialTexts;
+        _textIdx = 0;
+        _typeIndex = 0;
+    }
+
+    public void ClearnUp()
+    {
+        _text.ClearText();
     }
 
     private void FixedUpdate()

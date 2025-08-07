@@ -26,6 +26,11 @@ public class TutorialSupporter
         _tutorialUI.Initialize(_tutorialTexts.GetTutorialText(tutorial));
     }
 
+    public void ClearnUp()
+    {
+        _tutorialUI.ClearnUp();
+    }
+
     public bool PlayNext()
     {
         return _tutorialUI.PlayNext();

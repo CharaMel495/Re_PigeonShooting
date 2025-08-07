@@ -50,11 +50,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7acdb04126e85e349be751cf7da32428
-    m_Address: Assets/Font/PixelMplus12-Regular SDF.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b11e1ecf5a612214bb11d7e823f90dea
     m_Address: Assets/Textures/PlayerShot.png
     m_ReadOnly: 0
@@ -67,6 +62,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8896e1d03afe5945b5b64a3c2dff21b
     m_Address: Assets/Textures/SimpleBullet.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc948a6f93f20f54cb2010f9824b9207
+    m_Address: Assets/Font/PixelMplus12-Regular SDF.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -63,6 +63,8 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
         _tutorialChecker.Initialize();
 
+        _supporter = new(_tutorialUI);
+
         _desideKeyPressed = new Dictionary<CurrentState, Action>
         {
             { CurrentState.Top, _tutorialMenu.SelectButton },
@@ -89,8 +91,6 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
             { CurrentState.EndTutorial, null },
             { CurrentState.Loading, null },
         };
-
-        _supporter = new(_tutorialUI);
 
         TutorialStageManager.Instance.Initialize();
         ColliderManager.Instance.Initialize();
@@ -176,7 +176,16 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
     public void EndTutorial(object data)
     {
         _state = CurrentState.Loading;
-        _loadingCutin.EnterCutin(() => Initialize());
+        _loadingCutin.EnterCutin(() => BackToTop());
+    }
+
+    private void BackToTop()
+    {
+        _tutorialMenu.EnActive();
+
+        _supporter.ClearnUp();
+
+        _loadingCutin.ExitCutin(() => _state = CurrentState.Top);
     }
 
     [CallableEvent("EnterPlayingMode")]

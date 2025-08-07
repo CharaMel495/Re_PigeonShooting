@@ -19,6 +19,8 @@ public class TutorialPlayerMover
         _moveSpeed = moveSpeed;
         _playerArea = area;
         _moveTime = 0.0f;
+
+        EventDispatcher.Instance.Bind(this);
     }
 
     public void Initialize(float moveSpeed, Rect area)
@@ -54,6 +56,10 @@ public class TutorialPlayerMover
         if (_moveTime > 5.0f)
             EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Move);
     }
+
+    [CallableEvent("EndTutorial")]
+    public void WhenEndTutorial(object data)
+        => _moveTime = 0.0f;
 
     private bool CheckArea(Vector3 pos, Vector3 padding)
     {

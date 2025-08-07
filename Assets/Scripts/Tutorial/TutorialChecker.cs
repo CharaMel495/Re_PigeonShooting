@@ -37,18 +37,11 @@ public class TutorialChecker : MonoBehaviour
 
     private CheckListUI _currentUI;
 
-    private bool _isChecking;
+    private bool _isChecking = false;
 
     public void Initialize()
     {
         EventDispatcher.Instance.Bind(this);
-
-        foreach (var item in _checkList)
-            item.Initialize();
-
-        _checkIdx = 0;
-
-        _isChecking = false;
 
         _checkDic = new Dictionary<Tutorials, CheckLists[]>
         {
@@ -93,6 +86,10 @@ public class TutorialChecker : MonoBehaviour
 
     public void SetUp(Tutorials tutorial)
     {
+        foreach (var item in _checkList)
+            item.Initialize();
+
+        _isChecking = false;
         _checkIdx = 0;
         _currentChecking = _checkDic[tutorial];
         _currentUI = _checkList[(int)tutorial];
