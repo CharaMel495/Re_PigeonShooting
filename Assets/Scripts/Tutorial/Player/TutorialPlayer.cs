@@ -76,6 +76,9 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private bool _isInvincible = false;
 
+    public Vector3 MoveDir
+    { get; set; }
+
     public bool IsDash
     { get; private set; } = false;
 
@@ -139,6 +142,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         set
         {
             _exp = value;
+
+            EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Shot_SmashEnemy);
 
             if (_exp < _LEVELBORDER)
                 return;
@@ -229,6 +234,11 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         // インターバル中ならカウントを進める
         if (IsInterval)
             _intervalTime -= Time.fixedDeltaTime;
+        else
+        {
+            _animator.SetFloat(_animParamX, MoveDir.x);
+            _animator.SetFloat(_animParamY, MoveDir.y);
+        }
     }
 
     /// <summary>
@@ -238,6 +248,9 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     [CallableEvent("OnShotKeyPressed")]
     public void Fire(object data)
     {
+        if (!_arrowedActions[Tutorials.Shot])
+            return;
+
         // インターバル中は弾を撃たない
         // 吸引中も弾を撃たない
         // ダッシュ中も弾を撃たない
@@ -260,7 +273,9 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         // 弾を発射する
         Shooter.Shoot(data as BulletStructs.IBulletCreateData, _slopeCondition);
-        CRISoundManager.Instance.PlaySE(SFX.PlayerShot);
+        //CRISoundManager.Instance.PlaySE(SFX.PlayerShot);
+        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Shot);
+        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster_Shot);
     }
 
     public void Vacuume()
@@ -281,6 +296,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         _vacuume.DisActive();
         _isVacuuming = false;
         _animator.SetBool(_animParamVacuume, _isVacuuming);
+
+        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Vacuum);
     }
 
     public void AirBaster()
@@ -299,6 +316,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         CRISoundManager.Instance.PlaySE(SFX.AirBaster);
         CRISoundManager.Instance.BombEffect(_bombTime * 100);
         _cleanerUI.UpdataValue(0.0f);
+
+        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster);
     }
 
     public void Dash()
@@ -307,7 +326,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
             return;
 
         IsDash = true;
-        ColliderManager.Instance.RemoveCollider(_circle);
+        //ColliderManager.Instance.RemoveCollider(_circle);
 
         _timer.CreateTask(EndDash, _dashTime);
     }
@@ -315,7 +334,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     private void EndDash()
     {
         IsDash = false;
-        ColliderManager.Instance.AddCollider(_circle);
+        //ColliderManager.Instance.AddCollider(_circle);
     }
 
     public void ShootLazer(BulletStructs.LazerParam param)
@@ -485,6 +504,9 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private void GetItem(GetItemEventData item)
     {
+        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Move_ItemGet);
+        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Vacuum_Item);
+
         switch (item.ItemType)
         {
             case ItemType.Battery_Green:
@@ -494,15 +516,27 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
                 Exp += item.Value;
                 break;
             case ItemType.Garbage:
+                if (!_arrowedActions[Tutorials.AirBaster])
+                    break;
                 _dustValue += item.Value;
                 _dustValue = Mathf.Min(_dustValue, _maxDustValue);
                 _cleanerUI.UpdataValue(_dustValue / (float)_maxDustValue);
+                EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster_GetDust);
                 break;
         }
     }
 
     private void GetDamage(DamageEventData data)
     {
+        if (_isInvincible)
+            return;
+
+        if (IsDash)
+        {
+            EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Dash_Invincible);
+            return;
+        }
+
         Life -= data.Damage;
 
         _camera.Shake(0.1f, 0.2f);
@@ -545,7 +579,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     {
         _arrowedActions = arrowedActions;
         this.gameObject.SetActive(true);
-        _cleanerUI.gameObject.SetActive(true);
+        _cleanerUI.gameObject.SetActive(_arrowedActions[Tutorials.AirBaster]);
         IsActive = true;
     }
 

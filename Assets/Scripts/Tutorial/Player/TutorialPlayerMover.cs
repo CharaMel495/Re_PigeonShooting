@@ -12,10 +12,13 @@ public class TutorialPlayerMover
 
     private float _dashMag = 5.0f;
 
+    private float _moveTime = 0.0f;
+
     public TutorialPlayerMover(float moveSpeed, Rect area)
     {
         _moveSpeed = moveSpeed;
         _playerArea = area;
+        _moveTime = 0.0f;
     }
 
     public void Initialize(float moveSpeed, Rect area)
@@ -41,6 +44,15 @@ public class TutorialPlayerMover
             CrrectInArea(ref pos, halfScale);
 
         transform.position = pos;
+
+        if (Mathf.Abs(_inputDir.x) > 0 || Mathf.Abs(_inputDir.y) > 0)
+        {
+            _moveTime += Time.fixedDeltaTime;
+            player.MoveDir = _inputDir;
+        }
+
+        if (_moveTime > 5.0f)
+            EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Move);
     }
 
     private bool CheckArea(Vector3 pos, Vector3 padding)

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 public enum InputHandler
 {
     Player,
+    UI
 }
 
 /// <summary>
@@ -96,8 +97,15 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         IsGamePadMode = CheckConnectController();
     }
 
-    public static bool IsShotKeyDowning(out Vector2 joyStickMap, out float slopeCondition)
+    public static bool IsShotKeyDowning(out Vector2 joyStickMap, out float slopeCondition, InputHandler handle)
     {
+        if (CurrentHandler != handle)
+        {
+            joyStickMap = Vector2.zero;
+            slopeCondition = 0.0f;
+            return false;
+        }
+
         float inputValX = Input.GetAxis("RightStickHorizontal");
         float inputValY = Input.GetAxis("RightStickVertical");
 

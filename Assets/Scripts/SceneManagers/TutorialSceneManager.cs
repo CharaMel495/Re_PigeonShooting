@@ -32,6 +32,15 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
     [SerializeField]
     private LoadingCutIn _loadingCutin;
 
+    [SerializeField]
+    private TutorialUI _tutorialUI;
+
+    [SerializeField]
+    private TutorialChecker _tutorialChecker;
+
+    [SerializeField]
+    private Item _itemPrefab;
+
     private CurrentState _state;
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;
@@ -44,16 +53,20 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
     public override void Initialize()
     {
+        InputManager.Instance.ChangeInputHandler(InputHandler.UI);
+
         _state = CurrentState.Loading;
 
         _tutorialMenu.Initialize(CreateButtonFunc());
 
         _tutorialMenu.EnActive();
 
+        _tutorialChecker.Initialize();
+
         _desideKeyPressed = new Dictionary<CurrentState, Action>
         {
             { CurrentState.Top, _tutorialMenu.SelectButton },
-            { CurrentState.ExamTutorial, null },
+            { CurrentState.ExamTutorial, () => _supporter.PlayNext() },
             { CurrentState.PlayTutorial, null },
             { CurrentState.EndTutorial, null },
             { CurrentState.Loading, null },
@@ -77,7 +90,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
             { CurrentState.Loading, null },
         };
 
-        _supporter = new();
+        _supporter = new(_tutorialUI);
 
         TutorialStageManager.Instance.Initialize();
         ColliderManager.Instance.Initialize();
@@ -85,6 +98,8 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         TutorialPlayerManager.Instance.Initialize();
 
         _loadingCutin.ExitCutin(() => _state = CurrentState.Top);
+
+        EventDispatcher.Instance.Bind(this);
 
         Action[] CreateButtonFunc()
         {
@@ -102,13 +117,13 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
     private void Update()
     {
-        if (InputManager.CheckKey(InputManager.DesideKey, InputHandler.Player))
+        if (InputManager.CheckKey(InputManager.DesideKey, InputHandler.UI))
             _desideKeyPressed[_state]?.Invoke();
 
-        if (InputManager.CheckKey(InputManager.CancelKey, InputHandler.Player))
+        if (InputManager.CheckKey(InputManager.CancelKey, InputHandler.UI))
             _cancelKeyPressed[_state]?.Invoke();
 
-        Direction inputDir = InputManager.CheckInputDirection(InputHandler.Player, isPrevious: true);
+        Direction inputDir = InputManager.CheckInputDirection(InputHandler.UI, isPrevious: true);
 
         _dirInputed[_state]?.Invoke(inputDir);
     }
@@ -144,6 +159,51 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
     private void SetUpTutorial(Tutorials tutorial)
     {
+        _tutorialMenu.DisActive();
+        _state = CurrentState.Loading;
+        _supporter.SetUp(tutorial);
+        _loadingCutin.ExitCutin(StartTutorial);
+        _tutorialChecker.SetUp(tutorial);
+    }
 
+    public void StartTutorial()
+    {
+        _state = CurrentState.ExamTutorial;
+        _supporter.PlayNext();
+    }
+
+    [CallableEvent("EndTutorial")]
+    public void EndTutorial(object data)
+    {
+        _state = CurrentState.Loading;
+        _loadingCutin.EnterCutin(() => Initialize());
+    }
+
+    [CallableEvent("EnterPlayingMode")]
+    public void EnterPlayingMode(object data)
+    {
+        _state = CurrentState.PlayTutorial;
+        TutorialSpawn(_tutorialChecker.EnterCheckingMode());
+    }
+
+    [CallableEvent("CorrectTutorial")]
+    public void CorrectTutorial(object data)
+    {
+        _state = CurrentState.ExamTutorial;
+        _supporter.PlayNext();
+    }
+
+    private void TutorialSpawn(CheckLists checkTarget)
+    {
+        switch (checkTarget)
+        {
+            case CheckLists.Move_ItemGet:
+                {
+                    var randPos = TutorialStageManager.Instance.GetRandomPositionInArea(50);
+                    var item = Instantiate(_itemPrefab, randPos, Quaternion.identity);
+                    item.Initialize(ItemType.Battery_Green);
+                }
+                break;
+        }
     }
 }

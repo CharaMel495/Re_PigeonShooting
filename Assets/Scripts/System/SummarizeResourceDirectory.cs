@@ -18,6 +18,11 @@ public class SummarizeResourceDirectory
     public const string HEALITEM_TEX = "Assets/Textures/HealBattery.png";
     public const string POWITEM_TEX = "Assets/Textures/PoweBattery.png";
     public const string DUSTITEM_TEX = "Assets/Textures/Dust.png";
+    public const string TUTORIALTEXTS = "Assets/ExternalResources/TutorialTexts.asset";
+
+    // UsingFont
+
+    public const string FONT = "Assets/Font/PixelMplus12-Regular SDF.asset";
 
     // ScriptableObjectDirectory
 

@@ -41,6 +41,9 @@ public class PlayerMover
             CrrectInArea(ref pos, halfScale);
 
         transform.position = pos;
+
+        if (Mathf.Abs(_inputDir.x) > 0 || Mathf.Abs(_inputDir.y) > 0)
+            player.MoveDir = _inputDir;
     }
 
     private bool CheckArea(Vector3 pos, Vector3 padding)

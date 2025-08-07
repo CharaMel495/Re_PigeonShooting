@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1585600f3f50e4843bd4a3d50749f91d
+    m_Address: Assets/ExternalResources/TutorialTexts.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 272990fe3ef14e34bbf7856060b56337
     m_Address: Assets/Textures/IceMissile.png
     m_ReadOnly: 0
@@ -42,6 +47,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5b65b6f8366275a4c81e22a3aa33fa7c
     m_Address: Assets/Textures/CandyBall.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7acdb04126e85e349be751cf7da32428
+    m_Address: Assets/Font/PixelMplus12-Regular SDF.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

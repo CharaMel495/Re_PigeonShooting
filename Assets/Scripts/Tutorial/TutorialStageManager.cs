@@ -20,7 +20,7 @@ public class TutorialStageManager : SingletonMonoBehaviour<TutorialStageManager>
 
     public Vector3 GetRandomPositionInArea(float minDistanceFromPlayer = 0)
     {
-        ITargetProvider player = PlayerManager.Instance.Player;
+        ITargetProvider player = TutorialPlayerManager.Instance.Player;
         Vector3 spawnPos;
         int safetyLoop = 0;
 
@@ -33,9 +33,6 @@ public class TutorialStageManager : SingletonMonoBehaviour<TutorialStageManager>
 
             safetyLoop++;
             if (safetyLoop > 100) break; // 無限ループ対策
-
-            Debug.Log(Vector3.Distance(spawnPos, player.GetPostion()));
-
         } while (Vector3.Distance(spawnPos, player.GetPostion()) * 0.01 < minDistanceFromPlayer);
 
         return spawnPos;

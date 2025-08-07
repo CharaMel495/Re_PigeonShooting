@@ -94,6 +94,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private bool _isInvincible = false;
 
+    public Vector3 MoveDir
+    { get; set; }
+
     public bool IsDash
     { get; private set; } = false;
 
@@ -240,6 +243,11 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         // インターバル中ならカウントを進める
         if (IsInterval)
             _intervalTime -= Time.fixedDeltaTime;
+        else
+        {
+            _animator.SetFloat(_animParamX, MoveDir.x);
+            _animator.SetFloat(_animParamY, MoveDir.y);
+        }
     }
 
     /// <summary>

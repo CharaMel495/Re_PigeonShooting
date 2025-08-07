@@ -48,7 +48,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     /// </summary>
     private void CheckPlayerEvent()
     {
-        if (InputManager.IsShotKeyDowning(out Vector2 joyStickMap, out float slopeCondition))
+        if (InputManager.IsShotKeyDowning(out Vector2 joyStickMap, out float slopeCondition, InputHandler.Player))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), _player.GetBulletParameter(joyStickMap, slopeCondition));
 
         if (InputManager.CheckKey(InputManager.VacuumKey, InputHandler.Player, isPrevious: true))

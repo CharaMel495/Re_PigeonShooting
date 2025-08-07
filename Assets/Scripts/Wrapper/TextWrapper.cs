@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 /// <summary>
@@ -24,6 +25,8 @@ public class TextWrapper : MonoBehaviour
             return;
 
         _text = this.GetComponent<TextMeshProUGUI>();
+        var fontAssset = Addressables.LoadAssetAsync<TMP_FontAsset>(SummarizeResourceDirectory.FONT).WaitForCompletion();
+        _text.font = fontAssset;
     }
 
 
