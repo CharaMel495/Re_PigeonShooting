@@ -67,6 +67,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             case Scenes.MainScene:
                 MainSceneManager.Instance.Initialize();
                 break;
+            case Scenes.Tutorial:
+                TutorialSceneManager.Instance.Initialize();
+                break;
         }
     }
 

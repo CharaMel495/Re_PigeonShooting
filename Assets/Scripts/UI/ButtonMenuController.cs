@@ -7,7 +7,7 @@ public class ButtonMenuController : MonoBehaviour
     private ImageWrapper _panel;
 
     [SerializeField]
-    private Button[] _buttons;
+    private ButtonBase[] _buttons;
 
     [SerializeField]
     private Color _panelColor;
@@ -17,7 +17,8 @@ public class ButtonMenuController : MonoBehaviour
     public bool IsMoving
     { get; private set; }
 
-    private int _currentButton;
+    public int CurrentButton
+    { get; private set; }
 
     public void Initialize(Action[] buttonFunc)
     {
@@ -46,7 +47,7 @@ public class ButtonMenuController : MonoBehaviour
 
         IsMoving = false;
 
-        _currentButton = 0;
+        CurrentButton = 0;
     }
 
     private void FixedUpdate()
@@ -54,11 +55,11 @@ public class ButtonMenuController : MonoBehaviour
 
     public void MoveButton(bool isDown)
     {
-        int nextIdx = _currentButton + (isDown ? 1 : -1);
+        int nextIdx = CurrentButton + (isDown ? 1 : -1);
         if (nextIdx < 0 || nextIdx >= _buttons.Length)
             return;
 
-        var currentButton = _buttons[_currentButton];
+        var currentButton = _buttons[CurrentButton];
         var nextButton = _buttons[nextIdx];
 
         if (currentButton.IsMoving || nextButton.IsMoving)
@@ -66,7 +67,23 @@ public class ButtonMenuController : MonoBehaviour
 
         currentButton.DisActive();
         nextButton.EnActive();
-        _currentButton = nextIdx;
+        CurrentButton = nextIdx;
+    }
+
+    public void MoveButton(int nextIdx)
+    {
+        if (nextIdx < 0 || nextIdx >= _buttons.Length)
+            return;
+
+        var currentButton = _buttons[CurrentButton];
+        var nextButton = _buttons[nextIdx];
+
+        if (currentButton.IsMoving || nextButton.IsMoving)
+            return;
+
+        currentButton.DisActive();
+        nextButton.EnActive();
+        CurrentButton = nextIdx;
     }
 
     public bool EnActive()
@@ -92,7 +109,7 @@ public class ButtonMenuController : MonoBehaviour
 
         _durator.CreateTask(DisAppearPanel, null, 0.1f);
 
-        _currentButton = 0;
+        CurrentButton = 0;
 
         return true;
     }
@@ -131,7 +148,7 @@ public class ButtonMenuController : MonoBehaviour
 
     public void SelectButton()
     {
-        var button = _buttons[_currentButton];
+        var button = _buttons[CurrentButton];
 
         if (button.IsMoving)
             return;

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class Button : MonoBehaviour
+public class CylinderButton : ButtonBase
 {
     [SerializeField]
     private ImageWrapper _rightFrame;
@@ -26,11 +26,9 @@ public class Button : MonoBehaviour
     [SerializeField]
     private float _openTime;
 
-    private Action _onPressedFunc;
-
     private Tweener _tweener;
 
-    public bool IsMoving
+    public override bool IsMoving
     {
         get
         {
@@ -41,7 +39,7 @@ public class Button : MonoBehaviour
         }
     }
 
-    public void Initialize(Action func = null)
+    public override void Initialize(Action func = null)
     {
         _rightFrame.Initialize();
         _leftFrame.Initialize();
@@ -53,13 +51,7 @@ public class Button : MonoBehaviour
         _text.SetText(_viewText);
     }
 
-    /// <summary>
-    /// このボタンが選択された際の処理
-    /// </summary>
-    public void Selected()
-        => _onPressedFunc?.Invoke();
-
-    public bool EnActive()
+    public override bool EnActive()
     {
         if (IsMoving)
             return false;
@@ -69,7 +61,7 @@ public class Button : MonoBehaviour
         return true;
     }
 
-    public bool DisActive()
+    public override bool DisActive()
     {
         if (IsMoving)
             return false;
