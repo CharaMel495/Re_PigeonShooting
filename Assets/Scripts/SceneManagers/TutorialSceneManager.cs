@@ -215,8 +215,9 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         {
             case CheckLists.Move_ItemGet:
                 {
-                    var randPos = TutorialStageManager.Instance.GetRandomPositionInArea(50);
-                    var item = Instantiate(_itemPrefab, randPos, Quaternion.identity);
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var spawnPos = playerPos + (Vector3.left * 3);
+                    var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
                     item.Initialize(ItemType.Battery_Green);
                 }
                 break;

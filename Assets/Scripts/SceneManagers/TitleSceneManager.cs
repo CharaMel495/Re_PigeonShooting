@@ -75,7 +75,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
                     null,
                     null,
                     null,
-                    null,
+                    () => _loadingCutin.EnterCutin(() => GameManager.EndGame()),
                 };
         }
     }
