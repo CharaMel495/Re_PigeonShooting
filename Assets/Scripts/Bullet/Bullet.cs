@@ -10,11 +10,13 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     [Header("画像描画するやつ")]
     private SpriteRendererWrapper _renderer;
 
+    private Rect _playArea;
+
     /// <summary>
     /// カメラに映ってるか
     /// </summary>
     public bool IsInCamera
-        => _renderer.IsInCamera;
+        => _playArea.Contains(this.transform.position);
 
     /// <summary>
     /// 移動情報
@@ -60,10 +62,14 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     public object TriggerExitEventData
         => null;
 
-    public void Initialize()
+    public int Score
+    { get; set; } = 50;
+
+    public void Initialize(Rect playArea)
     {
         _renderer.Initialize();
         _renderer.SetEnabled(false);
+        _playArea = playArea;
     }
 
     public void EnActive(Sprite sprite, string name)
@@ -110,6 +116,12 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     [CallableEvent("OnTriggerEnter")]
     public void OnHit(object data)
     {
+        if (data is DamageEventData damageData)
+        {
+            if (damageData.Damage > 50)
+                EventDispatcher.Instance.Dispatch("AddScore", Score);
+        }
+
         IsDestroyWaiting = true;
     }
 }

@@ -1,4 +1,4 @@
-// BGM、mementoの人
+// BGM、memento(ステージ通常)/parabox(チュートリアル)の音源人
 https://www.youtube.com/@uniquegear
 
 // 耳鳴りの効果音とかの拾い元

@@ -18,6 +18,11 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
     [Header("弾のプールをまとめておく場所")]
     private Transform _root;
 
+    [SerializeField]
+    private bool _isTutorial = false;
+    public bool IsTutorial
+        => _isTutorial;
+
     /// <summary>
     /// 弾のプール
     /// </summary>
@@ -49,7 +54,7 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
 
     public void Initialize()
     {
-        _pool = new(_bulletPrefab, _root);
+        _pool = new(_bulletPrefab, _root, (_isTutorial ? TutorialStageManager.Instance.PlayArea : StageManager.Instance.PlayArea));
         _activeBullets = new();
         _destroyRegister = new();
         Shooter = new();

@@ -17,11 +17,13 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     [SerializeField]
     private ParticleController _particle;
 
+    private Rect _playArea;
+
     /// <summary>
-    /// プレイエリア内に入ってるか
+    /// カメラに映ってるか
     /// </summary>
     public bool IsInArea
-        => StageManager.Instance.PlayArea.Contains(this.transform.position);
+        => _playArea.Contains(this.transform.position);
 
     /// <summary>
     /// 移動情報
@@ -85,13 +87,13 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     public object TriggerExitEventData 
         => null;
 
-    public void Initialize()
+    public void Initialize(Rect playArea)
     {
         _renderer.Initialize();
         _renderer.SetEnabled(false);
         _timer = new();
         _timer.Initialize();
-        
+        _playArea = playArea;
     }
 
     public void EnActive(Sprite sprite, string name)
@@ -170,17 +172,14 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         if (Life < 1)
         {
             IsDestroyWaiting = true;
-            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnSmashed, "Player"), 1);
-            var item = Instantiate(_dropItem, this.transform.position, Quaternion.identity);
-            item.Initialize(ItemType.Garbage);
-            item.Dir = this.MoveData.MoveDir;
+            EventDispatcher.Instance.Dispatch("AddScore", Score);
             return;
         }
 
         _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
     }
 
-    public void Destroy(Transform poolRoot)
+    public void Destroy(Transform poolRoot, bool isItemDroppable)
     {
         _renderer.SetEnabled(false);
         this.transform.parent = poolRoot;
@@ -194,6 +193,16 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         this.transform.rotation = Quaternion.identity;
         _particle.PlayParticle();
 
+        ItemType itemType = GetRandomItemType();
+
+        // アイテムをドロップできるなら
+        if (isItemDroppable && itemType != ItemType.None)
+        {
+            var item = Instantiate(_dropItem, this.transform.position, Quaternion.identity);
+            item.Initialize(itemType);
+            item.Dir = this.MoveData.MoveDir;
+        }
+
         if (this.transform.childCount < 1)
             return;
 
@@ -205,6 +214,20 @@ public class Enemy : MonoBehaviour, IColliderbleObject
             var enemy = child.GetComponent<Enemy>();
             if (enemy != null)
                 enemy.IsDestroyWaiting = true;
+        }
+
+        ItemType GetRandomItemType()
+        {
+            int rand = Random.Range(0, 100);
+
+            if (rand < 60)
+                return ItemType.None;
+            else if (rand < 80)
+                return ItemType.Garbage;
+            else if (rand < 90)
+                return ItemType.Battery_Green;
+            else
+                return ItemType.Battery_Red;
         }
     }
 }

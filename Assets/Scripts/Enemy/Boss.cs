@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// ボスの本体クラス
 /// </summary>
+[StandAloneObject]
 public class Boss : MonoBehaviour, IColliderbleObject
 {
     private enum ActionType
@@ -13,6 +14,9 @@ public class Boss : MonoBehaviour, IColliderbleObject
         ShootMissile,
         DiscShot
     }
+
+    public EnemyDataStructs.TrackPlayer MoveData
+    { get; set; }
 
     /// <summary>
     /// 現在のアクション
@@ -45,8 +49,6 @@ public class Boss : MonoBehaviour, IColliderbleObject
     public bool IsDestroyWaiting
     { get; private set; }
 
-    private int hoge = 0;
-
     public ICollider Collider => _rect;
 
     public object TriggerEnterEventData
@@ -73,6 +75,13 @@ public class Boss : MonoBehaviour, IColliderbleObject
 
         _timer = new();
         _timer.Initialize();
+
+        MoveData = new EnemyDataStructs.TrackPlayer
+        {
+            MoveSpeed = 2.0f,
+            Target = PlayerManager.Instance.Player,
+            TurnRate = 80.0f,
+        };
 
         _actions = new()
         {
@@ -111,8 +120,9 @@ public class Boss : MonoBehaviour, IColliderbleObject
                         ColCategory = ColliderCategory.EnemyBullet,
                         Dir = this.transform.right,
                         MoveSpeed = 1.0f,
+                        SecondMoveSpeed = 15.0f,
                         Scale = Vector3.one * 0.75f,
-                        SpriteType = SpriteData.SpriteType.PlayerBullet
+                        SpriteType = SpriteData.SpriteType.EnemyBullet
                     },
                     BigRing = new BulletStructs.RingShot
                     {
@@ -121,8 +131,9 @@ public class Boss : MonoBehaviour, IColliderbleObject
                         ColCategory = ColliderCategory.EnemyBullet,
                         Dir = this.transform.right,
                         MoveSpeed = 5.5f,
+                        SecondMoveSpeed = 5.0f,
                         Scale = Vector3.one * 1.0f,
-                        SpriteType = SpriteData.SpriteType.PlayerBullet
+                        SpriteType = SpriteData.SpriteType.EnemyBullet
                     }
                 }
             }
@@ -158,12 +169,6 @@ public class Boss : MonoBehaviour, IColliderbleObject
         if (currentAction.IsFinished())
             ChangeNextAction();
 
-        this.transform.position = new Vector3
-            (
-                Mathf.Cos(Time.fixedTime) + 6,
-                Mathf.Sin(Time.fixedTime)
-            );
-
         if (_isInvincible)
         {
             if (_renderer.GetSpriteAlpha() < 0.1f)
@@ -186,7 +191,6 @@ public class Boss : MonoBehaviour, IColliderbleObject
         if (_currentPattern >= _actionPattern.Length)
         {
             _currentPattern = 0;
-            Debug.Log(hoge);
         }
         _currentAction = _actionPattern[_currentPattern];
         _actions[_currentAction].Initialize();
@@ -202,15 +206,23 @@ public class Boss : MonoBehaviour, IColliderbleObject
 
         --Life;
 
-        ++hoge;
-
         if (Life < 1)
         {
-            //IsDestroyWaiting = true;
+            IsDestroyWaiting = true;
             EventDispatcher.Instance.Unbind(this, _rect.ActorName);
+            EventDispatcher.Instance.Dispatch("BossSmashed");
+            
             return;
         }
 
         _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
+    }
+
+    public void DestroyByColliderManager()
+    {
+        _actions[_currentAction].OnDestroyed();
+        ColliderManager.Instance.RemoveCollider(_rect);
+        Destroy(this.gameObject);
+        EventDispatcher.Instance.Dispatch("GameOver");
     }
 }

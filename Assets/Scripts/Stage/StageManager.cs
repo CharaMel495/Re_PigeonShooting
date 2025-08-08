@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
+using System.Collections.Generic;
 
 /// <summary>
 /// ステージ管理クラス
@@ -15,49 +16,67 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     private float _spawnInterval;
 
     [SerializeField]
-    private EnemyEnums.EnemyID[] _spawnableEnemys;
+    private EnemySpawner _spawner;
+
+    private List<EnemySpawner> _createdSpawner;
+
+    [SerializeField]
+    private SpawnEnemyTable _spawnTable;
 
     [SerializeField]
     private EnemyEnums.EnemyID[] _middleBosses;
 
     private float _remainInterval = 0;
 
-    private bool _isBossMode = false;
+    private float _bossInterval = 60.0f;
 
-    private float _bossInterval = 10.0f;
+    private int _bigBossCount = 2;
 
     public void Initialize()
     {
-        
+        _createdSpawner = new();
+
+        _bigBossCount = 2;
+
+        CreateSpawner(1.0f);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (_remainInterval < 0)
-        {
-            var id = _spawnableEnemys[Random.Range(0, _spawnableEnemys.Length)];
-
-            EnemyManager.Instance.CreateEnemy((int)id, GetRandomPositionInArea(8));
-            _remainInterval = _spawnInterval;
-        }
-        else
-            _remainInterval -= Time.fixedDeltaTime;
+        if (EnemyManager.Instance.IsBossMode)
+            return;
 
         if (_bossInterval < 0)
         {
-            var id = _middleBosses[Random.Range(0, _middleBosses.Length)];
-
-            EnemyManager.Instance.CreateEnemy((int)id, GetRandomPositionInArea(8));
-            _bossInterval = 300.0f;
+            if (_bigBossCount > 0)
+            {
+                EnemyManager.Instance.CreateEnemy((int)_middleBosses[0], GetRandomPositionInArea());
+                --_bigBossCount;
+                _bossInterval = 60.0f;
+                CreateSpawner(8.0f);
+            }
+            else
+            {
+                EventDispatcher.Instance.Dispatch("BossEvent");
+                _bossInterval = 60.0f;
+            }
         }
         else
             _bossInterval -= Time.fixedDeltaTime;
     }
 
+    public void CreateSpawner(float interval)
+    {
+        var spawner = Instantiate(_spawner, this.transform.position, Quaternion.identity);
+        _createdSpawner.Add(spawner);
 
+        var idx = Mathf.Min(_createdSpawner.Count - 1, _createdSpawner.Count);
 
-    public Vector3 GetRandomPositionInArea(float minDistanceFromPlayer = 0)
+        spawner.Initialize(_spawnTable.Table[idx], UsableMethods.GetRandomDirection2D(), PlayArea, interval);
+    }
+
+    public Vector3 GetRandomPositionInArea(float minDistanceFromPlayer = 0, float maxDistanceFromPlayer = 0)
     {
         ITargetProvider player = PlayerManager.Instance.Player;
         Vector3 spawnPos;
@@ -71,13 +90,13 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
             spawnPos = new Vector3(x, y, 0);
 
             safetyLoop++;
-            if (safetyLoop > 100) break; // 無限ループ対策
-
-            Debug.Log(Vector3.Distance(spawnPos, player.GetPostion()));
-
-        } while (Vector3.Distance(spawnPos, player.GetPostion()) * 0.01 < minDistanceFromPlayer);
+            if (safetyLoop > 999)
+            {
+                spawnPos = Vector3.zero;
+                break; // 無限ループ対策
+            }
+        } while (Vector3.Distance(spawnPos, player.GetPostion()) < minDistanceFromPlayer || Vector3.Distance(spawnPos, player.GetPostion()) > maxDistanceFromPlayer);
 
         return spawnPos;
     }
-
 }

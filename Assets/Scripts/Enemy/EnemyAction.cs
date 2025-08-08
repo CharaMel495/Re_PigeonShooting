@@ -34,6 +34,13 @@ public class EnemyAction
                     {
                         // 誤差を修正
                         enemy.transform.position = moveData.TargetPoint;
+                        
+
+                        if (moveData.NextMove is EnemyDataStructs.StopPointMove next)
+                        {
+                            moveData.TargetPoint = StageManager.Instance.GetRandomPositionInArea(80, 120);
+                        }
+
                         // 移動情報を次のものに上書き
                         enemy.MoveData = moveData.NextMove;
                         return;
@@ -213,36 +220,73 @@ public class EnemyAction
                 {
                     EnemyDataStructs.SummonEnemy data = (EnemyDataStructs.SummonEnemy)enemy.ActionData;
 
-                    if (data.CurrentInterval > 0)
+                    if (data.CurrentBulletInterval > 0)
                     {
-                        enemy.AdvanceInterval();
-                        return;
+                        if (!(data.BulletData is BulletStructs.NoBullet))
+                            shooter.Shoot(data.BulletData);
+
+                        data.CurrentBulletInterval = data.BulletInterval;
                     }
                     else
-                        enemy.SetActionInterval();
+                        data.CurrentBulletInterval -= Time.fixedDeltaTime;
 
-                    if (data.Target != null)
-                        data.BulletData.Dir = (data.Target.GetPostion() - enemy.transform.position).normalized;
+                    if (data.CurrentInterval > 0)
+                    {
+                        data.CurrentInterval -= Time.fixedDeltaTime;
+                    }
+                    else
+                    {
+                        data.CurrentInterval = data.ActionInterval;
+                        SpawnEnemy();
+                    }
 
-                    if (data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵 ||
-                        data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵_自機狙い単発弾 ||
-                        data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way)
-                        EnemyManager.Instance.CreateSpiralBarrierEnemy(
-                            (int)data.SummonID,
-                            enemy.transform.position,
-                            5,
-                            1.0f,
-                            isRightSpiral: true,
-                            enemy.transform);
+                    enemy.ActionData = data;
 
-                    if (data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵 ||
-                        data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵_弾あり)
-                        EnemyManager.Instance.CreateEnemy((int)data.SummonID, enemy.transform.position, -enemy.MoveData.MoveDir);
+                    return;
 
-                    if (data.BulletData is BulletStructs.NoBullet)
-                        return;
+                    void SpawnEnemy()
+                    {
+                        if (data.Target != null)
+                            data.BulletData.Dir = (data.Target.GetPostion() - enemy.transform.position).normalized;
 
-                    shooter.Shoot(data.BulletData);
+                        if (data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵 ||
+                            data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵_自機狙い単発弾 ||
+                            data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way)
+                            EnemyManager.Instance.CreateSpiralBarrierEnemy(
+                                (int)data.SummonID,
+                                enemy.transform.position,
+                                5,
+                                1.0f,
+                                isRightSpiral: true,
+                                enemy.transform);
+
+                        if (data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵 ||
+                            data.SummonID == EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵_弾あり)
+                            EnemyManager.Instance.CreateEnemy((int)data.SummonID, enemy.transform.position, -enemy.MoveData.MoveDir);
+                    }
+                }
+                break;
+        }
+    }
+
+    public void Move(Boss boss)
+    {
+        switch (boss.MoveData)
+        {
+            case EnemyDataStructs.TrackPlayer:
+                {
+                    // 移動データを取得
+                    var moveData = (EnemyDataStructs.TrackPlayer)boss.MoveData;
+
+                    Vector3 dir = (moveData.Target.GetPostion() - boss.transform.position).normalized;
+
+                    // 現在の移動速度を経過時間から計算
+                    moveData.MoveSpeed = moveData.MoveSpeed + moveData.Acceleration * moveData.ElaspedTime;
+
+                    // 移動（前方向へ）
+                    boss.transform.position += dir * moveData.MoveSpeed * Time.fixedDeltaTime;
+
+                    boss.MoveData = moveData;
                 }
                 break;
         }

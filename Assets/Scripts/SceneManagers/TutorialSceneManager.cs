@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Tutorial;
+using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Tutorial
 {
@@ -51,6 +53,8 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
     private TutorialSupporter _supporter;
 
+    public bool IsAirBasterOK = false;
+
     public override void Initialize()
     {
         InputManager.Instance.ChangeInputHandler(InputHandler.UI);
@@ -96,10 +100,13 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         ColliderManager.Instance.Initialize();
         BulletManager.Instance.Initialize();
         TutorialPlayerManager.Instance.Initialize();
+        EnemyManager.Instance.Initialize();
 
         _loadingCutin.ExitCutin(() => _state = CurrentState.Top);
 
         EventDispatcher.Instance.Bind(this);
+
+        CRISoundManager.Instance.PlayBGM(BGM.Tutorial);
 
         Action[] CreateButtonFunc()
         {
@@ -110,7 +117,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
                     () => _loadingCutin.EnterCutin(() => SetUpTutorial(Tutorials.Vacuum)),
                     () => _loadingCutin.EnterCutin(() => SetUpTutorial(Tutorials.Dash)),
                     () => _loadingCutin.EnterCutin(() => SetUpTutorial(Tutorials.AirBaster)),
-                    null,
+                    () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("MainGame")),
                 };
         }
     }
@@ -211,6 +218,57 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
                     var randPos = TutorialStageManager.Instance.GetRandomPositionInArea(50);
                     var item = Instantiate(_itemPrefab, randPos, Quaternion.identity);
                     item.Initialize(ItemType.Battery_Green);
+                }
+                break;
+
+            case CheckLists.Shot_SmashEnemy:
+                {
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var spawnPos = playerPos + (Vector3.right * 3);
+                    EnemyManager.Instance.CreateEnemy(12, spawnPos);
+                }
+                break;
+
+            case CheckLists.Vacuum_Item:
+                {
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var spawnPos = playerPos + (Vector3.right * 3);
+                    var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
+                    item.Initialize(ItemType.Battery_Red);
+                }
+                break;
+
+            case CheckLists.AirBaster_GetDust:
+                {
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var spawnPos = playerPos + (Vector3.right * 3);
+                    var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
+                    item.Initialize(ItemType.Garbage);
+
+                    for (int i = 1; i < 10; ++i)
+                    {
+                        var ratio = 360 / (float)10;
+                        var spawnPos2 = Quaternion.AngleAxis(ratio * i, Vector3.forward) * spawnPos;
+                        item = Instantiate(_itemPrefab, spawnPos2, Quaternion.identity);
+                        item.Initialize(ItemType.Garbage);
+                    }
+                }
+                break;
+
+            case CheckLists.AirBaster:
+                {
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var spawnPos = playerPos + (Vector3.right * 3);
+                    EnemyManager.Instance.CreateEnemy(12, spawnPos);
+
+                    for (int i = 1; i < 8; ++i)
+                    {
+                        var ratio = 360 / (float)8;
+                        var spawnPos2 = playerPos + Quaternion.AngleAxis(ratio * i, Vector3.forward) * spawnPos;
+                        EnemyManager.Instance.CreateEnemy(12, spawnPos2);
+                    }
+
+                    EventDispatcher.Instance.Dispatch("PlayerIsAirBasterUnLock");
                 }
                 break;
         }

@@ -100,6 +100,8 @@ public class TutorialUI : MonoBehaviour
         }
         else
         _timer.CreateTask(TypeText, _typeSpeed);
+
+        CRISoundManager.Instance.PlaySE(SFX.TypeText);
     }
 
     private void EndTyping()

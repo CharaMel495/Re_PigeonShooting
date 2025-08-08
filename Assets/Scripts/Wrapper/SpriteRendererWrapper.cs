@@ -45,6 +45,7 @@ public class SpriteRendererWrapper : MonoBehaviour
         if (_renderer != null)
             return;
 
+
         _renderer = this.GetComponent<SpriteRenderer>();
     }
 

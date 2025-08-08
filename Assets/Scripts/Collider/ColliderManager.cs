@@ -181,6 +181,7 @@ public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
                 continue;
             // もしマネージャー無しのクラスならここで消す
             obj.Owner.DestroyByColliderManager();
+            break;
         }
     }
 

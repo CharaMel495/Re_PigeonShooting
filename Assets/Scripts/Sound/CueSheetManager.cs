@@ -10,6 +10,10 @@ public enum BGM
 {
     // BGMのキーをここに追加する
     MainStage,
+    LastBoss,
+    Tutorial,
+    Ranking,
+    Title,
     None,
 }
 
@@ -18,6 +22,10 @@ public enum SFX
     // SEのキーをここに追加する
     PlayerShot,
     AirBaster,
+    IconButton,
+    NormalButton,
+    TutorialSuccess,
+    TypeText,
 }
 
 

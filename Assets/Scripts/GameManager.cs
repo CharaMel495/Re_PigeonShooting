@@ -25,6 +25,18 @@ public enum Scenes
     GameOver
 }
 
+public class UsableMethods
+{
+    /// <summary>
+    /// ランダムな単位ベクトル（方向ベクトル）を返す（2D）
+    /// </summary>
+    public static Vector2 GetRandomDirection2D()
+    {
+        float angle = Random.Range(0f, Mathf.PI * 2f); // 0〜360度のランダム角度（ラジアン）
+        return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+    }
+}
+
 /// <summary>
 /// ゲーム全体の管理クラス
 /// </summary>
@@ -54,6 +66,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         EventDispatcher.Instance.Initialize();
         _ = InputManager.Instance.Initialize();
+        _ = CRISoundManager.Instance.Initialize();
         InitializeScene();
     }
 
@@ -69,6 +82,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                 break;
             case Scenes.Tutorial:
                 TutorialSceneManager.Instance.Initialize();
+                break;
+            case Scenes.GameOver:
+                GameOverScene.Instance.Initialize();
                 break;
         }
     }

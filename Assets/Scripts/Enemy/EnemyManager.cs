@@ -30,7 +30,8 @@ namespace EnemyEnums
         渦巻ぐるぐる敵_後方3way,
         バリア突進敵,
         レーザー発射敵,
-        バリア突進中ボス
+        バリア突進中ボス,
+        何もしない敵
     }
 }
 
@@ -40,18 +41,22 @@ namespace EnemyEnums
 public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 {
     [SerializeField]
-    [Header("今はテスト用、将来的にはプレハブにする")]
-    private Boss Hoge;
-
-    [SerializeField]
     [Header("敵プレハブ")]
     private Enemy _enemyPrefab;
+
+    [SerializeField]
+    private Boss[] _bossPrefab;
 
     [SerializeField]
     private Transform _stoppableArea;
 
     [SerializeField]
     private Transform _poolRoot;
+
+    [SerializeField]
+    private bool _isTutorial = false;
+    public bool IsTutorial
+        => _isTutorial;
 
     /// <summary>
     /// 現在アクティブな弾
@@ -84,6 +89,11 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
     private EnemyParamTableAsset _tableAsset;
 
+    public bool IsBossMode
+    { get; set; } = false;
+
+    private Boss _currentBoss;
+
     public void Initialize()
     {
         _destroyRegister = new();
@@ -93,11 +103,13 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         _tableAsset = Addressables.LoadAssetAsync<EnemyParamTableAsset>
             (SummarizeResourceDirectory.ENEMYTABLEASSET_PATH).WaitForCompletion();
         _createID = 0;
-        _pool = new(_enemyPrefab, _poolRoot);
+        _pool = new(_enemyPrefab, _poolRoot, (_isTutorial ? TutorialStageManager.Instance.PlayArea : StageManager.Instance.PlayArea));
         _moveParamCreator = new();
         _actionParamCreator = new();
 
-        //Hoge.Initialize();
+        IsBossMode = false;
+
+        EventDispatcher.Instance.Bind(this);
     }
 
     private void FixedUpdate()
@@ -125,6 +137,11 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
         // リストを更新
         FlashActiveEnemysList();
+
+        if (_currentBoss == null)
+            return;
+
+        _action.Move(_currentBoss);
     }
 
     public void CreateEnemy(int tableID, Vector3 createPos, Vector3 moveDir = new())
@@ -134,6 +151,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
         // 敵を生成
         var enemy = _pool.GetEnemyFromPool();
+        enemy.transform.position = enemyData.Origin;
         enemy.transform.localScale = enemyData.Scale;
         // 体力を注入
         enemy.Life = enemyData.Life;
@@ -313,7 +331,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     }
 
     /// <summary>
-    /// アクティブな弾の状態を更新するメソッド
+    /// アクティブな敵の状態を更新するメソッド
     /// </summary>
     private void FlashActiveEnemysList()
     {
@@ -329,15 +347,17 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
         //弾を破棄し、リストからも削除する
         ColliderManager.Instance.RemoveCollider(destroyEnemy.Collider);
-        destroyEnemy.Destroy(_poolRoot);
+        destroyEnemy.Destroy(_poolRoot, IsItemDroppableFlag());
         _activeEnemys.Remove(destroyEnemy);
 
         // メソッドの最初に飛ぶ
         goto MethodTop;
     }
 
-    
-
+    private bool IsItemDroppableFlag()
+    {
+        return !_isTutorial;
+    }
     
     public EnemyDataStructs.IEnemyParam StructEnemyParamFromMasterData(int tableID, EnemyEnums.EnemyType enemyType)
     {
@@ -363,5 +383,21 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         }
 
         return null;
+    }
+
+    [CallableEvent("BossEvent")]
+    public void AppearBoss(object data)
+    {
+        _currentBoss = Instantiate(_bossPrefab[0], Vector3.zero, Quaternion.identity);
+        _currentBoss.Initialize();
+        IsBossMode = true;
+    }
+
+    [CallableEvent("BossSmashed")]
+    public void BossSmashed(object data)
+    {
+        var destroyedPos = _currentBoss.transform.position;
+        
+        IsBossMode = false;
     }
 }

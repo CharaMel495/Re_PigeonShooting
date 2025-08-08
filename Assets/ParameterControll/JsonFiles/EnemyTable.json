@@ -105,8 +105,17 @@
 			"BulletSize":"0",
 			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"300",
+			"Life":"100",
 			"Score":"2000"
+		},
+		{
+			"ID":"12",
+			"Size":"1",
+			"BulletSize":"0",
+			"SpriteID":"100",
+			"ColliderType":"0",
+			"Life":"15",
+			"Score":"0"
 		}
 	]
 }

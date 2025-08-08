@@ -4,7 +4,8 @@ public enum ItemType
 {
     Battery_Green,
     Battery_Red,
-    Garbage
+    Garbage,
+    None
 }
 
 public struct GetItemEventData
@@ -54,6 +55,9 @@ public class Item : MonoBehaviour, IColliderbleObject
     public bool IsDestroyWaiting
     { get; private set; } = false;
 
+    private float _outViewTime;
+    private readonly float _destroyOutOfViewTime = 5.0f;
+
     public void Initialize(ItemType type, int value = 1)
     {
         _renderer.Initialize();
@@ -90,7 +94,17 @@ public class Item : MonoBehaviour, IColliderbleObject
 
     private void FixedUpdate()
     {
-        Move();   
+        Move();
+
+        if (_renderer.IsInCamera)
+            return;
+
+        _outViewTime += Time.fixedDeltaTime;
+
+        if (_outViewTime < _destroyOutOfViewTime)
+            return;
+
+        IsDestroyWaiting = true;
     }
 
     private void Move()

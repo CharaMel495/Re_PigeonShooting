@@ -25,24 +25,24 @@ public class EnemyPool
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public EnemyPool(Enemy bulletPrefab, Transform root)
+    public EnemyPool(Enemy bulletPrefab, Transform root, Rect playArea)
     {
         _enemyPool = new Enemy[300];
         _root = root;
-        CreatePool(bulletPrefab);
+        CreatePool(bulletPrefab, playArea);
     }
 
     /// <summary>
     /// 弾のプールを作成するメソッド
     /// </summary>
-    public void CreatePool(Enemy enemyPrefab)
+    public void CreatePool(Enemy enemyPrefab, Rect playArea)
     {
         for (int idx = 0; idx < _enemyPool.Length; ++idx)
         {
             // 弾を生成
             _enemyPool[idx] = Object.Instantiate(enemyPrefab, _root);
             // 弾を初期化
-            _enemyPool[idx].Initialize();
+            _enemyPool[idx].Initialize(playArea);
         }
     }
 

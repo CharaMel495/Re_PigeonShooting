@@ -107,24 +107,33 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private Timer _timer;
 
-    private int _exp;
-
     private int _level;
+    public int Level
+    {
+        get => _level;
+        set
+        {
+            _level = Mathf.Min(_MAXLEVEL, value);
 
-    private const int _LEVELBORDER = 10;
-    private const int _MAXLEVEL = 5;
+            BulletStructs.MultiWayShot mul = (BulletStructs.MultiWayShot)_bulletData[PlayerBullet.ShootType.MultiWayShot];
+            mul.ShotValue = _level;
+            _bulletData[PlayerBullet.ShootType.MultiWayShot] = mul;
+        }
+    }
+
+    private const int _MAXLEVEL = 10;
 
     private float _slopeCondition;
 
     private readonly int _maxDustValue = 10;
     private int _dustValue;
-    private readonly int _maxLife = 100;
+    private readonly int _maxLife = 10;
     private int _life;
     public int Life
     { get => _life;
         private set
         {
-            _life = value;
+            _life = Mathf.Min(value, _maxLife);
             UpdateLifeUI(_life / (float)_maxLife);
         }    
     }
@@ -150,36 +159,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     public object TriggerExitEventData
         => null;
 
-    /// <summary>
-    /// 経験値
-    /// </summary>
-    public int Exp
-    { get => _exp;
-        set
-        {
-            _exp = value;
-
-            if (_exp < _LEVELBORDER)
-                return;
-
-            _exp -= _LEVELBORDER;
-
-            if (_level < _MAXLEVEL)
-            {
-                // TODO あとでレベルアップの仕組みをちゃんと作り込む
-                BulletStructs.MultiWayShot mul = (BulletStructs.MultiWayShot)_bulletData[PlayerBullet.ShootType.MultiWayShot];
-                ++mul.ShotValue;
-                _bulletData[PlayerBullet.ShootType.MultiWayShot] = mul;
-            }
-            else
-                return;//TODO:ここにレベル上限でレベルアップ時に追加スコアの記述をする
-        }
-    }
-
     public void Initialize()
     {
-        _exp = 0;
-        _level = 0;
+        _level = 3;
 
         _currentSubShootType = PlayerBullet.ShootType.Lazer;
 
@@ -207,7 +189,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         EventDispatcher.Instance.Bind(this, "Player");
         // ラムダを使ってて自動バインドできないものを登録
         // 経験値取得イベント
-        EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnSmashed, "Player"), (object data) => Exp += (int)data);
+        EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnSmashed, "Player"), (object data) => Level += (int)data);
         // 吸引イベント
         EventDispatcher.Instance.Subscribe(
             EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"), (object _) => { Vacuume(); });
@@ -374,7 +356,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 MoveSpeed = 30.0f,
                 AngleSpan = 90.0f,
                 ColCategory = ColliderCategory.PlayerBullet,
-                ShotValue = 3,
+                ShotValue = _level,
                 SpriteType = SpriteData.SpriteType.PlayerBullet,
             });
 
@@ -445,7 +427,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     /// </summary>
     public object GetBulletParameter(Vector2 shotDir, float slopeCondition)
     {
-        var data = _bulletData[_shootTypeList[_level]];
+        var data = _bulletData[_shootTypeList[0]];
 
         data.Origin = this.transform.position;
         data.Dir = shotDir;
@@ -509,7 +491,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 HealHP(item.Value);
                 break;
             case ItemType.Battery_Red:
-                Exp += item.Value;
+                Level += item.Value;
                 break;
             case ItemType.Garbage:
                 _dustValue += item.Value;
@@ -528,6 +510,11 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _isInvincible = true;
 
         _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
+
+        if (Life > 0)
+            return;
+
+        EventDispatcher.Instance.Dispatch("GameOver");
     }
 
     private void HealHP(int value)

@@ -61,6 +61,8 @@ public class CheckListUI : MonoBehaviour
         // チェックマークを出す
         _checkUI[_next].transform.DOScale(_checkSize, _checkTime).SetEase(Ease.OutBounce);
 
+        CRISoundManager.Instance.PlaySE(SFX.TutorialSuccess);
+
         ++_next;
 
         // 次のチェックリストを見せる

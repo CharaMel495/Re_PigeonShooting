@@ -146,6 +146,7 @@ public class EnemyActionParameterCreater
                 return new EnemyDataStructs.SummonEnemy
                 {
                     ActionInterval = 9999.0f,
+                    BulletInterval = 0.5f,
                     Target = PlayerManager.Instance.Player,
                     SummonID = EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way,
                     BulletData = new BulletStructs.SpreadEightShoot
@@ -155,6 +156,12 @@ public class EnemyActionParameterCreater
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
                         ColCategory = ColliderCategory.EnemyBullet
                     }
+                };
+
+            // 12
+            case EnemyEnums.EnemyID.何もしない敵:
+                return new EnemyDataStructs.NoAction
+                {
                 };
         }
 

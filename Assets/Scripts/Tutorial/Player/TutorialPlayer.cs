@@ -133,6 +133,10 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     public object TriggerExitEventData
         => null;
 
+    private float _shotTime;
+
+    private bool _isAirBasterLock = true;
+
     /// <summary>
     /// 経験値
     /// </summary>
@@ -185,6 +189,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         // 弾を発射する為の構造体はここで作っちゃう
         CreateBulletParameter();
         CreatePlayerShotList();
+
+        _isAirBasterLock = true;
 
         _circle = new SelfMade.Circle(_hitBox)
         {
@@ -251,14 +257,18 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         if (!_arrowedActions[Tutorials.Shot])
             return;
 
+        _shotTime += Time.fixedDeltaTime;
+
+        if (_shotTime > 5.0f)
+        {
+            EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Shot);
+            EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster_Shot);
+        }
+
         // インターバル中は弾を撃たない
         // 吸引中も弾を撃たない
         // ダッシュ中も弾を撃たない
         if (IsInterval || _isVacuuming || IsDash)
-            return;
-
-        // ほこりの量が最大の時も打たない
-        if (_dustValue >= _maxDustValue)
             return;
 
         // インターバルをセット
@@ -273,9 +283,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         // 弾を発射する
         Shooter.Shoot(data as BulletStructs.IBulletCreateData, _slopeCondition);
-        //CRISoundManager.Instance.PlaySE(SFX.PlayerShot);
-        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Shot);
-        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster_Shot);
+        CRISoundManager.Instance.PlaySE(SFX.PlayerShot);
     }
 
     public void Vacuume()
@@ -302,7 +310,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void AirBaster()
     {
-        if (_dustValue < _maxDustValue)
+        if (_dustValue < _maxDustValue || _isAirBasterLock)
             return;
 
         _camera.Shake(_bombTime * 10, 1.0f);
@@ -329,6 +337,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         //ColliderManager.Instance.RemoveCollider(_circle);
 
         _timer.CreateTask(EndDash, _dashTime);
+
+        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Dash);
     }
 
     private void EndDash()
@@ -521,7 +531,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
                 _dustValue += item.Value;
                 _dustValue = Mathf.Min(_dustValue, _maxDustValue);
                 _cleanerUI.UpdataValue(_dustValue / (float)_maxDustValue);
-                EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster_GetDust);
+                if (_dustValue >= _maxDustValue)
+                    EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster_GetDust);
                 break;
         }
     }
@@ -595,5 +606,15 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     {
         _animator.SetFloat(_animParamX, 0.0f);
         _animator.SetFloat(_animParamY, -1.0f);
+
+        this.transform.position = Vector3.zero;
+
+        _shotTime = 0.0f;
+
+        _isAirBasterLock = true;
     }
+
+    [CallableEvent("IsAirBasterUnLock")]
+    public void AirBasterUnLock(object data)
+        => _isAirBasterLock = false;
 }

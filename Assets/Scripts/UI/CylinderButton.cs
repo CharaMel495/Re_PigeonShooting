@@ -58,6 +58,8 @@ public class CylinderButton : ButtonBase
 
         OpenMove();
 
+        CRISoundManager.Instance.PlaySE(SFX.NormalButton);
+
         return true;
     }
 

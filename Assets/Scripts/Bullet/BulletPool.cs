@@ -24,24 +24,24 @@ public class BulletPool
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public BulletPool(Bullet bulletPrefab, Transform root)
+    public BulletPool(Bullet bulletPrefab, Transform root, Rect playArea)
     {
         _bulletPool = new Bullet[1000];
         _root = root;
-        CreatePool(bulletPrefab);
+        CreatePool(bulletPrefab, playArea);
     }
 
     /// <summary>
     /// 弾のプールを作成するメソッド
     /// </summary>
-    public void CreatePool(Bullet bulletPrefab)
+    public void CreatePool(Bullet bulletPrefab, Rect playArea)
     {
         for (int idx = 0; idx < _bulletPool.Length; ++idx)
         {
             // 弾を生成
             _bulletPool[idx] = Object.Instantiate(bulletPrefab, _root);
             // 弾を初期化
-            _bulletPool[idx].Initialize();
+            _bulletPool[idx].Initialize(playArea);
         }
     }
 

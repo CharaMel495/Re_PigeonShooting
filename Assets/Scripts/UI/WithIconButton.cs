@@ -29,6 +29,8 @@ public class WithIconButton : ButtonBase
     {
         _iconImage.SetImageAlpha(1.0f);
 
+        CRISoundManager.Instance.PlaySE(SFX.IconButton);
+
         return true;
     }
 

@@ -141,7 +141,9 @@ namespace EnemyDataStructs
     public struct SummonEnemy : IEnemyActionData
     {
         public float ActionInterval { get; set; }
+        public float BulletInterval { get; set; }
         public float CurrentInterval { get; set; }
+        public float CurrentBulletInterval { get; set; }
         public ITargetProvider Target { get; set; }
         public BulletStructs.IBulletCreateData BulletData { get; set; }
         public EnemyEnums.EnemyID SummonID { get; set; }

@@ -11,6 +11,7 @@ namespace BossDataStructs
         public void Initialize();
         public bool IsFinished();
         public void Act();
+        public void OnDestroyed();
     }
 
     public class SpreadBarrage : IBossAction
@@ -57,7 +58,7 @@ namespace BossDataStructs
         {
             if (RemainInterval < 0.1f)
                 BarrierEnemyes = EnemyManager.Instance.CreateSpiralBarrierEnemy(
-                    (int)EnemyEnums.EnemyID.渦巻ぐるぐる敵,
+                    (int)EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way,
                     Transform.position,
                     SummonEnemyVal,
                     3.0f,
@@ -73,13 +74,36 @@ namespace BossDataStructs
         {
             foreach (var enemy in BarrierEnemyes.ToArray())
             {
-                EnemyDataStructs.SpiralMove moveData = (EnemyDataStructs.SpiralMove)enemy.MoveData;
-                moveData.SpiralRatio = moveData.SpiralRatio * 0.2f;
-                moveData.MoveSpeed = moveData.MoveSpeed * 3.0f;
-                enemy.MoveData = moveData;
+                EnemyDataStructs.SlavedSpiralMove moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
+                enemy.MoveData = new EnemyDataStructs.StrainghtNormalMove
+                {
+                    MoveDir = moveData.MoveDir,
+                    MoveSpeed = 8.0f,
+                    Acceleration = -12.0f
+                };
+
+                enemy.transform.parent = null;
             }
 
+            
+
             _currentMode = Mode.End;
+        }
+
+        public void OnDestroyed()
+        {
+            foreach (var enemy in BarrierEnemyes.ToArray())
+            {
+                EnemyDataStructs.SlavedSpiralMove moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
+                enemy.MoveData = new EnemyDataStructs.StrainghtNormalMove
+                {
+                    MoveDir = moveData.MoveDir,
+                    MoveSpeed = 8.0f,
+                    Acceleration = -12.0f
+                };
+
+                enemy.transform.parent = null;
+            }
         }
     }
 
@@ -103,7 +127,8 @@ namespace BossDataStructs
 
         public void Act()
         {
-            EnemyManager.Instance.CreateEnemy(13, Transform.position, GetRandomAngle());
+            EnemyManager.Instance.CreateEnemy((int)EnemyEnums.EnemyID.プレイヤーに突っ込んでくるミサイル敵_弾あり,
+                Transform.position, GetRandomAngle());
 
             RemainInterval = ActionInterval;
 
@@ -116,6 +141,11 @@ namespace BossDataStructs
             Vector3 dir = Quaternion.Euler(0, 0, randomAngle) * Vector3.right;
 
             return dir;
+        }
+
+        public void OnDestroyed()
+        {
+
         }
     }
 
@@ -152,6 +182,11 @@ namespace BossDataStructs
             RemainInterval = ActionInterval;
 
             ++ShotCount;
+        }
+
+        public void OnDestroyed()
+        {
+
         }
     }
 

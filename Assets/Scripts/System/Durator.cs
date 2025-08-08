@@ -142,7 +142,8 @@ public class Durator
     public void EndTask(int key, bool isCallBack = true)
     {
         //渡されたコールバックを実行
-        _myTasks[key].CallBack?.Invoke();
+        if (isCallBack)
+            _myTasks[key].CallBack?.Invoke();
 
         //依頼を達成したので除外する
         _myTasks.Remove(key);

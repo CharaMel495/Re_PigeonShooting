@@ -18,6 +18,9 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     [SerializeField]
     private ButtonMenuController _titleMenu;
 
+    [SerializeField]
+    private LoadingCutIn _loadingCutin;
+
     private CurrentState _state;
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;
@@ -29,6 +32,8 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         _titleMenu.Initialize(CreateButtonFunc());
 
         _state = CurrentState.Top;
+
+        _loadingCutin.ExitCutin();
 
         _desideKeyPressed = new Dictionary<CurrentState, Action>
         {
@@ -60,11 +65,13 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
             { CurrentState.Exit, null },
         };
 
+        CRISoundManager.Instance.PlayBGM(BGM.Title);
+
         Action[] CreateButtonFunc()
         {
             return new Action[]
                 {
-                    () => SceneManager.LoadScene("MainGame"),
+                    () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("Tutorial")),
                     null,
                     null,
                     null,

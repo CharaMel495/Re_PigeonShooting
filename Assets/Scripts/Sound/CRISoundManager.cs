@@ -7,8 +7,15 @@ using Cysharp.Threading.Tasks;
 /// <summary>
 /// CRIWARE音声を統括するサウンドマネージャー（BGM/SE管理）
 /// </summary>
-public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
+public class CRISoundManager : MonoBehaviour
 {
+    private static CRISoundManager _instance;
+
+    /// <summary>
+    /// シングルトンインスタンス
+    /// </summary>
+    public static CRISoundManager Instance => _instance;
+
     /// <summary>
     /// BGMの再生を担うプレイヤー
     /// </summary>
@@ -39,6 +46,8 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
     /// </summary>
     private BGM _currentBgm = BGM.None;
 
+    private BGM _registingBGM = BGM.None;
+
     /// <summary>
     /// 非同期処理を多用するので、バグ避けのトークン
     /// </summary>
@@ -53,17 +62,47 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
 
     private Durator _durator;
 
+    private int _effectTask;
+
+    private static bool _isInitialized = false;
+
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
     private void FixedUpdate()
     {
         //_cueSheetManager?.Update();
         _durator?.Update();
+
+        if (_registingBGM != BGM.None)
+        {
+            var bgm = _registingBGM;
+            _registingBGM = BGM.None;
+            PlayBGM(bgm);
+        }
     }
 
     /// <summary>
     /// 初期化処理
     /// </summary>
-    public async UniTaskVoid Initialize()
+    public async UniTask Initialize()
     {
+        if (_isInitialized)
+        {
+            
+            return;
+        }
+
         // オブジェクト破棄時に停止されるようにトークンを取得
         _destroyToken = this.GetCancellationTokenOnDestroy();
 
@@ -84,13 +123,14 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
         // 使用する全てのキューシートを読み込む
         await _cueSheetManager.LoadAllCueSheetsAsync(_destroyToken);
 
-        ChangeMasterVolume(0.5f);
-        ChangeBGMVolume(0.5f);
+        ChangeMasterVolume(1.0f);
+        ChangeBGMVolume(1.0f);
         ChangeSEVolume(1.0f);
-        PlayBGM(BGM.MainStage);
 
         _durator = new();
         _durator.Initialize();
+
+        _isInitialized = true;
     }
 
     /// <summary>
@@ -125,6 +165,9 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
     /// <param name="bgm">流したいBGMのキー</param>
     public void PlayBGM(BGM bgm)
     {
+        if (!_isInitialized)
+            _registingBGM = bgm;
+
         // もし既に流れているBGMならここで終わる
         if (_currentBgm == bgm || bgm == BGM.None) 
             return;
@@ -223,11 +266,14 @@ public class CRISoundManager : SingletonMonoBehaviour<CRISoundManager>
 
     public void BombEffect(float duration)
     {
+        if (_durator.IsTaskExistTask(_effectTask))
+            _durator.CanncellTask(_effectTask, true);
+
         var currentVolume = BGMVolume;
 
         ChangeBGMVolume(0.0f);
 
-        _durator.CreateTask((float _elapsedTime, float _endTime) => ZeroToCurrent(_elapsedTime, _endTime, currentVolume),
+        _effectTask = _durator.CreateTask((float _elapsedTime, float _endTime) => ZeroToCurrent(_elapsedTime, _endTime, currentVolume),
             () => ChangeBGMVolume(currentVolume), duration);
     }
 
