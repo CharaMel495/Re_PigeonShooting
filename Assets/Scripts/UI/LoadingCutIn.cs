@@ -28,7 +28,5 @@ public class LoadingCutIn : MonoBehaviour
     public void ExitCutin(Action onEndCutin = null)
     {
         _cutinTransform.DOAnchorPos(_endPos, _moveTime).SetEase(Ease.Linear).OnComplete(() => onEndCutin?.Invoke()).SetUpdate(true);
-
-        CRISoundManager.Instance.PlaySE(SFX.Cutin);
     }
 }

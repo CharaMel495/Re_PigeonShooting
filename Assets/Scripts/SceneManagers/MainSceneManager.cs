@@ -18,6 +18,9 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
     [SerializeField]
     private ButtonMenuController _pauseMenu;
 
+    [SerializeField]
+    private ScoreHolder _scoreHolder;
+
     private bool _isPausing = false;
 
     private static int _score;
@@ -32,13 +35,15 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
 
         _pauseMenu.Initialize(CreateButtonFunc());
 
-        _score = 0;
+        _scoreHolder.Initialize();
 
         _loadingCutin.ExitCutin();
 
         CRISoundManager.Instance.PlayBGM(BGM.MainStage);
 
         EventDispatcher.Instance.Bind(this);
+
+        InputManager.Instance.ChangeInputHandler(InputHandler.Player);
 
         Action[] CreateButtonFunc()
         {
@@ -97,7 +102,7 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
     [CallableEvent("AddScore")]
     public void AddScore(object data)
     {
-        _score += (int)data;
+        _scoreHolder.Score += (int)data;
     }
 
     [CallableEvent("GameOver")]

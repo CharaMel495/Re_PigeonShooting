@@ -21,6 +21,12 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     [SerializeField]
     private LoadingCutIn _loadingCutin;
 
+    [SerializeField]
+    private GameObject _textObj;
+
+    [SerializeField]
+    private ScoreHolder _highScore;
+
     private CurrentState _state;
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;
@@ -34,6 +40,10 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         _state = CurrentState.Top;
 
         _loadingCutin.ExitCutin();
+
+        _textObj.SetActive(true);
+
+        InputManager.Instance.ChangeInputHandler(InputHandler.UI);
 
         _desideKeyPressed = new Dictionary<CurrentState, Action>
         {
@@ -82,13 +92,20 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
 
     private void Update()
     {
-        if (InputManager.CheckKey(InputManager.DesideKey, InputHandler.Player))
+        if (InputManager.CheckKey(InputManager.DesideKey, InputHandler.UI))
             _desideKeyPressed[_state]?.Invoke();
 
-        if (InputManager.CheckKey(InputManager.CancelKey, InputHandler.Player))
+        if (InputManager.CheckKey(InputManager.CancelKey, InputHandler.UI))
             _cancelKeyPressed[_state]?.Invoke();
 
-        Direction inputDir = InputManager.CheckInputDirection(InputHandler.Player);
+        // ポーズキー＋決定キー＋吸引キーでハイスコアリセット
+        if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI, true) && InputManager.CheckKey(InputManager.CancelKey, InputHandler.UI, true) && InputManager.CheckKey(InputManager.VacuumKey, InputHandler.UI))
+        {
+            _highScore.Initialize();
+            CRISoundManager.Instance.PlaySE(SFX.TutorialSuccess);
+        }
+
+        Direction inputDir = InputManager.CheckInputDirection(InputHandler.UI);
 
         if (inputDir == Direction.Down)
             _dirInputed[_state]?.Invoke(true);
@@ -101,12 +118,16 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     {
         if (_titleMenu.EnActive())
             _state = CurrentState.TitleMenu;
+
+        _textObj.SetActive(false);
     }
 
     private void CloseMenu()
     {
         if (_titleMenu.DisActive())
             _state = CurrentState.Top;
+
+        _textObj.SetActive(true);
     }
 
     private void MoveMenu(bool isDown)

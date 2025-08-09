@@ -64,7 +64,23 @@ public class CRISoundManager : MonoBehaviour
 
     private int _effectTask;
 
+    private float _volumeChache = -1.0f;
+
     private static bool _isInitialized = false;
+
+    // ==== 安全装置：SEプール & スロットル ====
+    private int _sePoolSize = 16;           // 同時SEの上限
+    private CriAtomSource[] _sePool;
+    private int _seIndex = 0;
+
+    // 連打間引き（SEごとに最短インターバル）
+    private float _seThrottleInterval = 0.04f; // 40ms
+    private readonly System.Collections.Generic.Dictionary<SFX, float> _nextPlayable
+        = new System.Collections.Generic.Dictionary<SFX, float>();
+
+    // 時刻取得は unscaledTime を推奨（TimeScale 0 演出中でも動く）
+    private float Now => Time.unscaledTime;
+
 
     private void Awake()
     {
@@ -130,34 +146,62 @@ public class CRISoundManager : MonoBehaviour
         _durator = new();
         _durator.Initialize();
 
+        // --- SEを鳴らすクラスを生成（プール化） ---
+        _sePool = new CriAtomSource[_sePoolSize];
+        for (int i = 0; i < _sePoolSize; i++)
+        {
+            var src = gameObject.AddComponent<CriAtomSource>();
+            src.volume = SEVolume * MasterVolume;
+            _sePool[i] = src;
+        }
+        // 後方互換：既存API用の参照（最初のプールを流用）
+        _defaultSeSource = _sePool[0];
+
+
         _isInitialized = true;
     }
 
-    /// <summary>
-    /// SEを鳴らすメソッド
-    /// </summary>
-    /// <param name="se">鳴らしたい音源のキー</param>
+    // 既存の PlaySE(SFX se) を差し替え（間引き＋プール）
     public void PlaySE(SFX se)
     {
-        PlaySE(se, _defaultSeSource);
-    }
-
-    /// <summary>
-    /// SEを鳴らすメソッド
-    /// </summary>
-    /// <param name="se">鳴らしたい音源のキー</param>
-    /// <param name="source">音源の再生元</param>
-    public void PlaySE(SFX se, CriAtomSource source)
-    {
-        // キューシートを取得
-        var cueSheet = _cueSheetManager.GetCueSheet(se);
-        if (cueSheet == null) 
+        if (!_isInitialized)
             return;
 
-        // 鳴らすキューを文字列で指定し再生
+        // スロットル：短時間の多重発火を抑制
+        if (_nextPlayable.TryGetValue(se, out var t) && Now < t) return;
+        _nextPlayable[se] = Now + _seThrottleInterval;
+
+        // プールから次のソースを取得
+        var src = GetNextSeSource();
+        if (src == null) return; // ありえないけど念のため
+
+        var cueSheet = _cueSheetManager.GetCueSheet(se);
+        if (cueSheet == null) return;
+
+        src.cueSheet = cueSheet.Name;
+        src.volume = SEVolume * MasterVolume; // 念のため直前反映
+        src.Play(se.ToString());
+    }
+
+    // 明示ソース版は残す（ピンポイント再生用）
+    public void PlaySE(SFX se, CriAtomSource source)
+    {
+        var cueSheet = _cueSheetManager.GetCueSheet(se);
+        if (cueSheet == null) return;
+
         source.cueSheet = cueSheet.Name;
+        source.volume = SEVolume * MasterVolume;
         source.Play(se.ToString());
     }
+
+    private CriAtomSource GetNextSeSource()
+    {
+        // ラウンドロビンで使い回し（多重再生は各ソースが担当）
+        var src = _sePool[_seIndex];
+        _seIndex = (_seIndex + 1) % _sePool.Length;
+        return src;
+    }
+
 
     /// <summary>
     /// BGMを流すメソッド
@@ -220,20 +264,26 @@ public class CRISoundManager : MonoBehaviour
     /// <param name="volume">変更後の音量</param>
     public void ChangeBGMVolume(float volume)
     {
+
         BGMVolume = Mathf.Clamp01(volume);
 
         _bgmPlayer.SetVolume(BGMVolume * MasterVolume);
         _bgmPlayer.Update(_bgmPlayback);
     }
 
-    /// <summary>
-    /// SE音量を変更するメソッド
-    /// </summary>
-    /// <param name="volume">変更後の音量</param>
     public void ChangeSEVolume(float volume)
     {
         SEVolume = Mathf.Clamp01(volume);
-        _defaultSeSource.volume = SEVolume * MasterVolume;
+        float v = SEVolume * MasterVolume;
+
+        // すべてのSEソースへ反映（プール全体）
+        if (_sePool != null)
+        {
+            for (int i = 0; i < _sePool.Length; i++)
+            {
+                if (_sePool[i] != null) _sePool[i].volume = v;
+            }
+        }
     }
 
     /// <summary>
@@ -269,18 +319,20 @@ public class CRISoundManager : MonoBehaviour
         if (_durator.IsTaskExistTask(_effectTask))
             _durator.CanncellTask(_effectTask, true);
 
-        var currentVolume = BGMVolume;
+        // キャッシュが無ければ記憶
+        if (_volumeChache < 0)
+            _volumeChache = BGMVolume;
 
         ChangeBGMVolume(0.0f);
 
-        _effectTask = _durator.CreateTask((float _elapsedTime, float _endTime) => ZeroToCurrent(_elapsedTime, _endTime, currentVolume),
-            () => ChangeBGMVolume(currentVolume), duration);
+        _effectTask = _durator.CreateTask((float _elapsedTime, float _endTime) => ZeroToCurrent(_elapsedTime, _endTime, _volumeChache),
+            () => { ChangeBGMVolume(_volumeChache); _volumeChache = -1.0f; }, duration);
     }
 
     public void ZeroToCurrent(float _elapsedTime, float _endTime, float volume)
     {
         var ratio = _elapsedTime / _endTime;
 
-        ChangeBGMVolume(Mathf.Lerp(0, volume, ratio));
+        ChangeBGMVolume(BGMVolume + Time.fixedDeltaTime);
     }
 }

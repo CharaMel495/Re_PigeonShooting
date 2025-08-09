@@ -10,6 +10,12 @@ public class GameOverScene : SceneManagerBase<GameOverScene>
     [SerializeField]
     private ButtonMenuController _gameOverMenu;
 
+    [SerializeField]
+    private ScoreHolder _scoreHolder;
+
+    [SerializeField]
+    private ScoreUI _scoreUI;
+
     public override void Initialize()
     {
         CRISoundManager.Instance.PlayBGM(BGM.Ranking);
@@ -20,18 +26,34 @@ public class GameOverScene : SceneManagerBase<GameOverScene>
 
         _loadingCutin.ExitCutin();
 
+        _scoreUI.Initialize(_scoreHolder.Score);
+
+        InputManager.Instance.ChangeInputHandler(InputHandler.UI);
+
         Action[] CreateButtonFunc()
         {
             return new Action[]
                 {
-                    () => SceneManager.LoadScene("Title")
+                    () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("MainGame")),
+                    () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("Title"))
                 };
         }
     }
 
     private void Update()
     {
-        if (InputManager.CheckKey(InputManager.DesideKey, InputHandler.Player))
+        if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI))
+            _scoreUI.Skip();
+
+        if (InputManager.CheckKey(InputManager.DesideKey, InputHandler.UI))
             _gameOverMenu.SelectButton();
+
+        Direction inputDir = InputManager.CheckInputDirection(InputHandler.UI);
+
+        if (inputDir == Direction.Down)
+            _gameOverMenu.MoveButton(true);
+
+        if (inputDir == Direction.Up)
+            _gameOverMenu.MoveButton(false);
     }
 }

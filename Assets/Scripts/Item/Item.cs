@@ -58,6 +58,8 @@ public class Item : MonoBehaviour, IColliderbleObject
     private float _outViewTime;
     private readonly float _destroyOutOfViewTime = 5.0f;
 
+    private bool _isFixedUpdate = false;
+
     public void Initialize(ItemType type, int value = 1)
     {
         _renderer.Initialize();
@@ -94,6 +96,8 @@ public class Item : MonoBehaviour, IColliderbleObject
 
     private void FixedUpdate()
     {
+        _isFixedUpdate = true;
+
         Move();
 
         if (_renderer.IsInCamera)
@@ -116,9 +120,14 @@ public class Item : MonoBehaviour, IColliderbleObject
 
     private void Move(Vector3 dir, float pow)
     {
+        if (!_isFixedUpdate)
+            return;
+
         var pos = this.transform.position;
         pos += dir * pow * Time.fixedDeltaTime;
         this.transform.position = pos;
+
+        _isFixedUpdate = false;
     }
 
     [CallableEvent("OnTriggerStay")]

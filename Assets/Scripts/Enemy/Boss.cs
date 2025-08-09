@@ -18,6 +18,9 @@ public class Boss : MonoBehaviour, IColliderbleObject
     public EnemyDataStructs.TrackPlayer MoveData
     { get; set; }
 
+    [SerializeField]
+    private ParticleSystem _particle;
+
     /// <summary>
     /// 現在のアクション
     /// </summary>
@@ -45,6 +48,8 @@ public class Boss : MonoBehaviour, IColliderbleObject
 
     public int Score
     { get; set; }
+
+    private int _effectCount = 50;
 
     public bool IsDestroyWaiting
     { get; private set; }
@@ -159,6 +164,8 @@ public class Boss : MonoBehaviour, IColliderbleObject
     {
         _timer.Update();
 
+        _renderer.SetFlipX(MoveData.MoveDir.x < 0);
+
         var currentAction = _actions[_currentAction];
 
         if (currentAction.RemainInterval > 0.0f)
@@ -208,21 +215,37 @@ public class Boss : MonoBehaviour, IColliderbleObject
 
         if (Life < 1)
         {
-            IsDestroyWaiting = true;
             EventDispatcher.Instance.Unbind(this, _rect.ActorName);
             EventDispatcher.Instance.Dispatch("BossSmashed");
-            
+            _actions[_currentAction].OnDestroyed();
             return;
         }
 
         _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
     }
 
+    public void PlaySmashedEffect()
+    {
+        Vector2 rnd = Random.insideUnitCircle * 3.0f;
+        var center = this.transform.position;
+        Vector3 pos = new Vector3(center.x + rnd.x, center.y + rnd.y, center.z);
+        var particle = Instantiate(_particle, pos, Quaternion.identity);
+        CRISoundManager.Instance.PlaySE(SFX.BossExplosion2);
+
+        --_effectCount;
+
+        if (_effectCount > 0)
+            _timer.CreateTask(PlaySmashedEffect, 0.1f);
+        else
+        {
+            CRISoundManager.Instance.PlaySE(SFX.BossExplode);
+            IsDestroyWaiting = true;
+        }
+    }
+
     public void DestroyByColliderManager()
     {
-        _actions[_currentAction].OnDestroyed();
         ColliderManager.Instance.RemoveCollider(_rect);
         Destroy(this.gameObject);
-        EventDispatcher.Instance.Dispatch("GameOver");
     }
 }

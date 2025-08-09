@@ -529,9 +529,11 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         {
             case ItemType.Battery_Green:
                 HealHP(item.Value);
+                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
                 break;
             case ItemType.Battery_Red:
                 Exp += item.Value;
+                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
                 break;
             case ItemType.Garbage:
                 if (!_arrowedActions[Tutorials.AirBaster])
@@ -539,6 +541,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
                 _dustValue += item.Value;
                 _dustValue = Mathf.Min(_dustValue, _maxDustValue);
                 _cleanerUI.UpdataValue(_dustValue / (float)_maxDustValue);
+                CRISoundManager.Instance.PlaySE(SFX.TypeText);
                 if (_dustValue >= _maxDustValue)
                     EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.AirBaster_GetDust);
                 break;

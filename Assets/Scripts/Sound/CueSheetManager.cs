@@ -14,6 +14,7 @@ public enum BGM
     Tutorial,
     Ranking,
     Title,
+    NormalBoss,
     None,
 }
 

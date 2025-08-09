@@ -43,6 +43,9 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
     [SerializeField]
     private Item _itemPrefab;
 
+    [SerializeField]
+    private TextWrapper _topText;
+
     private CurrentState _state;
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;
@@ -68,6 +71,8 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         _tutorialChecker.Initialize();
 
         _supporter = new(_tutorialUI);
+
+        _topText.Initialize();
 
         _desideKeyPressed = new Dictionary<CurrentState, Action>
         {
@@ -135,7 +140,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         _dirInputed[_state]?.Invoke(inputDir);
 
         if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI))
-            BackToTop();
+            _loadingCutin.EnterCutin(BackToTop);
     }
 
     private void MoveMenu(Direction dir)
@@ -174,6 +179,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         _supporter.SetUp(tutorial);
         _loadingCutin.ExitCutin(StartTutorial);
         _tutorialChecker.SetUp(tutorial);
+        _topText.SetTextAlpha(0.0f);
     }
 
     public void StartTutorial()
@@ -198,9 +204,15 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
         EventDispatcher.Instance.Dispatch("PlayerEndTutorial");
 
+        InputManager.Instance.ChangeInputHandler(InputHandler.UI);
+
+        _state = CurrentState.Loading;
+
         _supporter.ClearnUp();
 
         _loadingCutin.ExitCutin(() => _state = CurrentState.Top);
+
+        _topText.SetTextAlpha(1.0f);
     }
 
     [CallableEvent("EnterPlayingMode")]

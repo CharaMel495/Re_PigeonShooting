@@ -87,6 +87,8 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     public object TriggerExitEventData 
         => null;
 
+    private bool _isDestroyedByShot = true;
+
     public void Initialize(Rect playArea)
     {
         _renderer.Initialize();
@@ -106,6 +108,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         IsActive = true;
         IsDestroyWaiting = false;
         Name = name;
+        _isDestroyedByShot = true;
 
         EventDispatcher.Instance.Bind(this, Name);
 
@@ -167,6 +170,8 @@ public class Enemy : MonoBehaviour, IColliderbleObject
             _isInvincible = true;
 
             Life -= damageData.Damage;
+
+            _isDestroyedByShot = damageData.Damage < 10;
         }
 
         if (Life < 1)
@@ -195,10 +200,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         _particle.PlayParticle();
 
         int rand = Random.Range(0, 100);
-        if (rand % 2 == 0)
-            CRISoundManager.Instance.PlaySE(SFX.EnemyDefeat);
-        else
-            CRISoundManager.Instance.PlaySE(SFX.EnemyDefeat2);
+        
         
         ItemType itemType = GetRandomItemType();
 
@@ -208,6 +210,14 @@ public class Enemy : MonoBehaviour, IColliderbleObject
             var item = Instantiate(_dropItem, this.transform.position, Quaternion.identity);
             item.Initialize(itemType);
             item.Dir = this.MoveData.MoveDir;
+        }
+
+        if (_isDestroyedByShot && Life < 1)
+        {
+            if (itemType == ItemType.None)
+                CRISoundManager.Instance.PlaySE(SFX.EnemyDefeat);
+            else
+                CRISoundManager.Instance.PlaySE(SFX.EnemyDefeat2);
         }
 
         if (this.transform.childCount < 1)

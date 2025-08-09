@@ -54,6 +54,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     [SerializeField]
     private CleanerUI _cleanerUI;
 
+    [SerializeField]
+    private ParticleSystem _deadParticle;
+
     public BulletShooter Shooter
     { get; set; }
 
@@ -106,6 +109,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private bool _isVacuuming = false;
 
     private Timer _timer;
+    private Durator _durator;
 
     private int _level;
     public int Level
@@ -166,9 +170,11 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _currentSubShootType = PlayerBullet.ShootType.Lazer;
 
         _timer = new();
+        _durator = new();
 
         _renderer.Initialize();
         _renderer.SetSprite(SpriteManager.GetSprite(SpriteData.SpriteType.Player));
+        _renderer.SetEnabled(true);
 
         _lifeImage.Initialize();
         Life = _maxLife;
@@ -211,6 +217,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private void FixedUpdate()
     {
         _timer.Update();
+        _durator.Update();
 
         if (_isInvincible)
         {
@@ -243,10 +250,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         // 吸引中も弾を撃たない
         // ダッシュ中も弾を撃たない
         if (IsInterval || _isVacuuming || IsDash)
-            return;
-
-        // ほこりの量が最大の時も打たない
-        if (_dustValue >= _maxDustValue)
             return;
 
         // インターバルをセット
@@ -506,6 +509,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private void GetDamage(DamageEventData data)
     {
+        if (Life <= 0)
+            return;
+
         Life -= data.Damage;
 
         _camera.Shake(0.1f, 0.2f);
@@ -519,7 +525,22 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         if (Life > 0)
             return;
 
-        EventDispatcher.Instance.Dispatch("GameOver");
+        _renderer.SetEnabled(false);
+
+        _camera.Shake(1.0f, 2.0f);
+
+        Time.timeScale = 0.25f;
+
+        CRISoundManager.Instance.PlaySE(SFX.BossExplode);
+
+        Instantiate(_deadParticle, this.transform.position, Quaternion.identity);
+
+        _durator.CreateTask(ResumeTime, () =>
+        {
+            Time.timeScale = 1.0f;
+            _timer.CreateTask(() => EventDispatcher.Instance.Dispatch("GameOver"), 1.0f);
+
+        }, 2.0f);
     }
 
     private void HealHP(int value)
@@ -549,5 +570,27 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         }
 
         _lifeImage.SetImageColor(newColor);
+    }
+
+    [CallableEvent("OnBossSmashed")]
+    public void WhenBossSmashed(object data)
+    {
+        _camera.Shake(5.0f, 2.0f);
+
+        Time.timeScale = 0.1f;
+
+        _durator.CreateTask(ResumeTime, () => 
+        { 
+            Time.timeScale = 1.0f; 
+            _timer.CreateTask (() => EventDispatcher.Instance.Dispatch("GameOver"), 3.0f);
+        
+        }, 5.0f);
+    }
+
+    private void ResumeTime(float _elapsedTime, float _endTime)
+    {
+        var ratio = _elapsedTime / _endTime;
+
+        Time.timeScale = Mathf.Lerp(0.25f, 1.0f, ratio);
     }
 }

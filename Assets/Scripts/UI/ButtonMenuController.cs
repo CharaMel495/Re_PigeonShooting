@@ -75,6 +75,9 @@ public class ButtonMenuController : MonoBehaviour
         if (nextIdx < 0 || nextIdx >= _buttons.Length)
             return;
 
+        if (nextIdx == CurrentButton)
+            return;
+
         var currentButton = _buttons[CurrentButton];
         var nextButton = _buttons[nextIdx];
 

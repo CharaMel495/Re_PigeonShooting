@@ -391,14 +391,18 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         _currentBoss.Initialize();
         IsBossMode = true;
 
-        CRISoundManager.Instance.PlayBGM(BGM.LastBoss);
+        CRISoundManager.Instance.PlayBGM(BGM.NormalBoss);
     }
 
     [CallableEvent("BossSmashed")]
     public void BossSmashed(object data)
     {
-        var destroyedPos = _currentBoss.transform.position;
-        
-        IsBossMode = false;
+        EventDispatcher.Instance.Dispatch("PlayerOnBossSmashed");
+        _currentBoss.PlaySmashedEffect();
+        _currentBoss = null;
+        //IsBossMode = false;
+
+        foreach (var enemy in _activeEnemys)
+            enemy.IsDestroyWaiting = true;
     }
 }

@@ -18,6 +18,7 @@ public class CylinderButton : ButtonBase
     private ImageWrapper _backGround;
 
     [SerializeField]
+    [TextArea]
     private string _viewText;
 
     [ReadOnlySerializeField]

@@ -94,15 +94,8 @@ namespace BossDataStructs
         {
             foreach (var enemy in BarrierEnemyes.ToArray())
             {
-                EnemyDataStructs.SlavedSpiralMove moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
-                enemy.MoveData = new EnemyDataStructs.StrainghtNormalMove
-                {
-                    MoveDir = moveData.MoveDir,
-                    MoveSpeed = 8.0f,
-                    Acceleration = -12.0f
-                };
-
                 enemy.transform.parent = null;
+                enemy.IsDestroyWaiting = true;
             }
         }
     }
