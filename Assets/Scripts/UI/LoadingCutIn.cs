@@ -20,11 +20,15 @@ public class LoadingCutIn : MonoBehaviour
     {
         _cutinTransform.anchoredPosition = _startPos;
 
-        _cutinTransform.DOAnchorPos(Vector3.zero, _moveTime).SetEase(Ease.InOutQuart).OnComplete(() => onEndCutin?.Invoke());
+        _cutinTransform.DOAnchorPos(Vector3.zero, _moveTime).SetEase(Ease.InOutQuart).OnComplete(() => onEndCutin?.Invoke()).SetUpdate(true);
+
+        CRISoundManager.Instance.PlaySE(SFX.Cutin);
     }
 
     public void ExitCutin(Action onEndCutin = null)
     {
-        _cutinTransform.DOAnchorPos(_endPos, _moveTime).SetEase(Ease.Linear).OnComplete(() => onEndCutin?.Invoke());
+        _cutinTransform.DOAnchorPos(_endPos, _moveTime).SetEase(Ease.Linear).OnComplete(() => onEndCutin?.Invoke()).SetUpdate(true);
+
+        CRISoundManager.Instance.PlaySE(SFX.Cutin);
     }
 }

@@ -137,6 +137,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private bool _isAirBasterLock = true;
 
+    private int _dashCount = 0;
+
     /// <summary>
     /// 経験値
     /// </summary>
@@ -175,7 +177,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     {
         _exp = 0;
         _level = 0;
-
+        
         _currentSubShootType = PlayerBullet.ShootType.Lazer;
 
         _timer = new();
@@ -221,6 +223,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         _airBaster.Initialize("Player");
 
         _cleanerUI.UpdataValue(0.0f);
+
+        WhenEndTutorial(null);
     }
 
     private void FixedUpdate()
@@ -338,12 +342,16 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         _timer.CreateTask(EndDash, _dashTime);
 
-        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Dash);
+        
     }
 
     private void EndDash()
     {
         IsDash = false;
+        ++_dashCount;
+
+        if (_dashCount >= 3)
+            EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Dash);
         //ColliderManager.Instance.AddCollider(_circle);
     }
 
@@ -484,7 +492,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     /// インターフェースからの継承
     /// 自身の座標を公開するメソッド
     /// </summary>
-    public Vector3 GetPostion()
+    public Vector3 GetPosition()
         => this.transform.position;
 
     [CallableEvent("OnTriggerEnter")]
@@ -610,6 +618,9 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         this.transform.position = Vector3.zero;
 
         _shotTime = 0.0f;
+        _dashCount = 0;
+
+        MoveDir = Vector3.down;
 
         _isAirBasterLock = true;
     }

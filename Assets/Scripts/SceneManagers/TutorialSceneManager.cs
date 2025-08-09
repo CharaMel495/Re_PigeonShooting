@@ -133,6 +133,9 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         Direction inputDir = InputManager.CheckInputDirection(InputHandler.UI, isPrevious: true);
 
         _dirInputed[_state]?.Invoke(inputDir);
+
+        if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI))
+            BackToTop();
     }
 
     private void MoveMenu(Direction dir)
@@ -188,7 +191,12 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
     private void BackToTop()
     {
+        if (_state == CurrentState.Top)
+            return;
+
         _tutorialMenu.EnActive();
+
+        EventDispatcher.Instance.Dispatch("PlayerEndTutorial");
 
         _supporter.ClearnUp();
 
@@ -215,7 +223,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         {
             case CheckLists.Move_ItemGet:
                 {
-                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
                     var spawnPos = playerPos + (Vector3.left * 3);
                     var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
                     item.Initialize(ItemType.Battery_Green);
@@ -224,7 +232,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
             case CheckLists.Shot_SmashEnemy:
                 {
-                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
                     var spawnPos = playerPos + (Vector3.right * 3);
                     EnemyManager.Instance.CreateEnemy(12, spawnPos);
                 }
@@ -232,7 +240,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
             case CheckLists.Vacuum_Item:
                 {
-                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
                     var spawnPos = playerPos + (Vector3.right * 3);
                     var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
                     item.Initialize(ItemType.Battery_Red);
@@ -241,16 +249,20 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
             case CheckLists.AirBaster_GetDust:
                 {
-                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
-                    var spawnPos = playerPos + (Vector3.right * 3);
-                    var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
-                    item.Initialize(ItemType.Garbage);
+                    int count = 10;
+                    float radius = 3f;
 
-                    for (int i = 1; i < 10; ++i)
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
+
+                    for (int i = 0; i < count; ++i)
                     {
-                        var ratio = 360 / (float)10;
-                        var spawnPos2 = Quaternion.AngleAxis(ratio * i, Vector3.forward) * spawnPos;
-                        item = Instantiate(_itemPrefab, spawnPos2, Quaternion.identity);
+                        float angleDeg = 360f * i / count;
+                        // ① 右方向の単位ベクトルを角度だけ回す
+                        Vector3 offset = Quaternion.AngleAxis(angleDeg, Vector3.forward) * Vector3.right * radius;
+                        // ② プレイヤー位置に足し戻してスポーン
+                        Vector3 spawnPos = playerPos + offset;
+
+                        var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
                         item.Initialize(ItemType.Garbage);
                     }
                 }
@@ -258,16 +270,21 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
             case CheckLists.AirBaster:
                 {
-                    var playerPos = TutorialPlayerManager.Instance.Player.GetPostion();
-                    var spawnPos = playerPos + (Vector3.right * 3);
-                    EnemyManager.Instance.CreateEnemy(12, spawnPos);
+                    var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
+                    int count = 8;
+                    float radius = 3f;
 
-                    for (int i = 1; i < 8; ++i)
+                    for (int i = 0; i < count; ++i)
                     {
-                        var ratio = 360 / (float)8;
-                        var spawnPos2 = playerPos + Quaternion.AngleAxis(ratio * i, Vector3.forward) * spawnPos;
-                        EnemyManager.Instance.CreateEnemy(12, spawnPos2);
+                        float angleDeg = 360f * i / count;
+                        // ① 右方向の単位ベクトルを角度だけ回す
+                        Vector3 offset = Quaternion.AngleAxis(angleDeg, Vector3.forward) * Vector3.right * radius;
+                        // ② プレイヤー位置に足し戻してスポーン
+                        Vector3 spawnPos = playerPos + offset;
+
+                        EnemyManager.Instance.CreateEnemy(12, spawnPos);
                     }
+
 
                     EventDispatcher.Instance.Dispatch("PlayerIsAirBasterUnLock");
                 }

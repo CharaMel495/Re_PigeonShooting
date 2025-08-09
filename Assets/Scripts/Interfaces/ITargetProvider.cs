@@ -5,5 +5,5 @@
 /// </summary>
 public interface ITargetProvider
 {
-    public Vector3 GetPostion();
+    public Vector3 GetPosition();
 }

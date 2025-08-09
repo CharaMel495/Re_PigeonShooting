@@ -78,17 +78,17 @@ public class CylinderButton : ButtonBase
         var transform = _backGround.GetComponent<RectTransform>();
         var scale = transform.localScale;
         scale.x = _openWidth;
-        transform.DOScale(scale, _openTime).SetEase(Ease.OutCirc);
+        transform.DOScale(scale, _openTime).SetEase(Ease.OutCirc).SetUpdate(true);
         
         transform = _rightFrame.GetComponent<RectTransform>();
         var pos = transform.anchoredPosition;
         pos.x = 25 + 45 * _openWidth;
-        transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc);
+        transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc).SetUpdate(true);
 
         transform = _leftFrame.GetComponent<RectTransform>();
         pos = transform.anchoredPosition;
         pos.x = -25 - 45 * _openWidth;
-        _tweener = transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc).OnComplete(() => _text.SetTextAlpha(1.0f));
+        _tweener = transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc).OnComplete(() => _text.SetTextAlpha(1.0f)).SetUpdate(true);
     }
 
     private void CloseMove()
@@ -98,16 +98,16 @@ public class CylinderButton : ButtonBase
         var transform = _backGround.GetComponent<RectTransform>();
         var scale = transform.localScale;
         scale.x = 1;
-        transform.DOScale(scale, _openTime).SetEase(Ease.OutCirc);
+        transform.DOScale(scale, _openTime).SetEase(Ease.OutCirc).SetUpdate(true);
 
         transform = _rightFrame.GetComponent<RectTransform>();
         var pos = transform.anchoredPosition;
         pos.x = 25;
-        transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc);
+        transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc).SetUpdate(true);
 
         transform = _leftFrame.GetComponent<RectTransform>();
         pos = transform.anchoredPosition;
         pos.x = -25;
-        _tweener = transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc);
+        _tweener = transform.DOAnchorPos(pos, _openTime).SetEase(Ease.OutCirc).SetUpdate(true);
     }
 }

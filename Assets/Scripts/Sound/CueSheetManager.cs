@@ -26,6 +26,13 @@ public enum SFX
     NormalButton,
     TutorialSuccess,
     TypeText,
+    BatteryCharge,
+    BossExplode,
+    BulletHit,
+    EnemyDefeat,
+    EnemyDefeat2,
+    BossExplosion2,
+    Cutin
 }
 
 

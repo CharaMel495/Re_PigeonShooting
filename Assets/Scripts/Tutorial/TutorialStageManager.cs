@@ -33,7 +33,7 @@ public class TutorialStageManager : SingletonMonoBehaviour<TutorialStageManager>
 
             safetyLoop++;
             if (safetyLoop > 100) break; // 無限ループ対策
-        } while (Vector3.Distance(spawnPos, player.GetPostion()) * 0.01 < minDistanceFromPlayer);
+        } while (Vector3.Distance(spawnPos, player.GetPosition()) * 0.01 < minDistanceFromPlayer);
 
         return spawnPos;
     }

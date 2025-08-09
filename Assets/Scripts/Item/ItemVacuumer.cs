@@ -55,6 +55,13 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
         _renderer.Initialize();
     }
 
+    private void FixedUpdate()
+    {
+        var euler = this.transform.eulerAngles;
+        euler.z -= Time.fixedDeltaTime * 1080.0f;
+        this.transform.eulerAngles = euler;
+    }
+
     public void EnActive()
     {
         _renderer.SetEnabled(true);

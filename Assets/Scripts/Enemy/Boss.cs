@@ -100,7 +100,7 @@ public class Boss : MonoBehaviour, IColliderbleObject
                 ActionType.ShootMissile,
                 new BossDataStructs.ShootMissiles
                 {
-                    ActionInterval = 1.0f,
+                    ActionInterval = 0.2f,
                     Transform = this.transform,
                     ShotValue = 30
                 }

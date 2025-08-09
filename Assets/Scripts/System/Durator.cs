@@ -44,11 +44,15 @@ public class Durator
         /// </summary>
         public bool IsMeasuring;
         /// <summary>
+        /// TimeScaleを無視するか
+        /// </summary>
+        public bool OnUnscaledTime;
+        /// <summary>
         /// タイマーを進める関数
         /// </summary>
         public void CountTimer()
         {
-            Timer += Time.deltaTime;
+            Timer += OnUnscaledTime ? Time.fixedUnscaledDeltaTime : Time.fixedDeltaTime;
         }
         /// <summary>
         /// 計測フラグを立てる関数
@@ -156,7 +160,7 @@ public class Durator
     /// <param name="func">依頼したいコールバック</param>
     /// <param name="waitTime">待ち時間</param>
     /// <returns>このタスクの識別番号</returns>
-    public int CreateTask(DurationTask func, CallBackTask callBack, float waitTime)
+    public int CreateTask(DurationTask func, CallBackTask callBack, float waitTime, bool onUnscaledTime = false)
     {
         //生成IDをインクリメント
         ++_id;
@@ -172,6 +176,8 @@ public class Durator
         newTask.Timer = 0;
         //計測フラグを立てる
         newTask.IsMeasuring = true;
+        // 計測モードを設定
+        newTask.OnUnscaledTime = onUnscaledTime;
         //連想配列に格納
         _myTasks.Add(_id, newTask);
         //登録に使用した識別番号を返却

@@ -91,8 +91,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     private void Update()
     {
-        if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.Player))
-            Time.timeScale = (Time.timeScale < 1.0 ? 1.0f : 0.0f);
+
     }
 
     /// <summary>

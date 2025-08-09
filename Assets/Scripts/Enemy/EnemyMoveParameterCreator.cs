@@ -30,7 +30,7 @@ public class EnemyMoveParameterCreator
                 {
                     MoveSpeed = 5.0f,
                     SecondMoveSpeed = 3.0f,
-                    MaxMoveSpeed = 7.0f,
+                    MaxMoveSpeed = 20.0f,
                     Acceleration = 0.15f,
                     DisAcceleration = -2.0f,
                     Target = PlayerManager.Instance.Player,
@@ -44,8 +44,8 @@ public class EnemyMoveParameterCreator
                 {
                     MoveSpeed = 5.0f,
                     SecondMoveSpeed = 3.0f,
-                    MaxMoveSpeed = 7.0f,
-                    Acceleration = 0.15f,
+                    MaxMoveSpeed = 20.0f,
+                    Acceleration = 1.0f,
                     DisAcceleration = -2.0f,
                     Target = PlayerManager.Instance.Player,
                     TurnRate = 80.0f,

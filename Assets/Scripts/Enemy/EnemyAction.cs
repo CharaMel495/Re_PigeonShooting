@@ -38,7 +38,7 @@ public class EnemyAction
 
                         if (moveData.NextMove is EnemyDataStructs.StopPointMove next)
                         {
-                            moveData.TargetPoint = StageManager.Instance.GetRandomPositionInArea(80, 120);
+                            moveData.TargetPoint = StageManager.Instance.GetRandomPositionInArea();
                         }
 
                         // 移動情報を次のものに上書き
@@ -128,7 +128,7 @@ public class EnemyAction
                     }
                     else
                     {
-                        Vector3 dir = (moveData.Target.GetPostion() - enemy.transform.position).normalized;
+                        Vector3 dir = (moveData.Target.GetPosition() - enemy.transform.position).normalized;
                         Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, dir);
 
                         // 徐々に向く
@@ -162,7 +162,7 @@ public class EnemyAction
                     // 移動データを取得
                     var moveData = (EnemyDataStructs.TrackPlayer)enemy.MoveData;
 
-                    Vector3 dir = (moveData.Target.GetPostion() - enemy.transform.position).normalized;
+                    Vector3 dir = (moveData.Target.GetPosition() - enemy.transform.position).normalized;
                   
                     // 現在の移動速度を経過時間から計算
                     moveData.MoveSpeed = moveData.MoveSpeed + moveData.Acceleration * moveData.ElaspedTime;
@@ -196,7 +196,7 @@ public class EnemyAction
                         enemy.SetActionInterval();
 
                     if (data.Target != null)
-                        data.BulletData.Dir = (data.Target.GetPostion() - enemy.transform.position).normalized;
+                        data.BulletData.Dir = (data.Target.GetPosition() - enemy.transform.position).normalized;
 
                     if (enemy.MoveData is EnemyDataStructs.SpiralMove)
                         data.BulletData.Dir = -((EnemyDataStructs.SpiralMove)enemy.MoveData).MoveDir;
@@ -247,7 +247,7 @@ public class EnemyAction
                     void SpawnEnemy()
                     {
                         if (data.Target != null)
-                            data.BulletData.Dir = (data.Target.GetPostion() - enemy.transform.position).normalized;
+                            data.BulletData.Dir = (data.Target.GetPosition() - enemy.transform.position).normalized;
 
                         if (data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵 ||
                             data.SummonID == EnemyEnums.EnemyID.渦巻ぐるぐる敵_自機狙い単発弾 ||
@@ -278,7 +278,7 @@ public class EnemyAction
                     // 移動データを取得
                     var moveData = (EnemyDataStructs.TrackPlayer)boss.MoveData;
 
-                    Vector3 dir = (moveData.Target.GetPostion() - boss.transform.position).normalized;
+                    Vector3 dir = (moveData.Target.GetPosition() - boss.transform.position).normalized;
 
                     // 現在の移動速度を経過時間から計算
                     moveData.MoveSpeed = moveData.MoveSpeed + moveData.Acceleration * moveData.ElaspedTime;

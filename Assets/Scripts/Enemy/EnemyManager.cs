@@ -390,6 +390,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         _currentBoss = Instantiate(_bossPrefab[0], Vector3.zero, Quaternion.identity);
         _currentBoss.Initialize();
         IsBossMode = true;
+
+        CRISoundManager.Instance.PlayBGM(BGM.LastBoss);
     }
 
     [CallableEvent("BossSmashed")]

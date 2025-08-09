@@ -26,6 +26,12 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     [SerializeField]
     private EnemyEnums.EnemyID[] _middleBosses;
 
+    [SerializeField]
+    private GameObject _bossSummonParticle;
+
+    [SerializeField]
+    private ParticleSystem _bossSummonEffect;
+
     private float _remainInterval = 0;
 
     private float _bossInterval = 60.0f;
@@ -51,7 +57,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         {
             if (_bigBossCount > 0)
             {
-                EnemyManager.Instance.CreateEnemy((int)_middleBosses[0], GetRandomPositionInArea());
+                EnemyManager.Instance.CreateEnemy((int)_middleBosses[0], Vector3.zero);
                 --_bigBossCount;
                 _bossInterval = 60.0f;
                 CreateSpawner(8.0f);
@@ -61,9 +67,17 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
                 EventDispatcher.Instance.Dispatch("BossEvent");
                 _bossInterval = 60.0f;
             }
+
+            _bossSummonParticle.SetActive(false);
+            _bossSummonEffect.Play();
         }
         else
+        {
             _bossInterval -= Time.fixedDeltaTime;
+
+            if (_bossInterval < 30.0f && !_bossSummonParticle.activeSelf)
+                _bossSummonParticle.SetActive(true);
+        }
     }
 
     public void CreateSpawner(float interval)
@@ -76,26 +90,16 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         spawner.Initialize(_spawnTable.Table[idx], UsableMethods.GetRandomDirection2D(), PlayArea, interval);
     }
 
-    public Vector3 GetRandomPositionInArea(float minDistanceFromPlayer = 0, float maxDistanceFromPlayer = 0)
+    public Vector3 GetRandomPositionInArea()
     {
         ITargetProvider player = PlayerManager.Instance.Player;
         Vector3 spawnPos;
         int safetyLoop = 0;
 
-        do
-        {
-            // Rect内のランダム座標を取得
-            float x = Random.Range(PlayArea.xMin, PlayArea.xMax);
-            float y = Random.Range(PlayArea.yMin, PlayArea.yMax);
-            spawnPos = new Vector3(x, y, 0);
-
-            safetyLoop++;
-            if (safetyLoop > 999)
-            {
-                spawnPos = Vector3.zero;
-                break; // 無限ループ対策
-            }
-        } while (Vector3.Distance(spawnPos, player.GetPostion()) < minDistanceFromPlayer || Vector3.Distance(spawnPos, player.GetPostion()) > maxDistanceFromPlayer);
+        // Rect内のランダム座標を取得
+        float x = Random.Range(PlayArea.xMin, PlayArea.xMax);
+        float y = Random.Range(PlayArea.yMin, PlayArea.yMax);
+        spawnPos = new Vector3(x, y, 0);
 
         return spawnPos;
     }

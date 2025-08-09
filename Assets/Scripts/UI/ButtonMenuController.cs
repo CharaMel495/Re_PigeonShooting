@@ -50,7 +50,7 @@ public class ButtonMenuController : MonoBehaviour
         CurrentButton = 0;
     }
 
-    private void FixedUpdate()
+    private void Update()
         => _durator.Update();
 
     public void MoveButton(bool isDown)
@@ -93,7 +93,7 @@ public class ButtonMenuController : MonoBehaviour
 
         IsMoving = true;
 
-        _durator.CreateTask(AppearPanel, AppearButton, 0.1f);
+        _durator.CreateTask(AppearPanel, AppearButton, 0.1f, onUnscaledTime: true);
 
         return true;
     }
@@ -107,7 +107,7 @@ public class ButtonMenuController : MonoBehaviour
 
         DisAppearButton();
 
-        _durator.CreateTask(DisAppearPanel, null, 0.1f);
+        _durator.CreateTask(DisAppearPanel, null, 0.1f, onUnscaledTime: true);
 
         CurrentButton = 0;
 

@@ -455,7 +455,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     /// インターフェースからの継承
     /// 自身の座標を公開するメソッド
     /// </summary>
-    public Vector3 GetPostion()
+    public Vector3 GetPosition()
         => this.transform.position;
 
     [CallableEvent("OnTriggerEnter")]
@@ -489,14 +489,17 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         {
             case ItemType.Battery_Green:
                 HealHP(item.Value);
+                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
                 break;
             case ItemType.Battery_Red:
                 Level += item.Value;
+                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
                 break;
             case ItemType.Garbage:
                 _dustValue += item.Value;
                 _dustValue = Mathf.Min(_dustValue, _maxDustValue);
                 _cleanerUI.UpdataValue(_dustValue / (float)_maxDustValue);
+                CRISoundManager.Instance.PlaySE(SFX.TypeText);
                 break;
         }
     }
@@ -510,6 +513,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _isInvincible = true;
 
         _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
+
+        CRISoundManager.Instance.PlaySE(SFX.BulletHit);
 
         if (Life > 0)
             return;

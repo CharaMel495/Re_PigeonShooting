@@ -54,11 +54,11 @@ public class CRISoundManager : MonoBehaviour
     private CancellationToken _destroyToken;
 
     // マスターボリューム
-    public static float MasterVolume { get; set; } = 0.5f;
+    public static float MasterVolume { get; set; } = 1.0f;
     // BGMボリューム
-    public static float BGMVolume { get; set; } = 0.5f;
+    public static float BGMVolume { get; set; } = 1.0f;
     // SEボリューム
-    public static float SEVolume { get; set; } = 0.75f;
+    public static float SEVolume { get; set; } = 1.0f;
 
     private Durator _durator;
 
@@ -123,9 +123,9 @@ public class CRISoundManager : MonoBehaviour
         // 使用する全てのキューシートを読み込む
         await _cueSheetManager.LoadAllCueSheetsAsync(_destroyToken);
 
-        ChangeMasterVolume(1.0f);
-        ChangeBGMVolume(1.0f);
-        ChangeSEVolume(1.0f);
+        ChangeMasterVolume(MasterVolume);
+        ChangeBGMVolume(BGMVolume);
+        ChangeSEVolume(SEVolume);
 
         _durator = new();
         _durator.Initialize();

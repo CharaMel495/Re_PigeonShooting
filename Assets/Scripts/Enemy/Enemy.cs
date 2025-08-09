@@ -173,6 +173,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         {
             IsDestroyWaiting = true;
             EventDispatcher.Instance.Dispatch("AddScore", Score);
+            EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Shot_SmashEnemy);
             return;
         }
 
@@ -193,6 +194,12 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         this.transform.rotation = Quaternion.identity;
         _particle.PlayParticle();
 
+        int rand = Random.Range(0, 100);
+        if (rand % 2 == 0)
+            CRISoundManager.Instance.PlaySE(SFX.EnemyDefeat);
+        else
+            CRISoundManager.Instance.PlaySE(SFX.EnemyDefeat2);
+        
         ItemType itemType = GetRandomItemType();
 
         // アイテムをドロップできるなら
@@ -220,7 +227,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         {
             int rand = Random.Range(0, 100);
 
-            if (rand < 60)
+            if (rand < 40)
                 return ItemType.None;
             else if (rand < 80)
                 return ItemType.Garbage;
