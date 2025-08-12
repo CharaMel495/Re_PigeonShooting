@@ -6,7 +6,7 @@
 			"BulletSize":"0",
 			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"10",
+			"Life":"4",
 			"Score":"100"
 		},
 		{
@@ -15,7 +15,7 @@
 			"BulletSize":"0.5",
 			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"10",
+			"Life":"4",
 			"Score":"100"
 		},
 		{
@@ -42,7 +42,7 @@
 			"BulletSize":"0",
 			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"20",
+			"Life":"8",
 			"Score":"150"
 		},
 		{
@@ -51,7 +51,7 @@
 			"BulletSize":"1",
 			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"20",
+			"Life":"8",
 			"Score":"150"
 		},
 		{
@@ -87,7 +87,7 @@
 			"BulletSize":"0",
 			"SpriteID":"100",
 			"ColliderType":"0",
-			"Life":"40",
+			"Life":"20",
 			"Score":"300"
 		},
 		{

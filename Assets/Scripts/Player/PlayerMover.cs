@@ -29,6 +29,10 @@ public class PlayerMover
         if (!_inputLock)
             _inputDir = InputManager.GetInputDirection(InputHandler.Player).normalized;
 
+        // 体力が無いなってたら動かない
+        if (player.Life < 1)
+            return;
+
         _inputLock = player.IsDash;
 
         var transform = player.transform;

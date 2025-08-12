@@ -200,7 +200,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         if (_state == CurrentState.Top)
             return;
 
-        _tutorialMenu.EnActive();
+        _tutorialMenu.EnActive(_tutorialMenu.CurrentButton);
 
         EventDispatcher.Instance.Dispatch("PlayerEndTutorial");
 

@@ -18,14 +18,14 @@ MonoBehaviour:
     BulletSize: 0
     SpriteID: 100
     ColliderType: 0
-    Life: 10
+    Life: 4
     Score: 100
   - ID: 1
     Size: 1
     BulletSize: 0.5
     SpriteID: 100
     ColliderType: 0
-    Life: 10
+    Life: 4
     Score: 100
   - ID: 2
     Size: 1
@@ -46,14 +46,14 @@ MonoBehaviour:
     BulletSize: 0
     SpriteID: 100
     ColliderType: 0
-    Life: 20
+    Life: 8
     Score: 150
   - ID: 5
     Size: 2
     BulletSize: 1
     SpriteID: 100
     ColliderType: 0
-    Life: 20
+    Life: 8
     Score: 150
   - ID: 6
     Size: 2
@@ -81,7 +81,7 @@ MonoBehaviour:
     BulletSize: 0
     SpriteID: 100
     ColliderType: 0
-    Life: 40
+    Life: 20
     Score: 300
   - ID: 10
     Size: 2

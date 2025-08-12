@@ -33,7 +33,7 @@ public class ScoreUI : MonoBehaviour
     {
         if (_finalScore != _viewingScore)
         {
-            ++_viewingScore;
+            _viewingScore = Mathf.Min(_viewingScore + 1000, _finalScore);
             _scoreText.SetText($"{_viewingScore:D8}pts");
         }
     }

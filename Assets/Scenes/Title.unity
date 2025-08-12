@@ -1249,7 +1249,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ver1.0.3
+  m_text: Ver1.0.4
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cc948a6f93f20f54cb2010f9824b9207, type: 2}
   m_sharedMaterial: {fileID: 2975510058863447910, guid: cc948a6f93f20f54cb2010f9824b9207, type: 2}
@@ -1401,7 +1401,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031923415}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 37704b5809d70444a94efdc3e192949c, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 291f470f07d72794cabc13137016a116, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 357413874}

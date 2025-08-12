@@ -89,14 +89,14 @@ public class ButtonMenuController : MonoBehaviour
         CurrentButton = nextIdx;
     }
 
-    public bool EnActive()
+    public bool EnActive(int openButtonIdx = 0)
     {
         if (IsMoving)
             return false;
 
         IsMoving = true;
 
-        _durator.CreateTask(AppearPanel, AppearButton, 0.1f, onUnscaledTime: true);
+        _durator.CreateTask(AppearPanel, () => AppearButton(openButtonIdx), 0.1f, onUnscaledTime: true);
 
         return true;
     }
@@ -111,8 +111,6 @@ public class ButtonMenuController : MonoBehaviour
         DisAppearButton();
 
         _durator.CreateTask(DisAppearPanel, null, 0.1f, onUnscaledTime: true);
-
-        CurrentButton = 0;
 
         return true;
     }
@@ -129,12 +127,12 @@ public class ButtonMenuController : MonoBehaviour
         _panel.SetImageColor(Color.Lerp(_panelColor, Color.clear, ratio));
     }
 
-    private void AppearButton()
+    private void AppearButton(int openButtonIdx = 0)
     {
         foreach (var button in _buttons)
             button.gameObject.SetActive(true);
 
-        _buttons[0].EnActive();
+        _buttons[openButtonIdx].EnActive();
 
         IsMoving = false;
     }

@@ -8,12 +8,19 @@ public class CleanerUI : MonoBehaviour
     [SerializeField]
     private ImageWrapper _image;
 
+    [SerializeField]
+    private ParticleSystem _particle;
+
     public void UpdataValue(float value)
     {
         _image.Initialize();
 
-        _slider.UpdateValue(value);
+        //_slider.UpdateValue(value);
 
-        _image.SetImageAlpha(value < 1.0f ? 0.0f : 1.0f);
+        _image.SetFillAmount(value);
+
+        //_image.SetImageAlpha(value < 1.0f ? 0.0f : 1.0f);
+
+        _particle.gameObject.SetActive(value >= 1);
     }
 }
