@@ -195,25 +195,62 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             return;
 
         _createID = 0;
+    }
 
-        Vector3 GetRandomStopPos()
+    public void CreateEnemy(int tableID, Vector3 createPos, EnemyDataStructs.EnemyStatusScaler scaler, Vector3 moveDir = new())
+    {
+        var enemyData = StructEnemyParamFromMasterData(tableID, EnemyEnums.EnemyType.Normal);
+        enemyData.Origin = createPos;
+
+        // 敵を生成
+        var enemy = _pool.GetEnemyFromPool();
+        enemy.transform.position = enemyData.Origin;
+        enemy.transform.localScale = enemyData.Scale;
+        // 体力を注入
+        enemy.Life = (int)(enemyData.Life * scaler.HPScale);
+        // スコアを注入
+        enemy.Score = enemyData.Score;
+        // 移動情報を注入
+        if (moveDir != Vector3.zero)
+            enemyData.MoveData.MoveDir = moveDir;
+        if (enemyData.MoveData is EnemyDataStructs.StopPointMove)
         {
-            Vector2 min = new(
-                _stoppableArea.position.x - _stoppableArea.localScale.x * 0.5f,
-                _stoppableArea.position.y - _stoppableArea.localScale.y * 0.5f
-                );
-
-            Vector2 max = new(
-                _stoppableArea.position.x + _stoppableArea.localScale.x * 0.5f,
-                _stoppableArea.position.y + _stoppableArea.localScale.y * 0.5f
-                );
-
-            return new Vector3(
-                Random.Range(min.x, max.x),
-                Random.Range(min.y, max.y),
-                0.0f
-                );
+            var data = (EnemyDataStructs.StopPointMove)enemyData.MoveData;
+            data.TargetPoint = StageManager.Instance.GetRandomPositionInArea();
+            enemy.MoveData = data;
         }
+        else
+            enemy.MoveData = enemyData.MoveData;
+        // 速度補正をかける
+        enemy.MoveData.MoveSpeed *= scaler.SpeedScale;
+        // 行動情報を注入
+        enemy.ActionData = enemyData.ActionData;
+        // 弾のサイズを設定
+        if (enemy.ActionData.BulletData != null)
+            enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
+        // 初期化
+        enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
+        // 判定用の矩形を生成
+        var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
+        // アクタ名を登録
+        collider.ActorName = enemy.Name;
+        // 判定タイプを登録
+        collider.ColCategory = ColliderCategory.EnemyBody;
+        // オーナー登録
+        collider.Owner = enemy;
+        // 判定マネージャに登録通知を飛ばす
+        ColliderManager.Instance.AddCollider(collider);
+        // 生成した敵にコライダーの情報を記憶させる
+        enemy.Collider = collider;
+        // 管理対象として追加
+        _activeEnemys.Add(enemy);
+
+        ++_createID;
+
+        if (_createID < 100000)
+            return;
+
+        _createID = 0;
     }
 
     public void CreateSpiralEnemy(Vector3 center, int count, bool isRightSpiral)

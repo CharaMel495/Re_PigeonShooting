@@ -2,10 +2,16 @@
 
 public class CollisionChecker : IColliderVisitor
 {
-    private readonly ICollider _target;
+    private ICollider _target;
     public bool IsColliding { get; private set; }
 
     public CollisionChecker(ICollider target)
+    {
+        _target = target;
+        IsColliding = false;
+    }
+
+    public void Reset(ICollider target)
     {
         _target = target;
         IsColliding = false;

@@ -19,7 +19,8 @@ namespace SpriteData
         // アイテム系　200番台
         HealItem = 200,
         PowItem,
-        Dust
+        Dust,
+        EXP
         // システム(UI)系 300番台
     }
 }
@@ -55,6 +56,7 @@ public class SpriteManager
                 SpriteData.SpriteType.HealItem => SummarizeResourceDirectory.HEALITEM_TEX,
                 SpriteData.SpriteType.PowItem => SummarizeResourceDirectory.POWITEM_TEX,
                 SpriteData.SpriteType.Dust => SummarizeResourceDirectory.DUSTITEM_TEX,
+                SpriteData.SpriteType.EXP => SummarizeResourceDirectory.EXPITEM_TEX,
                 _ => null
             };
         }

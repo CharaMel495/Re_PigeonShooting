@@ -24,8 +24,10 @@ public class PlayerMover
         _playerArea = area;
     }
 
-    public void MovePlayer(Player player)
+    public void MovePlayer(Player player, out Vector3 moveValue)
     {
+        moveValue = Vector3.zero;
+
         if (!_inputLock)
             _inputDir = InputManager.GetInputDirection(InputHandler.Player).normalized;
 
@@ -39,7 +41,8 @@ public class PlayerMover
         var pos = transform.position;
         var scale = transform.localScale;
         var halfScale = scale * 0.5f;
-        pos += _inputDir * _moveSpeed * Time.fixedDeltaTime * (player.IsDash ? _dashMag : 1);
+        moveValue = _inputDir * _moveSpeed * Time.fixedDeltaTime * (player.IsDash ? _dashMag : 1);
+        pos += moveValue;
 
         if (CheckArea(pos, halfScale))
             CrrectInArea(ref pos, halfScale);

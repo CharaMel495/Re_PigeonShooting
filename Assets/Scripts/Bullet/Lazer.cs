@@ -4,13 +4,29 @@ using BulletStructs;
 /// <summary>
 /// レーザー弾は挙動が特殊なのでクラスを分ける
 /// </summary>
-public class Lazer : MonoBehaviour
+[StandAloneObject]
+public class Lazer : MonoBehaviour, IColliderbleObject
 {
     [SerializeField]
     private SpriteRendererWrapper _renderer;
 
     public ColliderCategory _colCategory
     { get; set; }
+
+    public ICollider Collider 
+        => _rect;
+
+    public bool IsDestroyWaiting
+    { get; set; }
+
+    public object TriggerEnterEventData
+        => null;
+
+    public object TriggerStayEventData 
+        => null;
+
+    public object TriggerExitEventData 
+        => null;
 
     private LazerParam _param;
 
@@ -28,6 +44,8 @@ public class Lazer : MonoBehaviour
         _param = param;
         SetPosition();
         _param.Dir = (_param.Target - this.transform.position).normalized;
+        float angle = Mathf.Atan2(_param.Dir.y, _param.Dir.x) * Mathf.Rad2Deg; // ラジアン→度
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     private void FixedUpdate()
@@ -67,7 +85,9 @@ public class Lazer : MonoBehaviour
     public void StartLazer()
     {
         // 判定用の矩形を登録
-        _rect = new(this.transform);
+        _rect = (SelfMade.Rectangle)ColliderManager.Instance.CreateCollider(this.transform, ColliderType.Rectangle);
+        _rect.Owner = this;
+        _rect.ActorName = "PlayerBomb";
         _rect.ColCategory = _param.ColCategory;
         ColliderManager.Instance.AddCollider(_rect);
 

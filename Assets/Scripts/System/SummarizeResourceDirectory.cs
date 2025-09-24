@@ -18,6 +18,7 @@ public class SummarizeResourceDirectory
     public const string HEALITEM_TEX = "Assets/Textures/HealBattery.png";
     public const string POWITEM_TEX = "Assets/Textures/PoweBattery.png";
     public const string DUSTITEM_TEX = "Assets/Textures/Dust.png";
+    public const string EXPITEM_TEX = "Assets/Textures/EXP.png";
     public const string TUTORIALTEXTS = "Assets/ExternalResources/TutorialTexts.asset";
 
     // UsingFont
@@ -28,9 +29,13 @@ public class SummarizeResourceDirectory
 
     public const string ENEMYTABLE_PATH = "/ParameterControll/JsonFiles/EnemyTable.json";
     public const string ENEMYTABLEASSET_PATH = "Assets/ExternalResources/EnemyParamTable.asset";
+    public const string WAVEEVENTTABLE_PATH = "/ParameterControll/JsonFiles/WaveEventTable.json";
+    public const string WAVEEVENTTABLEASSET_PATH = "Assets/ExternalResources/WaveEventTable.asset";
+    public const string WAVETIMETABLE_PATH = "/ParameterControll/JsonFiles/WaveTimeTable.json";
+    public const string WAVETIMETABLEASSET_PATH = "Assets/ExternalResources/WaveTimeTable.asset";
 
     ///CRIPath///
-    
+
     public const string CRI_ACFFILE_PATH = "Assets/StreamingAssets/CRIAssets/Re_PegionShooting.acf";
     public const string CRI_ACBFILE_PATH_TEMPLATE = "CRIAssets/";
 }

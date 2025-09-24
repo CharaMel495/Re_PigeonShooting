@@ -21,6 +21,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     [SerializeField]
     private float _moveSpeed;
 
+    [SerializeField]
+    private BackGroundScroller _bgScroller;
+
     /// <summary>
     /// 初期化を行う関数
     /// </summary>
@@ -30,6 +33,8 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         _player.Shooter = BulletManager.Instance.Shooter;
         _mover = new(_moveSpeed, StageManager.Instance.PlayArea);
         _mover.Initialize(_moveSpeed, StageManager.Instance.PlayArea);
+
+        EventDispatcher.Instance.Bind(this);
     }
 
     private void Update()
@@ -40,7 +45,14 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
 
     private void FixedUpdate()
     {
-        _mover.MovePlayer(_player);
+        _mover.MovePlayer(_player, out Vector3 moveValue);
+        _bgScroller.UpdateOffset(moveValue);
+    }
+
+    [CallableEvent("BossSmashed")]
+    public void BossSmashed(object data)
+    {
+        _player.EnterInvincible();
     }
 
     /// <summary>
@@ -52,13 +64,12 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), _player.GetBulletParameter(joyStickMap, slopeCondition));
 
         if (InputManager.CheckKey(InputManager.VacuumKey, InputHandler.Player, isPrevious: true))
-            if (InputManager.CheckKey(InputManager.DashKey, InputHandler.Player))
-                EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"));
-            else
-                EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"));
+             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"));
         else
-            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyReleased, "Player"));
-            
+             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyReleased, "Player"));
+
+        if (InputManager.CheckKey(InputManager.BombKey, InputHandler.Player))
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"));            
 
         if (InputManager.CheckKey(InputManager.DashKey, InputHandler.Player))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnDashKeyPressed, "Player"));

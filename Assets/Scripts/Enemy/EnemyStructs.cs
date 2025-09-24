@@ -1,9 +1,15 @@
 ﻿using System;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace EnemyDataStructs
 {
+    // 敵の速度やHPに補正をかけるようの構造体
+    public struct EnemyStatusScaler
+    {
+        public float HPScale;
+        public float SpeedScale;
+    }
+
     /// <summary>
     /// 敵の移動データインターフェース
     /// </summary>

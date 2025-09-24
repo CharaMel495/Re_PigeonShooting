@@ -57,6 +57,11 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     [SerializeField]
     private ParticleSystem _deadParticle;
 
+    [SerializeField]
+    private PlayerDefaultStatus _defaultStatus;
+
+    private PlayerGrowStatus _status;
+
     public BulletShooter Shooter
     { get; set; }
 
@@ -77,13 +82,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private PlayerBullet.ShootType[] _shootTypeList;
 
     /// <summary>
-    /// 弾の発射間隔
-    /// </summary>
-    private const float _MINFIREINTERVAL = 0.04f;
-
-    private const float _MAXFIREINTERVAL = 0.4f;
-
-    /// <summary>
     /// 現在の弾発射インターバル
     /// </summary>
     private float _intervalTime = 0;
@@ -93,8 +91,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     /// </summary>
     private PlayerBullet.ShootType _currentSubShootType;
 
-    private const float _INVINCIBLETIME = 0.1f;
-
     private bool _isInvincible = false;
 
     public Vector3 MoveDir
@@ -103,7 +99,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     public bool IsDash
     { get; private set; } = false;
 
-    private readonly float _dashTime = 0.1f;
     private readonly float _bombTime = 0.1f;
 
     private bool _isVacuuming = false;
@@ -111,23 +106,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private Timer _timer;
     private Durator _durator;
 
-    private int _level;
-    public int Level
-    {
-        get => _level;
-        set
-        {
-            _level = Mathf.Min(_MAXLEVEL, value);
-
-            BulletStructs.MultiWayShot mul = (BulletStructs.MultiWayShot)_bulletData[PlayerBullet.ShootType.MultiWayShot];
-            mul.ShotValue = _level;
-            _bulletData[PlayerBullet.ShootType.MultiWayShot] = mul;
-        }
-    }
-
-    private const int _MAXLEVEL = 10;
-
     private float _slopeCondition;
+
+    private Vector3 _shotDir;
 
     private readonly int _maxDustValue = 10;
     private int _dustValue;
@@ -165,7 +146,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void Initialize()
     {
-        _level = 3;
+        _status = new(_defaultStatus);
 
         _currentSubShootType = PlayerBullet.ShootType.Lazer;
 
@@ -178,6 +159,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         _lifeImage.Initialize();
         Life = _maxLife;
+        _isInvincible = false;
 
         // 弾を発射する為の構造体はここで作っちゃう
         CreateBulletParameter();
@@ -195,7 +177,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         EventDispatcher.Instance.Bind(this, "Player");
         // ラムダを使ってて自動バインドできないものを登録
         // 経験値取得イベント
-        EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnSmashed, "Player"), (object data) => Level += (int)data);
+        // TODO:敵を倒すのではなく、経験値アイテムを集めることであがるようにしたので一旦コメント化
+        //EventDispatcher.Instance.Subscribe(EventNames.GetEventName(Events.OnSmashed, "Player"), (object data) => Level += (int)data);
         // 吸引イベント
         EventDispatcher.Instance.Subscribe(
             EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"), (object _) => { Vacuume(); });
@@ -253,7 +236,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
             return;
 
         // インターバルをセット
-        _intervalTime = Mathf.Lerp(_MINFIREINTERVAL, _MAXFIREINTERVAL, (_dustValue / (float)_maxDustValue));
+        _intervalTime = Mathf.Lerp(_status.MinShotRate, _status.MaxShotRate, (_dustValue / (float)_maxDustValue));
 
         // 特殊弾の分岐：レーザー
         if (data is BulletStructs.LazerParam)
@@ -289,19 +272,26 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void AirBaster()
     {
-        if (_dustValue < _maxDustValue)
+        if (_dustValue < 1)
             return;
 
-        _camera.Shake(_bombTime * 10, 1.0f);
+        if (_dustValue < _maxDustValue)
+        {
+            ShootLazer((BulletStructs.LazerParam)_bulletData[PlayerBullet.ShootType.Lazer]);
+        }
+        else
+        {
+            _camera.Shake(_bombTime * 10, 1.0f);
+
+            _airBaster.EnActive();
+
+            _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
+
+            CRISoundManager.Instance.PlaySE(SFX.AirBaster);
+            CRISoundManager.Instance.BombEffect(_bombTime * 100);
+        }
 
         _dustValue = 0;
-
-        _airBaster.EnActive();
-
-        _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
-
-        CRISoundManager.Instance.PlaySE(SFX.AirBaster);
-        CRISoundManager.Instance.BombEffect(_bombTime * 100);
         _cleanerUI.UpdataValue(0.0f);
     }
 
@@ -313,7 +303,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         IsDash = true;
         ColliderManager.Instance.RemoveCollider(_circle);
 
-        _timer.CreateTask(EndDash, _dashTime);
+        _timer.CreateTask(EndDash, _status.DashTime);
     }
 
     private void EndDash()
@@ -324,11 +314,12 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void ShootLazer(BulletStructs.LazerParam param)
     {
+        // TODO: 発射向きに応じてレーザーの角度を変える仕組みをつくる
         param.Origin = this.transform.position;
-        param.Target = this.transform.position + Vector3.right * param.Length;
+        param.Target = this.transform.position + _shotDir * param.Length;
         BulletManager.Instance.CreateLazer(param);
         // インターバルをセット
-        _intervalTime = param.Interval;
+        //_intervalTime = param.Interval;
     }
 
     public void CreatePlayerShotList()
@@ -359,7 +350,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 MoveSpeed = 30.0f,
                 AngleSpan = 90.0f,
                 ColCategory = ColliderCategory.PlayerBullet,
-                ShotValue = _level,
+                ShotValue = _status.ShotValue,
                 SpriteType = SpriteData.SpriteType.PlayerBullet,
             });
 
@@ -434,6 +425,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         data.Origin = this.transform.position;
         data.Dir = shotDir;
+        _shotDir = shotDir;
         _animator.SetFloat(_animParamX, shotDir.x);
         _animator.SetFloat(_animParamY, shotDir.y);
 
@@ -490,19 +482,23 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     {
         switch (item.ItemType)
         {
-            case ItemType.Battery_Green:
-                HealHP(item.Value);
-                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
-                break;
-            case ItemType.Battery_Red:
-                Level += item.Value;
-                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
-                break;
+            //case ItemType.Battery_Green:
+            //    HealHP(item.Value);
+            //    CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
+            //    break;
+            //case ItemType.Battery_Red:
+            //    //Level += item.Value;
+            //    CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
+            //    break;
             case ItemType.Garbage:
                 _dustValue += item.Value;
                 _dustValue = Mathf.Min(_dustValue, _maxDustValue);
                 _cleanerUI.UpdataValue(_dustValue / (float)_maxDustValue);
                 CRISoundManager.Instance.PlaySE(SFX.TypeText);
+                break;
+            case ItemType.EXP:
+                //_status.EXP += item.Value;
+                ++_status.EXP;
                 break;
         }
     }
@@ -518,7 +514,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         _isInvincible = true;
 
-        _timer.CreateTask(() => _isInvincible = false, _INVINCIBLETIME);
+        _timer.CreateTask(() => _isInvincible = false, _status.InvincibleTime);
 
         CRISoundManager.Instance.PlaySE(SFX.BulletHit);
 
@@ -593,4 +589,10 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         Time.timeScale = Mathf.Lerp(0.25f, 1.0f, ratio);
     }
+
+    public void EnterInvincible()
+        => _isInvincible = true;
+
+    public void ExitInvincible()
+       => _isInvincible = false;
 }

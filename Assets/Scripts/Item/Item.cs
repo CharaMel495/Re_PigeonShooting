@@ -5,6 +5,7 @@ public enum ItemType
     Battery_Green,
     Battery_Red,
     Garbage,
+    EXP,
     None
 }
 
@@ -89,6 +90,7 @@ public class Item : MonoBehaviour, IColliderbleObject
                 ItemType.Battery_Green => SpriteData.SpriteType.HealItem,
                 ItemType.Battery_Red => SpriteData.SpriteType.PowItem,
                 ItemType.Garbage => SpriteData.SpriteType.Dust,
+                ItemType.EXP => SpriteData.SpriteType.EXP,
                 _ => SpriteData.SpriteType.Dust
             };
         }

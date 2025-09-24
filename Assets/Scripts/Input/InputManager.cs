@@ -36,6 +36,12 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     private static InputHandler _remainingHandler;
 
     /// <summary>
+    /// ボムキー
+    /// </summary>
+    public static KeyCode BombKey
+    { get => IsGamePadMode ? KeyCode.JoystickButton9 : KeyCode.C; }
+
+    /// <summary>
     /// 決定
     /// </summary>
     public static KeyCode DesideKey
@@ -63,7 +69,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// キャンセルキー
     /// </summary>
     public static KeyCode SlowKey
-    { get => IsGamePadMode ? KeyCode.JoystickButton2 : KeyCode.Z; }
+    { get => IsGamePadMode ? KeyCode.JoystickButton2 : KeyCode.LeftControl; }
 
 
     /// <summary>

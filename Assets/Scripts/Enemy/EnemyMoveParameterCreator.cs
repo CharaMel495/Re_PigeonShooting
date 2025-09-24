@@ -8,11 +8,11 @@ public class EnemyMoveParameterCreator
         {
             // 0
             case EnemyEnums.EnemyID.キホンの雑魚敵:
-                return new EnemyDataStructs.StopPointMove
+                return new EnemyDataStructs.TrackPlayer
                 {
-                    MoveSpeed = 2.0f,
-                    StopThreshold = 0.1f,
-                    NextMove = new EnemyDataStructs.StopPointMove()
+                    MoveSpeed = 3.0f,
+                    Target = PlayerManager.Instance.Player,
+                    TurnRate = 80.0f,
                 };
 
             // 1

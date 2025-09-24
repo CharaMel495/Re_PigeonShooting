@@ -32,6 +32,8 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     [SerializeField]
     private ParticleSystem _bossSummonEffect;
 
+    private WaveController _waveController;
+
     private float _remainInterval = 0;
 
     private float _bossInterval = 60.0f;
@@ -42,42 +44,46 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     {
         _createdSpawner = new();
 
+        _waveController = new();
+
         _bigBossCount = 2;
 
-        CreateSpawner(1.0f);
+        //CreateSpawner(1.0f);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        _waveController.Update();
+
         if (EnemyManager.Instance.IsBossMode)
             return;
 
-        if (_bossInterval < 0)
-        {
-            if (_bigBossCount > 0)
-            {
-                EnemyManager.Instance.CreateEnemy((int)_middleBosses[0], Vector3.zero);
-                --_bigBossCount;
-                _bossInterval = 60.0f;
-                CreateSpawner(8.0f);
-            }
-            else
-            {
-                EventDispatcher.Instance.Dispatch("BossEvent");
-                _bossInterval = 60.0f;
-            }
+        //if (_bossInterval < 0)
+        //{
+        //    if (_bigBossCount > 0)
+        //    {
+        //        EnemyManager.Instance.CreateEnemy((int)_middleBosses[0], Vector3.zero);
+        //        --_bigBossCount;
+        //        _bossInterval = 60.0f;
+        //        //CreateSpawner(8.0f);
+        //    }
+        //    else
+        //    {
+        //        EventDispatcher.Instance.Dispatch("BossEvent");
+        //        _bossInterval = 60.0f;
+        //    }
 
-            _bossSummonParticle.SetActive(false);
-            _bossSummonEffect.Play();
-        }
-        else
-        {
-            _bossInterval -= Time.fixedDeltaTime;
+        //    _bossSummonParticle.SetActive(false);
+        //    _bossSummonEffect.Play();
+        //}
+        //else
+        //{
+        //    _bossInterval -= Time.fixedDeltaTime;
 
-            if (_bossInterval < 30.0f && !_bossSummonParticle.activeSelf)
-                _bossSummonParticle.SetActive(true);
-        }
+        //    if (_bossInterval < 30.0f && !_bossSummonParticle.activeSelf)
+        //        _bossSummonParticle.SetActive(true);
+        //}
     }
 
     public void CreateSpawner(float interval)
