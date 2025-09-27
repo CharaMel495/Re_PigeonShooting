@@ -334,6 +334,15 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         };
     }
 
+    // 弾のパラメタを更新するメソッド
+    [CallableEvent("UpdateBulletParameter")]
+    public void UpdateBulletParameter(object donotUse)
+    {
+        BulletStructs.MultiWayShot data = (BulletStructs.MultiWayShot)_bulletData[PlayerBullet.ShootType.MultiWayShot];
+        data.ShotValue = _status.ShotValue;
+        _bulletData[PlayerBullet.ShootType.MultiWayShot] = data;
+    }
+
     /// <summary>
     /// 弾を作る為のデータを作成するメソッド
     /// </summary>

@@ -18,7 +18,7 @@ MonoBehaviour:
     EventID: 0
     IsClearEnemys: 0
   - ID: 1
-    StartTime: 20
+    StartTime: 15
     EventID: 0
     IsClearEnemys: 0
   - ID: 2

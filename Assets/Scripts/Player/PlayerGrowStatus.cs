@@ -113,6 +113,9 @@ public class PlayerGrowStatus
         // 能力を成長させる
         _statusGrown[_growOrder[_growIdx]].Invoke();
 
+        // プレイヤーの弾のパラメータ更新イベント呼び出し
+        EventDispatcher.Instance.Dispatch("PlayerUpdateBulletParameter");
+
         // 次の成長を予約
         ++_growIdx;
         _growIdx %= _growOrder.Length;

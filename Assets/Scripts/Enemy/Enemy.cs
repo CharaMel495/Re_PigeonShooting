@@ -237,7 +237,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         {
             int rand = Random.Range(0, 100);
 
-            //return ItemType.EXP;
+            return ItemType.EXP;
 
             //if (rand < 40)
             //    return ItemType.Garbage;

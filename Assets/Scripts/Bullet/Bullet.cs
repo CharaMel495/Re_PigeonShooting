@@ -16,7 +16,8 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     /// カメラに映ってるか
     /// </summary>
     public bool IsInCamera
-        => _playArea.Contains(this.transform.position);
+        => _renderer.IsInCamera;
+        //=> _playArea.Contains(this.transform.position);
 
     /// <summary>
     /// 移動情報

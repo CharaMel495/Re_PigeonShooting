@@ -14,6 +14,8 @@ public class WaveController
     /// </summary>
     private List<WaveEvent> _events;
 
+    private List<WaveEventHolder> _holdEvents;
+
     private Queue<WaveTimeTable> _eventQueue;
 
     // 経過時間
@@ -22,6 +24,7 @@ public class WaveController
     public WaveController()
     {
         _events = new();
+        _holdEvents = new();
         _eventQueue = new();
 
         // 必要なデータをAddressables経由で取得する
@@ -55,23 +58,32 @@ public class WaveController
     {
         _elapsedTime += Time.fixedDeltaTime;
 
+        foreach (var e in _holdEvents.ToArray())
+            e.Update();
+
         if (_eventQueue.Count < 1)
             return;
 
         if (_elapsedTime < _eventQueue.Peek().StartTime)
             return;
 
-        DispatchWaveEvent();   
+        StartNextWaveEvent();
+        FlushHoldEvents();
     }
 
-    private void DispatchWaveEvent()
+    private void StartNextWaveEvent()
     {
         var invokeEventOption = _eventQueue.Dequeue();
 
         var invokeEvent = _events.Single(item => item.ID == invokeEventOption.EventID);
-        
-        invokeEvent.Execute();
+
+        _holdEvents.Add(new(invokeEvent));
 
         _elapsedTime = 0;
+    }
+
+    private void FlushHoldEvents()
+    {
+        _holdEvents.RemoveAll(e => e.IsEnded);
     }
 }

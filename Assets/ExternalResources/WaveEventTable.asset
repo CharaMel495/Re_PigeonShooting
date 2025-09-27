@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WaveEventTable:
   - ID: 0
-    Duration: -1
+    Duration: 10
     EnemyID: 0
-    SpawnValue: 60
-    Interval: 0
+    SpawnValue: 8
+    Interval: 5
     Distance: 16
     AngleRange: 360
     HPScale: 1

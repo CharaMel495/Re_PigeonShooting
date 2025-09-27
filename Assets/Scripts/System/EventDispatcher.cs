@@ -84,6 +84,12 @@ public class EventDispatcher : SingletonMonoBehaviour<EventDispatcher>
             _eventTable[eventName].Invoke(param);
     }
 
+    /// <summary>
+    /// CallableEvent属性のインスタンスメソッド全てを一括登録するメソッド<br/>
+    /// イベント名 = $"{prefix}{attr.EventName}
+    /// </summary>
+    /// <param name="owner">登録したいインスタンス</param>
+    /// <param name="prefix">イベント名に付加する文字列</param>
     public void Bind(object owner, string prefix = "")
         => _binder.Bind(owner, prefix);
 
