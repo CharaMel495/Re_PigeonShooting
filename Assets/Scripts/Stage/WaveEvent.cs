@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.ProbeAdjustmentVolume;
 
 /// <summary>
 /// 一定時間ごとに起きるウェーブイベントを表すクラス
@@ -54,14 +55,15 @@ public class WaveEvent
         // 文字列からどの形で敵を出現させるかを決める
         Action DesideFunc(string spawnShape)
         {
-            switch (spawnShape)
+            return spawnShape switch
             {
-                case "Circle":
-                    return SpawnCircle;
-                default:
+                "Circle" => SpawnCircle,
+                "Random" => SpawnRandom,
+                _ => () =>
+                {
                     Debug.LogWarning($"[WaveEvent] Unknown SpawnShape: '{spawnShape}' (ID={data.ID})");
-                    return null;
-            }
+                }
+            };
         }
     }
 
@@ -97,6 +99,27 @@ public class WaveEvent
             };
 
             // ファクトリメソッドで敵を出す
+            EnemyManager.Instance.CreateEnemy(EnemyID, spawnPos, scaler);
+        }
+    }
+
+    private void SpawnRandom()
+    {
+        var playerPos = PlayerManager.Instance.Player.GetPosition();
+
+        for (int i = 0; i < SpawnValue; ++i)
+        {
+            float angle = UnityEngine.Random.Range(0f, AngleRange);
+            float rad = angle * Mathf.Deg2Rad;
+
+            Vector3 spawnPos = playerPos + new Vector3(Mathf.Cos(rad), Mathf.Sin(rad)) * Distance;
+
+            var scaler = new EnemyDataStructs.EnemyStatusScaler
+            {
+                HPScale = HPScale,
+                SpeedScale = SpeedScale
+            };
+
             EnemyManager.Instance.CreateEnemy(EnemyID, spawnPos, scaler);
         }
     }

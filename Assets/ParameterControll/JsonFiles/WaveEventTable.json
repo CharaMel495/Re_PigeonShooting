@@ -10,7 +10,7 @@
 			"AngleRange":"360",
 			"HPScale":"1",
 			"SpeedScale":"0.3",
-			"SpawnShape":"Circle"
+			"SpawnShape":"Random"
 		},
 		{
 			"ID":"1",
