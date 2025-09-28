@@ -53,6 +53,8 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
         };
 
         _renderer.Initialize();
+
+        EventDispatcher.Instance.Bind(this, _circle.ActorName);
     }
 
     private void FixedUpdate()

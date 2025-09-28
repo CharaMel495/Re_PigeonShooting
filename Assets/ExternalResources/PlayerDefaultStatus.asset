@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShotValue: 3
   ShotPower: 1
-  MinShotRate: 0.06
-  MaxShotRate: 0.6
+  MinShotRate: 0.08
+  MaxShotRate: 0.8
   InvincibleTime: 0.1
   DashTime: 0.1
   GrowOrder: 00000000000000000200000003000000000000000300000000000000040000000000000005000000

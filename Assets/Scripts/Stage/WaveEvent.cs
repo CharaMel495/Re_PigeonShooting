@@ -69,7 +69,12 @@ public class WaveEvent
 
     // 実行処理
     public void Execute()
-        => _spawnFunc?.Invoke();
+    {
+        if (EnemyID < 0)
+            EventDispatcher.Instance.Dispatch("BossEvent");
+        else
+            _spawnFunc?.Invoke();
+    }
 
     // 円形に出現させる
     private void SpawnCircle()

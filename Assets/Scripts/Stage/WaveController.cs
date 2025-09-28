@@ -79,7 +79,7 @@ public class WaveController
 
         _holdEvents.Add(new(invokeEvent));
 
-        _elapsedTime = 0;
+        //_elapsedTime = 0;
     }
 
     private void FlushHoldEvents()

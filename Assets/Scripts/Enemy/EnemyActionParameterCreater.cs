@@ -148,7 +148,7 @@ public class EnemyActionParameterCreater
                     ActionInterval = 9999.0f,
                     BulletInterval = 0.5f,
                     Target = PlayerManager.Instance.Player,
-                    SummonID = EnemyEnums.EnemyID.渦巻ぐるぐる敵_後方3way,
+                    SummonID = EnemyEnums.EnemyID.渦巻ぐるぐる敵,
                     BulletData = new BulletStructs.SpreadEightShoot
                     {
                         MoveSpeed = 4.0f,

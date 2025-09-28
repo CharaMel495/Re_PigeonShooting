@@ -37,8 +37,8 @@ public class PlayerGrowStatus
     // 成長時どれだけ成長するか
     private readonly int _shotValueGrowValue = 1;
     private readonly int _shotPowerGrowValue = 1;
-    private readonly float _maxShotRateGrowValue = 0.05f;
-    private readonly float _minShotRateGrowValue = 0.05f;
+    private readonly float _maxShotRateGrowValue = 0.025f;
+    private readonly float _minShotRateGrowValue = 0.025f;
     private readonly float _invincibleTimeGrowValue = 0.1f;
     private readonly float _dashTimeGrowValue = 0.1f;
 
@@ -66,7 +66,7 @@ public class PlayerGrowStatus
             if (_exp < _nextBoarder)
                 return;
 
-            LevelUp();   
+            LevelUp();
         }
     }
 
@@ -90,7 +90,7 @@ public class PlayerGrowStatus
         _exp = 0;
         _growIdx = 0;
 
-        _nextBoarder = 5;
+        _nextBoarder = 10;
 
         _statusGrown = new Dictionary<GrowStatus, Action>
         {
@@ -119,5 +119,7 @@ public class PlayerGrowStatus
         // 次の成長を予約
         ++_growIdx;
         _growIdx %= _growOrder.Length;
+
+        _nextBoarder = (int)(_nextBoarder * 1.4f);
     }
 }
