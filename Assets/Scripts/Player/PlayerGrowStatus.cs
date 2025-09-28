@@ -120,6 +120,8 @@ public class PlayerGrowStatus
         ++_growIdx;
         _growIdx %= _growOrder.Length;
 
-        _nextBoarder = (int)(_nextBoarder * 1.4f);
+        _nextBoarder = (int)(_nextBoarder * 1.1f);
+
+        CRISoundManager.Instance.PlaySE(SFX.Powerup);
     }
 }

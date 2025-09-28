@@ -424,7 +424,11 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [CallableEvent("BossEvent")]
     public void AppearBoss(object data)
     {
-        _currentBoss = Instantiate(_bossPrefab[0], Vector3.zero, Quaternion.identity);
+        if (data is Vector3 spawnPos)
+            _currentBoss = Instantiate(_bossPrefab[0], spawnPos, Quaternion.identity);
+        else
+            _currentBoss = Instantiate(_bossPrefab[0], Vector3.zero, Quaternion.identity);
+
         _currentBoss.Initialize();
         IsBossMode = true;
 
@@ -439,6 +443,13 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         _currentBoss = null;
         //IsBossMode = false;
 
+        foreach (var enemy in _activeEnemys)
+            enemy.IsDestroyWaiting = true;
+    }
+
+    [CallableEvent("ClearAllEnemy")]
+    public void ClearAllEnemy(object data)
+    {
         foreach (var enemy in _activeEnemys)
             enemy.IsDestroyWaiting = true;
     }

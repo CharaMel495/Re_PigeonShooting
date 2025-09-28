@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e4f70742910aca42b12a0f5d53c9b2a
+    m_Address: Assets/Textures/Candy_pixel.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 272990fe3ef14e34bbf7856060b56337
     m_Address: Assets/Textures/IceMissile.png
     m_ReadOnly: 0
@@ -57,6 +62,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 89e274cd2c257a84eabe9d1b0bfffb72
     m_Address: Assets/Textures/EXP.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af073278cfebd9e429e45756871c7ef8
+    m_Address: Assets/Textures/Coolie_pixel.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

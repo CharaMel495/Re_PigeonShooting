@@ -33,7 +33,8 @@ public enum SFX
     EnemyDefeat,
     EnemyDefeat2,
     BossExplosion2,
-    Cutin
+    Cutin,
+    Powerup
 }
 
 

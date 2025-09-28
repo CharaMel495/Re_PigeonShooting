@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using EnemyEnums;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.U2D;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// 雑魚敵のウェーブの管理を行うクラス
@@ -75,11 +79,29 @@ public class WaveController
     {
         var invokeEventOption = _eventQueue.Dequeue();
 
-        var invokeEvent = _events.Single(item => item.ID == invokeEventOption.EventID);
+        // 敵を全消去する必要があれば行う
+        if (invokeEventOption.IsClearEnemys)
+            EventDispatcher.Instance.Dispatch("ClearAllEnemy");
 
-        _holdEvents.Add(new(invokeEvent));
+        if (invokeEventOption.EventID < 0)
+            EventDispatcher.Instance.Dispatch("BossEvent", GetBossSpawnPosition());
+        else
+        {
+            var invokeEvent = _events.Single(item => item.ID == invokeEventOption.EventID);
 
+            _holdEvents.Add(new(invokeEvent));
+        }
         //_elapsedTime = 0;
+
+        Vector3 GetBossSpawnPosition()
+        {
+            var playerPos = PlayerManager.Instance.Player.GetPosition();
+
+            float angle = UnityEngine.Random.Range(0f, 360f);
+            float rad = angle * Mathf.Deg2Rad;
+
+            return playerPos + new Vector3(Mathf.Cos(rad), Mathf.Sin(rad)) * 24f;
+        }
     }
 
     private void FlushHoldEvents()

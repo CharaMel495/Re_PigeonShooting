@@ -18,100 +18,100 @@ MonoBehaviour:
     EnemyID: 0
     SpawnValue: 8
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 1
-    SpeedScale: 0.3
+    SpeedScale: 0.7
     SpawnShape: Random
   - ID: 1
     Duration: 10
     EnemyID: 0
     SpawnValue: 8
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 1.3
-    SpeedScale: 0.3
+    SpeedScale: 1
     SpawnShape: Random
   - ID: 2
     Duration: 10
     EnemyID: 0
     SpawnValue: 16
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 2
-    SpeedScale: 0.5
+    SpeedScale: 1.4
     SpawnShape: Random
   - ID: 3
     Duration: 10
     EnemyID: 0
     SpawnValue: 16
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 3
-    SpeedScale: 0.4
+    SpeedScale: 1.5
     SpawnShape: Random
   - ID: 4
     Duration: 10
     EnemyID: 0
     SpawnValue: 8
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 1
-    SpeedScale: 0.3
+    SpeedScale: 0.7
     SpawnShape: Circle
   - ID: 5
     Duration: 10
     EnemyID: 0
     SpawnValue: 8
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 1.3
-    SpeedScale: 0.5
+    SpeedScale: 1.5
     SpawnShape: Circle
   - ID: 6
     Duration: 10
     EnemyID: 0
     SpawnValue: 16
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 2
-    SpeedScale: 0.3
+    SpeedScale: 1
     SpawnShape: Circle
   - ID: 7
     Duration: 10
     EnemyID: 0
     SpawnValue: 16
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 2
-    SpeedScale: 1
+    SpeedScale: 2
     SpawnShape: Circle
   - ID: 8
     Duration: 10
     EnemyID: 1
     SpawnValue: 8
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 1
-    SpeedScale: 0.2
+    SpeedScale: 0.5
     SpawnShape: Circle
   - ID: 9
     Duration: 10
     EnemyID: 1
     SpawnValue: 8
     Interval: 5
-    Distance: 8
+    Distance: 16
     AngleRange: 360
     HPScale: 2
-    SpeedScale: 0.2
+    SpeedScale: 0.5
     SpawnShape: Circle
   - ID: 10
     Duration: -1

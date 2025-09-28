@@ -50,7 +50,7 @@ public class SpriteManager
                 SpriteData.SpriteType.Player => SummarizeResourceDirectory.PLAYER_TEX,
                 SpriteData.SpriteType.PlayerLazer => SummarizeResourceDirectory.PLAYERLAZER_TEX,
                 SpriteData.SpriteType.SpinningEnemy => SummarizeResourceDirectory.SPINNINGENEMY_TEX,
-                SpriteData.SpriteType.BossShip => SummarizeResourceDirectory.BOSSSHIP_TEX,
+                SpriteData.SpriteType.BossShip => SummarizeResourceDirectory.BOSS01_TEX,
                 SpriteData.SpriteType.Missile => SummarizeResourceDirectory.MISSILE_TEX,
                 SpriteData.SpriteType.EnemyBullet => SummarizeResourceDirectory.ENEMYBULLET01_TEX,
                 SpriteData.SpriteType.HealItem => SummarizeResourceDirectory.HEALITEM_TEX,

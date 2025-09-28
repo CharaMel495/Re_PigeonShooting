@@ -13,6 +13,8 @@ public interface ICollider
     string ActorName { get; set; }
     public IColliderbleObject Owner { get; set; }
 
+    public float GetBoundingRadius(); // 全てのColliderが実装
+
     public bool Equals(ICollider other)
     {
         if (ReferenceEquals(null, other)) return false;

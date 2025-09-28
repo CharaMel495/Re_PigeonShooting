@@ -33,6 +33,8 @@ public class Item : MonoBehaviour, IColliderbleObject
     /// </summary>
     private ITargetProvider _vacuumedTarget;
 
+    private Vector3 _addtionalPower;
+
     /// <summary>
     /// 移動方向
     /// </summary>
@@ -83,6 +85,8 @@ public class Item : MonoBehaviour, IColliderbleObject
         _value = value;
         _renderer.SetSprite(SpriteManager.GetSprite(CastSpriteType()));
 
+        _addtionalPower = Vector3.zero;
+
         SpriteData.SpriteType CastSpriteType()
         {
             return type switch
@@ -116,8 +120,11 @@ public class Item : MonoBehaviour, IColliderbleObject
     private void Move()
     {
         var pos = this.transform.position;
-        pos += Dir * _moveSpeed * Time.fixedDeltaTime;
+        pos += Dir * _moveSpeed * Time.fixedDeltaTime + _addtionalPower;
         this.transform.position = pos;
+
+        var addtionalPowerInverse = -_addtionalPower;
+        _addtionalPower += addtionalPowerInverse * Time.fixedDeltaTime;
     }
 
     private void Move(Vector3 dir, float pow)
@@ -125,9 +132,11 @@ public class Item : MonoBehaviour, IColliderbleObject
         if (!_isFixedUpdate)
             return;
 
-        var pos = this.transform.position;
-        pos += dir * pow * Time.fixedDeltaTime;
-        this.transform.position = pos;
+        _addtionalPower += dir * pow * Time.fixedDeltaTime;
+
+        //var pos = this.transform.position;
+        //pos += dir * pow * Time.fixedDeltaTime;
+        //this.transform.position = pos;
 
         _isFixedUpdate = false;
     }

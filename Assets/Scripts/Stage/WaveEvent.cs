@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.ProbeAdjustmentVolume;
 
 /// <summary>
 /// 一定時間ごとに起きるウェーブイベントを表すクラス
@@ -69,12 +68,7 @@ public class WaveEvent
 
     // 実行処理
     public void Execute()
-    {
-        if (EnemyID < 0)
-            EventDispatcher.Instance.Dispatch("BossEvent");
-        else
-            _spawnFunc?.Invoke();
-    }
+        => _spawnFunc?.Invoke();
 
     // 円形に出現させる
     private void SpawnCircle()

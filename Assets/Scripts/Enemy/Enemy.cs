@@ -237,19 +237,13 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         {
             int rand = Random.Range(0, 100);
 
-            if (rand < 40)
+            if (Life > 0)
+                return ItemType.None;
+
+            if (rand < 20)
                 return ItemType.Garbage;
             else
                 return ItemType.EXP;
-
-            if (rand < 40)
-                return ItemType.None;
-            else if (rand < 80)
-                return ItemType.Garbage;
-            else if (rand < 90)
-                return ItemType.Battery_Green;
-            else
-                return ItemType.Battery_Red;
         }
     }
 }

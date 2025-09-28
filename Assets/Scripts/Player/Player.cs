@@ -110,7 +110,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private Vector3 _shotDir;
 
-    private readonly int _maxDustValue = 10;
+    private readonly int _maxDustValue = 15;
     private int _dustValue;
     private readonly int _maxLife = 10;
     private int _life;

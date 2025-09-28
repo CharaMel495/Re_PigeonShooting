@@ -8,11 +8,11 @@ public class SummarizeResourceDirectory
     // TextureDirectory : Addressables
 
     public const string PLAYERBULLET_TEX = "Assets/Textures/PlayerShot.png";
-    public const string SIMPLEENEMY_TEX = "Assets/Textures/EnemyOne.png";
+    public const string SIMPLEENEMY_TEX = "Assets/Textures/Candy_pixel.png";
     public const string PLAYER_TEX = "Assets/Textures/Player.png";
     public const string PLAYERLAZER_TEX = "Assets/Textures/PlayerLazer.png";
     public const string SPINNINGENEMY_TEX = "Assets/Textures/CandyBall.png";
-    public const string BOSSSHIP_TEX = "Assets/Textures/BossShip.png";
+    public const string BOSS01_TEX = "Assets/Textures/Coolie_pixel.png";
     public const string MISSILE_TEX = "Assets/Textures/IceMissile.png";
     public const string ENEMYBULLET01_TEX = "Assets/Textures/SimpleBullet.png";
     public const string HEALITEM_TEX = "Assets/Textures/HealBattery.png";

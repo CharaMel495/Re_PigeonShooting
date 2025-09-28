@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 衝突イベント種別（Enter: 接触開始、Stay: 接触継続中、Exit: 接触終了）
-/// </summary>
 public enum CollisionEventType
 {
     Enter,
@@ -12,18 +9,12 @@ public enum CollisionEventType
     Exit
 }
 
-/// <summary>
-/// 使用する自作コライダーの形状タイプ
-/// </summary>
 public enum ColliderType
 {
     Rectangle,
     Circle
 }
 
-/// <summary>
-/// 判定カテゴリ（プレイヤー・敵・弾など）
-/// </summary>
 public enum ColliderCategory
 {
     PlayerBody,
@@ -35,38 +26,33 @@ public enum ColliderCategory
     ItemVacuumer
 }
 
-/// <summary>
-/// 衝突判定を一元管理するマネージャークラス
-/// </summary>
 public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
 {
-    /// <summary> 登録されたすべてのコライダー </summary>
+    private const float CellSize = 2.0f;
+
+    private Dictionary<Vector2Int, List<ICollider>> _spatialMap = new();
     private List<ICollider> _colliders = new();
 
-    /// <summary> 衝突判定するカテゴリのペア定義（例: Player vs Enemy）</summary>
     private Dictionary<ColliderCategory, HashSet<ColliderCategory>> _collisionPairs = new();
+    private Dictionary<int, ICollider> _colliderLookup = new();
 
-    /// <summary> コライダーに割り当てる一意なID用カウンタ </summary>
-    private int _colliderID;
-
-    /// <summary> 前フレームで衝突していたペア </summary>
     private HashSet<CollisionPair> _previousCollisions = new();
-
-    /// <summary> 今フレームで衝突したペア </summary>
     private HashSet<CollisionPair> _currentCollisions = new();
 
-    /// <summary>
-    /// マネージャー初期化（コライダー・ペア情報の初期化）
-    /// </summary>
+    private CollisionChecker _sharedChecker = new(null);
+
+    private int _colliderID = 0;
+
     public void Initialize()
     {
+        _spatialMap.Clear();
         _colliders.Clear();
         _collisionPairs.Clear();
+        _colliderLookup.Clear();
         _previousCollisions.Clear();
         _currentCollisions.Clear();
         _colliderID = 0;
 
-        // 衝突対象となるカテゴリのペアを定義
         DefineCollision(ColliderCategory.PlayerBody, ColliderCategory.EnemyBody);
         DefineCollision(ColliderCategory.PlayerBody, ColliderCategory.EnemyBullet);
         DefineCollision(ColliderCategory.EnemyBody, ColliderCategory.PlayerBullet);
@@ -76,118 +62,125 @@ public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
         DefineCollision(ColliderCategory.Item, ColliderCategory.ItemVacuumer);
     }
 
-    /// <summary>
-    /// 毎フレーム呼ばれ、コライダー同士の衝突チェックを行う
-    /// </summary>
     private void Update()
     {
         CheckCollisions();
     }
 
-    /// <summary>
-    /// 新しいコライダーを登録
-    /// </summary>
     public void AddCollider(ICollider collider)
     {
         collider.ID = _colliderID++;
         _colliders.Add(collider);
+        _colliderLookup[collider.ID] = collider;
     }
 
-    /// <summary>
-    /// コライダーの登録解除
-    /// </summary>
     public void RemoveCollider(ICollider collider)
     {
         _colliders.RemoveAll(c => c.ID == collider.ID);
+        _colliderLookup.Remove(collider.ID);
     }
 
-    /// <summary>
-    /// どのカテゴリ同士が衝突判定を持つかを登録する
-    /// </summary>
-    public void DefineCollision(ColliderCategory typeA, ColliderCategory typeB)
+    public void DefineCollision(ColliderCategory a, ColliderCategory b)
     {
-        if (!_collisionPairs.ContainsKey(typeA))
-            _collisionPairs[typeA] = new();
-        _collisionPairs[typeA].Add(typeB);
-
-        if (!_collisionPairs.ContainsKey(typeB))
-            _collisionPairs[typeB] = new();
-        _collisionPairs[typeB].Add(typeA);
+        if (!_collisionPairs.ContainsKey(a)) _collisionPairs[a] = new();
+        if (!_collisionPairs.ContainsKey(b)) _collisionPairs[b] = new();
+        _collisionPairs[a].Add(b);
+        _collisionPairs[b].Add(a);
     }
 
-    /// <summary>
-    /// 全登録コライダー間の衝突をチェックし、イベントを発火
-    /// </summary>
     public void CheckCollisions()
     {
+        _spatialMap.Clear();
         _currentCollisions.Clear();
 
-        int count = _colliders.Count;
-
-        for (int i = 0; i < count; ++i)
+        foreach (var col in _colliders)
         {
-            var a = _colliders[i];
+            Vector2 center = col.Position;
+            float radius = col.GetBoundingRadius();
 
-            for (int j = i + 1; j < count; ++j)
+            int minX = Mathf.FloorToInt((center.x - radius) / CellSize);
+            int maxX = Mathf.FloorToInt((center.x + radius) / CellSize);
+            int minY = Mathf.FloorToInt((center.y - radius) / CellSize);
+            int maxY = Mathf.FloorToInt((center.y + radius) / CellSize);
+
+            for (int x = minX; x <= maxX; x++)
             {
-                var b = _colliders[j];
-
-                // カテゴリの組み合わせが有効か確認
-                if (!_collisionPairs.TryGetValue(a.ColCategory, out var validTargets))
-                    continue;
-                if (!validTargets.Contains(b.ColCategory))
-                    continue;
-
-                // 衝突判定の実行（Visitorパターン）
-                var checker = new CollisionChecker(a);
-                b.Accept(checker);
-
-                if (checker.IsColliding)
+                for (int y = minY; y <= maxY; y++)
                 {
-                    var pair = new CollisionPair(a.ID, b.ID);
-                    _currentCollisions.Add(pair);
-
-                    if (_previousCollisions.Contains(pair))
-                        DispatchEvent(a, b, CollisionEventType.Stay); // 継続
-                    else
-                        DispatchEvent(a, b, CollisionEventType.Enter); // 新規衝突
+                    var cell = new Vector2Int(x, y);
+                    if (!_spatialMap.ContainsKey(cell))
+                        _spatialMap[cell] = new();
+                    _spatialMap[cell].Add(col);
                 }
             }
         }
 
-        // 前フレームでは衝突していたが、今フレームで解消されたもの = Exit
-        foreach (var pair in _previousCollisions)
+        foreach (var cell in _spatialMap)
         {
-            if (!_currentCollisions.Contains(pair))
+            List<ICollider> local = cell.Value;
+
+            for (int i = 0; i < local.Count; ++i)
             {
-                var a = _colliders.Find(c => c.ID == pair.A);
-                var b = _colliders.Find(c => c.ID == pair.B);
-                if (a != null && b != null)
-                    DispatchEvent(a, b, CollisionEventType.Exit);
+                var a = local[i];
+
+                for (int j = i + 1; j < local.Count; ++j)
+                {
+                    var b = local[j];
+
+                    if (!_collisionPairs.TryGetValue(a.ColCategory, out var valid) || !valid.Contains(b.ColCategory))
+                        continue;
+
+                    _sharedChecker.Reset(a);
+                    b.Accept(_sharedChecker);
+
+                    if (_sharedChecker.IsColliding)
+                    {
+                        var pair = new CollisionPair(a.ID, b.ID);
+                        _currentCollisions.Add(pair);
+
+                        if (_previousCollisions.Contains(pair))
+                            DispatchEvent(a, b, CollisionEventType.Stay);
+                        else
+                            DispatchEvent(a, b, CollisionEventType.Enter);
+                    }
+                }
             }
         }
 
-        // 衝突状態を次フレームに持ち越し（差分抽出のため）
+        foreach (var pair in _previousCollisions)
+        {
+            if (_currentCollisions.Contains(pair)) continue;
+
+            if (_colliderLookup.TryGetValue(pair.A, out var a) &&
+                _colliderLookup.TryGetValue(pair.B, out var b))
+            {
+                DispatchEvent(a, b, CollisionEventType.Exit);
+            }
+        }
+
         (_previousCollisions, _currentCollisions) = (_currentCollisions, _previousCollisions);
 
-        foreach (var obj in _colliders.ToArray())
+        for (int i = 0; i < _colliders.Count; ++i)
         {
-            if (!obj.Owner.IsDestroyWaiting)
-                continue;
+            var obj = _colliders[i];
+            if (!obj.Owner.IsDestroyWaiting) continue;
 
             var type = obj.Owner.GetType();
             bool hasAttr = Attribute.IsDefined(type, typeof(StandAloneObjectAttribute));
-            if (!hasAttr)
-                continue;
-            // もしマネージャー無しのクラスならここで消す
+            if (!hasAttr) continue;
+
             obj.Owner.DestroyByColliderManager();
             break;
         }
     }
 
-    /// <summary>
-    /// 衝突イベントを両者に対して送出
-    /// </summary>
+    private Vector2Int WorldToCell(Vector3 pos)
+    {
+        int x = Mathf.FloorToInt(pos.x / CellSize);
+        int y = Mathf.FloorToInt(pos.y / CellSize);
+        return new Vector2Int(x, y);
+    }
+
     private void DispatchEvent(ICollider a, ICollider b, CollisionEventType type)
     {
         if (a.Owner is IColliderbleObject ao && b.Owner is IColliderbleObject bo)
@@ -208,15 +201,34 @@ public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
                 _ => null
             };
 
-            // EventDispatcher にてイベント名を生成・発火
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(CastToEventName(type), a.ActorName), dataB);
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(CastToEventName(type), b.ActorName), dataA);
         }
     }
 
-    /// <summary>
-    /// 自作コライダー生成用のファクトリ
-    /// </summary>
+    private Events CastToEventName(CollisionEventType type) =>
+        type switch
+        {
+            CollisionEventType.Enter => Events.OnTriggerEnter,
+            CollisionEventType.Stay => Events.OnTriggerStay,
+            CollisionEventType.Exit => Events.OnTriggerExit,
+            _ => Events.OnGameEnd
+        };
+
+    private readonly struct CollisionPair
+    {
+        public readonly int A, B;
+        public CollisionPair(int a, int b)
+        {
+            A = Mathf.Min(a, b);
+            B = Mathf.Max(a, b);
+        }
+
+        public override int GetHashCode() => A * 397 ^ B;
+        public override bool Equals(object obj) =>
+            obj is CollisionPair other && A == other.A && B == other.B;
+    }
+
     public ICollider CreateCollider(Transform transform, ColliderType type)
     {
         return type switch
@@ -224,36 +236,6 @@ public class ColliderManager : SingletonMonoBehaviour<ColliderManager>
             ColliderType.Rectangle => new SelfMade.Rectangle(transform),
             ColliderType.Circle => new SelfMade.Circle(transform),
             _ => null
-        };
-    }
-
-    /// <summary>
-    /// 衝突ペア（順不同）を表す構造体
-    /// </summary>
-    private struct CollisionPair
-    {
-        public int A, B;
-        public CollisionPair(int a, int b)
-        {
-            A = Mathf.Min(a, b); // 順不同でも同じペアとして扱う
-            B = Mathf.Max(a, b);
-        }
-
-        public override bool Equals(object obj) =>
-            obj is CollisionPair other && A == other.A && B == other.B;
-
-        public override int GetHashCode() =>
-            A * 397 ^ B;
-    }
-
-    private Events CastToEventName(CollisionEventType type)
-    {
-        return type switch
-        {
-            CollisionEventType.Enter => Events.OnTriggerEnter,
-            CollisionEventType.Stay => Events.OnTriggerStay,
-            CollisionEventType.Exit => Events.OnTriggerExit,
-            _ => Events.OnGameEnd
         };
     }
 }
