@@ -8,8 +8,10 @@ public class PlayerDefaultStatus : ScriptableObject
     // 弾一発の攻撃力
     public int ShotPower;
     // 弾の発射間隔
-    public float MinShotRate = 0.04f;
-    public float MaxShotRate = 0.4f;
+    //public float MinShotRate = 0.04f;
+    //public float MaxShotRate = 0.4f;
+    public float ShotRate = 0.6f;
+    public float LessShotProbabirity = 100;
     // 被弾後無敵時間
     public float InvincibleTime = 0.1f;
     // ダッシュ継続時間

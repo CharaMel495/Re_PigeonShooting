@@ -1,19 +1,19 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 /// <summary>
-/// ŠeƒV[ƒ“ŠÇ—ƒNƒ‰ƒX‚ÉŒp³‚³‚¹‚éƒNƒ‰ƒX
+/// å„ã‚·ãƒ¼ãƒ³ç®¡ç†ã‚¯ãƒ©ã‚¹ã«ç¶™æ‰¿ã•ã›ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
-/// <typeparam name="TScene">Œp³æƒV[ƒ“ƒ}ƒl[ƒWƒƒ[</typeparam>
+/// <typeparam name="TScene">ç¶™æ‰¿å…ˆã‚·ãƒ¼ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼</typeparam>
 public abstract class SceneManagerBase<TScene> : SingletonMonoBehaviour<SceneManagerBase<TScene>>
 {
     /// <summary>
-    /// ƒV[ƒ“ƒ}ƒl[ƒWƒƒ[‚Æ‚µ‚Ä‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+    /// ã‚·ãƒ¼ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã—ã¦ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     /// </summary>
     private static TScene _sceneInstance;
 
     /// <summary>
-    /// Œp³‚µ‚½ƒV[ƒ“ƒ}ƒl[ƒWƒƒ[‚Æ‚µ‚ÄƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚·‚éƒƒ\ƒbƒh
+    /// ç¶™æ‰¿ã—ãŸã‚·ãƒ¼ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã—ã¦ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
     /// <returns></returns>
     public TScene GetSceneManagerInstance()
@@ -33,10 +33,10 @@ public abstract class SceneManagerBase<TScene> : SingletonMonoBehaviour<SceneMan
     }
 
     /// <summary>
-    /// ƒCƒ“ƒXƒ^ƒ“ƒX‚ª–¢“o˜^‚Ì‚Æ‚«‚ÉƒCƒ“ƒXƒ^ƒ“ƒX‚ğ’T‚µo‚·ƒƒ\ƒbƒh
+    /// ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒæœªç™»éŒ²ã®ã¨ãã«ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ¢ã—å‡ºã™ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
-    /// <param name="type">Œ^</param>
-    /// <returns>’T‚µo‚µ‚½ƒCƒ“ƒXƒ^ƒ“ƒX</returns>
+    /// <param name="type">å‹</param>
+    /// <returns>æ¢ã—å‡ºã—ãŸã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹</returns>
     private static UnityEngine.Object FindFirstObject(Type type)
     {
         // Use Unity's new API to find the first object of the specified type

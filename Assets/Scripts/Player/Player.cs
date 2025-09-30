@@ -236,7 +236,14 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
             return;
 
         // インターバルをセット
-        _intervalTime = Mathf.Lerp(_status.MinShotRate, _status.MaxShotRate, (_dustValue / (float)_maxDustValue));
+        //_intervalTime = Mathf.Lerp(_status.MinShotRate, _status.MaxShotRate, (_dustValue / (float)_maxDustValue));
+
+        _intervalTime = _status.ShotRate;
+
+        var lessShotProbabirity = Mathf.Lerp(0, _status.LessShotProbabirity, (_dustValue / (float)_maxDustValue));
+
+        if (Random.Range(0, 100) > 100 - lessShotProbabirity)
+            return;
 
         // 特殊弾の分岐：レーザー
         if (data is BulletStructs.LazerParam)

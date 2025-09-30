@@ -48,7 +48,7 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
 
         _eventData = new VacuumeEvent
         {
-            _vacuumePow = 0.4f,
+            _vacuumePow = 1.0f,
             _vacuumeTarget = _ownerTransform.position
         };
 
