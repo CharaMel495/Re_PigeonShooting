@@ -37,6 +37,7 @@ public class Item : MonoBehaviour, IColliderbleObject
     private ITargetProvider _vacuumedTarget;
 
     private float _addtionalPower;
+    private float _addtionalPowerWeight;
 
     /// <summary>
     /// 移動方向
@@ -94,6 +95,7 @@ public class Item : MonoBehaviour, IColliderbleObject
         _renderer.SetSprite(SpriteManager.GetSprite(CastSpriteType()));
 
         _addtionalPower = 0f;
+        _addtionalPowerWeight = DesideWeight();
 
         SpriteData.SpriteType CastSpriteType()
         {
@@ -104,6 +106,16 @@ public class Item : MonoBehaviour, IColliderbleObject
                 ItemType.Garbage => SpriteData.SpriteType.Dust,
                 ItemType.EXP => SpriteData.SpriteType.EXP,
                 _ => SpriteData.SpriteType.Dust
+            };
+        }
+
+        float DesideWeight()
+        {
+            return type switch
+            {
+                ItemType.Garbage => 0.75f,
+                ItemType.EXP => 1.0f,
+                _ => 0
             };
         }
     }
@@ -143,7 +155,7 @@ public class Item : MonoBehaviour, IColliderbleObject
         if (!_isFixedUpdate)
             return;
 
-        _addtionalPower += pow * Time.fixedDeltaTime;
+        _addtionalPower += pow * Time.fixedDeltaTime * _addtionalPowerWeight;
         Dir = dir;
 
         //var pos = this.transform.position;
@@ -167,7 +179,8 @@ public class Item : MonoBehaviour, IColliderbleObject
         var pos = this.transform.position;
         var targetDir = PlayerManager.Instance.Player.GetPosition() - pos;
         targetDir.Normalize();
-        pos += targetDir * _reservedMoveSpeed * Time.fixedDeltaTime;
+        _addtionalPower += _reservedMoveSpeed * _addtionalPowerWeight * Time.fixedDeltaTime;
+        pos += targetDir * _addtionalPower * Time.fixedDeltaTime;
         this.transform.position = pos;
     }
 

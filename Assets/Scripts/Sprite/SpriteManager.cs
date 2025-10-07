@@ -20,8 +20,12 @@ namespace SpriteData
         HealItem = 200,
         PowItem,
         Dust,
-        EXP
+        EXP,
         // システム(UI)系 300番台
+        BulletPowerUPIcon,
+        BulletRateUPIcon,
+        BulletUPIcon,
+        BulletDustProofUPIcon,
     }
 }
 
@@ -57,6 +61,10 @@ public class SpriteManager
                 SpriteData.SpriteType.PowItem => SummarizeResourceDirectory.POWITEM_TEX,
                 SpriteData.SpriteType.Dust => SummarizeResourceDirectory.DUSTITEM_TEX,
                 SpriteData.SpriteType.EXP => SummarizeResourceDirectory.EXPITEM_TEX,
+                SpriteData.SpriteType.BulletPowerUPIcon => SummarizeResourceDirectory.BULLETPOWERUPICON_TEX,
+                SpriteData.SpriteType.BulletRateUPIcon => SummarizeResourceDirectory.BULLETRATEUPICON_TEX,
+                SpriteData.SpriteType.BulletUPIcon => SummarizeResourceDirectory.BULLETUPICON_TEX,
+                SpriteData.SpriteType.BulletDustProofUPIcon => SummarizeResourceDirectory.BULLETDUSTPROOFUPICON_TEX,
                 _ => null
             };
         }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace PlayerBullet
 {
@@ -36,6 +35,7 @@ public struct DamageEventData
 /// </summary>
 public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 {
+    [Header("プレイヤーに関わるおぶじぇくと")]
     [SerializeField]
     private PlayerFollowCamera _camera;
 
@@ -62,6 +62,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     [SerializeField]
     private ImageWrapper _lifeImage;
 
+
+    [Header("UI系")]
     [SerializeField]
     private CleanerUI _cleanerUI;
 
@@ -73,8 +75,13 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private int _dashCoolTimeTaskID = -1;
 
     [SerializeField]
+    private EXPUI _expUI;
+
+    [Header("Effect")]
+    [SerializeField]
     private ParticleSystem _deadParticle;
 
+    [Header("初期ステ")]
     [SerializeField]
     private PlayerDefaultStatus _defaultStatus;
 
@@ -82,10 +89,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public BulletShooter Shooter
     { get; set; }
-
-    [Header("UI")]
-    [SerializeField]
-    private PlayerUI _playerUI;
 
     /// <summary>
     /// 弾発射のインターバルか
@@ -201,6 +204,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void Initialize()
     {
+        // 経験値UIはステ管理クラスからのイベント呼び出しがあるため、最初に初期化
+        _expUI.Initialize();
+
         _status = new(_defaultStatus);
         _maxDashStock = _defaultStatus.DashStock;
         _dashStock = _maxDashStock;
@@ -222,11 +228,10 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         CreateBulletParameter();
         CreatePlayerShotList();
 
-        _playerUI.Initialize();
         _dustUI.Initialize();
         _dustValueSetter = 0;
         _dashStockUI.Initialize();
-
+        
         _circle = new SelfMade.Circle(_hitBox)
         {
             ActorName = "Player",
@@ -357,7 +362,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 EventDispatcher.Instance.Dispatch("ReserveItem");
                 break;
             case PlayerBullet.DustAction.RingAttack:
-
+                // TODO ここにリング攻撃を記述する
+                ShootLazer((BulletStructs.LazerParam)_bulletData[PlayerBullet.ShootType.Lazer]);
                 break;
             case PlayerBullet.DustAction.AirBaster:
                 _camera.Shake(_bombTime * 10, 1.0f);
@@ -502,12 +508,12 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 ColCategory = ColliderCategory.PlayerBomb,
                 OpenTime = 0.2f,
                 CloseTime = 1.0f,
-                KeepTime = 0.2f,
+                KeepTime = 10.0f,
                 SpriteType = SpriteData.SpriteType.PlayerLazer,
                 Width = 5.0f,
-                Length = 3.0f,
-                MoveSpeed = 5.0f,
-                Interval = 1.0f
+                Length = 100.0f,
+                MoveSpeed = 10.0f,
+                Interval = 10.0f
             });
 
         _bulletData.Add(PlayerBullet.ShootType.Wall,

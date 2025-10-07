@@ -35,8 +35,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21da4ee6d1dc24740868a3008660953f
+    m_Address: Assets/Textures/UI/GrowUI/Icon_BulletRateUp.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 272990fe3ef14e34bbf7856060b56337
     m_Address: Assets/Textures/IceMissile.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 30d1e658654353c4ea1efabb25621506
+    m_Address: Assets/Textures/UI/GrowUI/Icon_BulletUp.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -60,6 +70,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 635f4bfebe075d64a8aa2fcff9b61884
+    m_Address: Assets/Textures/UI/GrowUI/Icon_BulletPowerUp.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 89e274cd2c257a84eabe9d1b0bfffb72
     m_Address: Assets/Textures/EXP.png
     m_ReadOnly: 0
@@ -72,6 +87,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b11e1ecf5a612214bb11d7e823f90dea
     m_Address: Assets/Textures/PlayerShot.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b66c5fa7c229850478f6fcb5a3b70d3b
+    m_Address: Assets/Textures/UI/GrowUI/Icon_DustProof.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -107,6 +127,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f332d33e72d025044a8aec6333226e47
     m_Address: Assets/Textures/EnemyOne.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4c0ebdfa71786640b4a4a485ddae6a9
+    m_Address: Assets/Textures/Bullet/LazerPixel.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

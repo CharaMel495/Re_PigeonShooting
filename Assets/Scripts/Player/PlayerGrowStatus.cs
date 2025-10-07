@@ -115,6 +115,9 @@ public class PlayerGrowStatus
 
         _nextBoarder = 10;
 
+        // UIの強化予報に最初の強化を伝える
+        EventDispatcher.Instance.Dispatch("EXPUIInitialSet", _growOrder[_growIdx]);
+
         _statusGrown = new Dictionary<GrowStatus, Action>
         {
             { GrowStatus.ShotValue, () => ShotValue = Mathf.Min(ShotValue + _shotValueGrowValue, _maxShotValue) },
@@ -144,6 +147,7 @@ public class PlayerGrowStatus
         // 次の成長を予約
         ++_growIdx;
         _growIdx %= _growOrder.Length;
+        EventDispatcher.Instance.Dispatch("SetNextGrowIcon", _growOrder[_growIdx]);
 
         _nextBoarder = (int)(_nextBoarder * 1.1f);
 
