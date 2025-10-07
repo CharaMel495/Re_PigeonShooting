@@ -13,7 +13,8 @@ public class PlayerGrowStatus
         ShotRate,
         ShotProbabirity,
         InvincibleTime,
-        DashTime
+        DashTime,
+        DashStockCoolTime
     }
 
     // 一回の射撃で発射する弾の数
@@ -43,6 +44,9 @@ public class PlayerGrowStatus
     // ダッシュ継続時間
     public float DashTime
     { get; private set; }
+    // ダッシュストック回復までの時間
+    public float DashStockCoolTime
+    { get; private set; }
 
     // 成長時どれだけ成長するか
     private readonly int _shotValueGrowValue = 1;
@@ -52,6 +56,7 @@ public class PlayerGrowStatus
     private readonly float _lessShotProbabirityGrowValue = 20.0f;
     private readonly float _invincibleTimeGrowValue = 0.1f;
     private readonly float _dashTimeGrowValue = 0.1f;
+    private readonly float _dashStockCoolTimeGrowValue = 0.25f;
 
     // 成長限界
     private readonly int _maxShotValue = 10;
@@ -61,6 +66,7 @@ public class PlayerGrowStatus
     private readonly float _maxLessShotProbabirity = 10.0f;
     private readonly float _maxInvincibleTime = 0.1f;
     private readonly float _maxDashTime = 0.1f;
+    private readonly float _maxDashStockCoolTime = 0.1f;
 
     public int Level
     { get; set; }
@@ -101,6 +107,7 @@ public class PlayerGrowStatus
         LessShotProbabirity = defaultStatus.LessShotProbabirity;
         InvincibleTime = defaultStatus.InvincibleTime;
         DashTime = defaultStatus.DashTime;
+        DashStockCoolTime = defaultStatus.DashStockCoolTime;
         _growOrder = defaultStatus.GrowOrder;
 
         _exp = 0;
@@ -117,6 +124,7 @@ public class PlayerGrowStatus
             { GrowStatus.ShotProbabirity, () => Mathf.Max(LessShotProbabirity - _lessShotProbabirityGrowValue, _maxLessShotProbabirity) },
             { GrowStatus.InvincibleTime, () => InvincibleTime = Mathf.Min(InvincibleTime + _invincibleTimeGrowValue, _maxInvincibleTime) },
             { GrowStatus.DashTime, () => DashTime = Mathf.Min(DashTime + _dashTimeGrowValue, _maxDashTime)  },
+            { GrowStatus.DashStockCoolTime, () => DashTime = Mathf.Max(DashStockCoolTime - _dashStockCoolTimeGrowValue, _maxDashStockCoolTime)  },
         };
     }
 

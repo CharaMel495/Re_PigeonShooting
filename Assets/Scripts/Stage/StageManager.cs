@@ -34,6 +34,10 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
     private WaveController _waveController;
 
+    [SerializeField]
+    private TextWrapper _timerText;
+    private float _timerCounter;
+
     private float _remainInterval = 0;
 
     private float _bossInterval = 60.0f;
@@ -48,7 +52,8 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
         _bigBossCount = 2;
 
-        //CreateSpawner(1.0f);
+        _timerText.Initialize();
+        _timerCounter = 0;
     }
 
     // Update is called once per frame
@@ -59,31 +64,16 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         if (EnemyManager.Instance.IsBossMode)
             return;
 
-        //if (_bossInterval < 0)
-        //{
-        //    if (_bigBossCount > 0)
-        //    {
-        //        EnemyManager.Instance.CreateEnemy((int)_middleBosses[0], Vector3.zero);
-        //        --_bigBossCount;
-        //        _bossInterval = 60.0f;
-        //        //CreateSpawner(8.0f);
-        //    }
-        //    else
-        //    {
-        //        EventDispatcher.Instance.Dispatch("BossEvent");
-        //        _bossInterval = 60.0f;
-        //    }
+        UpdateTimerUI();   
+    }
 
-        //    _bossSummonParticle.SetActive(false);
-        //    _bossSummonEffect.Play();
-        //}
-        //else
-        //{
-        //    _bossInterval -= Time.fixedDeltaTime;
+    private void UpdateTimerUI()
+    {
+        _timerCounter += Time.fixedDeltaTime;
+        int minutes = (int)(_timerCounter / 60);
+        int seconds = (int)(_timerCounter % 60);
 
-        //    if (_bossInterval < 30.0f && !_bossSummonParticle.activeSelf)
-        //        _bossSummonParticle.SetActive(true);
-        //}
+        _timerText.SetText($"{minutes:00}:{seconds:00}");
     }
 
     public void CreateSpawner(float interval)

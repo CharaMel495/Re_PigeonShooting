@@ -69,6 +69,10 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private DustMater _dustUI;
 
     [SerializeField]
+    private DashBatteryUI _dashStockUI;
+    private int _dashCoolTimeTaskID = -1;
+
+    [SerializeField]
     private ParticleSystem _deadParticle;
 
     [SerializeField]
@@ -118,6 +122,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     { get; private set; } = false;
 
     private readonly float _bombTime = 0.1f;
+    private int _maxDashStock;
+    private int _dashStock;
 
     private bool _isVacuuming = false;
 
@@ -196,6 +202,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     public void Initialize()
     {
         _status = new(_defaultStatus);
+        _maxDashStock = _defaultStatus.DashStock;
+        _dashStock = _maxDashStock;
 
         _currentSubShootType = PlayerBullet.ShootType.Lazer;
 
@@ -217,6 +225,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _playerUI.Initialize();
         _dustUI.Initialize();
         _dustValueSetter = 0;
+        _dashStockUI.Initialize();
 
         _circle = new SelfMade.Circle(_hitBox)
         {
@@ -371,10 +380,31 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         if (IsDash || _isVacuuming)
             return;
 
+        if (_dashStock < 1)
+            return;
+
         IsDash = true;
         ColliderManager.Instance.RemoveCollider(_circle);
+        --_dashStock;
+        _dashStockUI.CloseBattery(_dashStock);
 
         _timer.CreateTask(EndDash, _status.DashTime);
+
+        if (_timer.GetTaskFromID(_dashCoolTimeTaskID) != null)
+            _timer.CanncellTask(_dashCoolTimeTaskID);
+
+        _dashCoolTimeTaskID = _timer.CreateTask(RestoreDash, _status.DashStockCoolTime);
+
+        void RestoreDash()
+        {
+            _dashStockUI.OpenBattery(_dashStock);
+            ++_dashStock;
+
+            if (_dashStock >= _maxDashStock)
+                return;
+
+            _dashCoolTimeTaskID = _timer.CreateTask(RestoreDash, _status.DashStockCoolTime);
+        }
     }
 
     private void EndDash()

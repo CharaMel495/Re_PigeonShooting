@@ -16,6 +16,10 @@ public class PlayerDefaultStatus : ScriptableObject
     public float InvincibleTime = 0.1f;
     // ダッシュ継続時間
     public float DashTime = 0.1f;
+    // ダッシュのストック個数
+    public int DashStock = 3;
+    // ダッシュストック回復までの時間
+    public float DashStockCoolTime = 2.0f;
     // 成長する順番
     public PlayerGrowStatus.GrowStatus[] GrowOrder;
     // ほこりの溜まり具合に応じた行動
