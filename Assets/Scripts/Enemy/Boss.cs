@@ -157,6 +157,14 @@ public class Boss : MonoBehaviour, IColliderbleObject
         _currentPattern = 0;
         _currentAction = _actionPattern[_currentPattern];
 
+        EnemyManager.Instance.CreateSpiralBarrierEnemy(
+                    (int)EnemyEnums.EnemyID.渦巻ぐるぐる敵_自機狙い単発弾,
+                    this.transform.position,
+                    30,
+                    20.0f,
+                    UnityEngine.Random.Range(0, 100) % 2 == 0,
+                    this.transform);
+
         EventDispatcher.Instance.Bind(this, _rect.ActorName);
     }
 

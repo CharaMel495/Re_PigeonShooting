@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+// TODO ここにダメを追加する
+
 namespace BulletStructs
 {
     public interface IBulletMoveData

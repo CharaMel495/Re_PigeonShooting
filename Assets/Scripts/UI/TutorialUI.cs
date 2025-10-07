@@ -24,6 +24,11 @@ public class TutorialUI : MonoBehaviour
     [SerializeField]
     private Sprite[] _iconFaces;
 
+    [SerializeField]
+    private ImageWrapper _lockPanel;
+    [SerializeField]
+    private TextWrapper _lockText;
+
     private Timer _timer;
 
     public bool IsPlaying
@@ -46,6 +51,8 @@ public class TutorialUI : MonoBehaviour
         _timer = new();
         _timer.Initialize();
         _nextText.Initialize();
+        _lockPanel.Initialize();
+        _lockText.Initialize();
         IsPlaying = false;
         _tutorialTexts = tutorialTexts;
         _textIdx = 0;
@@ -80,6 +87,8 @@ public class TutorialUI : MonoBehaviour
         _timer.CreateTask(TypeText, _typeSpeed);
         IsPlaying = true;
         _typeIndex = 0;
+        _lockPanel.SetImageAlpha(0.5f);
+        _lockText.SetTextAlpha(1.0f);
 
         return true;
     }
@@ -97,6 +106,8 @@ public class TutorialUI : MonoBehaviour
             EndTyping();
             _nextObj.SetActive(false);
             EventDispatcher.Instance.Dispatch("EnterPlayingMode");
+            _lockPanel.SetImageAlpha(0.0f);
+            _lockText.SetTextAlpha(0.0f);
         }
         else
         _timer.CreateTask(TypeText, _typeSpeed);

@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      criware_logo01_0: 1978162881007416444
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

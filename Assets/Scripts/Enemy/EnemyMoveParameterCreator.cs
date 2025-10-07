@@ -83,7 +83,7 @@ public class EnemyMoveParameterCreator
                 return new EnemyDataStructs.SlavedSpiralMove
                 {
                     Acceleration = 0,
-                    MoveSpeed = 30.0f,
+                    MoveSpeed = 120.0f,
                 };
 
             // 8

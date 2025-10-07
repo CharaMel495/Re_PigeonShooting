@@ -24,6 +24,7 @@ public class SummarizeResourceDirectory
     // UsingFont
 
     public const string FONT = "Assets/Font/PixelMplus12-Regular SDF.asset";
+    //public const string FONT = "Assets/Font/KH-Dot-Dougenzaka-16 SDF.asset";
 
     // ScriptableObjectDirectory
 

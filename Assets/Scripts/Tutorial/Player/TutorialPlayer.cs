@@ -36,6 +36,11 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
     [SerializeField]
     private CleanerUI _cleanerUI;
 
+    [SerializeField]
+    private PlayerDefaultStatus _defaultStatus;
+
+    private PlayerGrowStatus _status;
+
     public BulletShooter Shooter
     { get; set; }
 
@@ -175,6 +180,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void Initialize()
     {
+        _status = new(_defaultStatus);
+
         _exp = 0;
         _level = 0;
         
@@ -276,7 +283,13 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
             return;
 
         // インターバルをセット
-        _intervalTime = Mathf.Lerp(_MINFIREINTERVAL, _MAXFIREINTERVAL, (_dustValue / (float)_maxDustValue));
+        //_intervalTime = Mathf.Lerp(_MINFIREINTERVAL, _MAXFIREINTERVAL, (_dustValue / (float)_maxDustValue));
+        _intervalTime = _status.ShotRate;
+
+        var lessShotProbabirity = Mathf.Lerp(0, _status.LessShotProbabirity, (_dustValue / (float)_maxDustValue));
+
+        if (Random.Range(0, 100) > 100 - lessShotProbabirity)
+            return;
 
         // 特殊弾の分岐：レーザー
         if (data is BulletStructs.LazerParam)

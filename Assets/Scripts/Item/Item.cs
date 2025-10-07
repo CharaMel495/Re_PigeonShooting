@@ -25,6 +25,9 @@ public class Item : MonoBehaviour, IColliderbleObject
     private float _moveSpeed;
 
     [SerializeField]
+    private float _reservedMoveSpeed;
+
+    [SerializeField]
     private SpriteRendererWrapper _renderer;
 
     /// <summary>
@@ -33,7 +36,7 @@ public class Item : MonoBehaviour, IColliderbleObject
     /// </summary>
     private ITargetProvider _vacuumedTarget;
 
-    private Vector3 _addtionalPower;
+    private float _addtionalPower;
 
     /// <summary>
     /// 移動方向
@@ -63,9 +66,13 @@ public class Item : MonoBehaviour, IColliderbleObject
 
     private bool _isFixedUpdate = false;
 
+    private bool _isReserved = false;
+
     public void Initialize(ItemType type, int value = 1)
     {
         _renderer.Initialize();
+
+        _isReserved = false;
 
         _circle = new SelfMade.Circle(this.transform)
         {
@@ -79,13 +86,14 @@ public class Item : MonoBehaviour, IColliderbleObject
         if (_createID > 1000000)
             _createID = 0;
 
+        EventDispatcher.Instance.Subscribe("ReserveItem", (object data) => _isReserved = true);
         EventDispatcher.Instance.Bind(this, _circle.ActorName);
 
         _type = type;
         _value = value;
         _renderer.SetSprite(SpriteManager.GetSprite(CastSpriteType()));
 
-        _addtionalPower = Vector3.zero;
+        _addtionalPower = 0f;
 
         SpriteData.SpriteType CastSpriteType()
         {
@@ -119,8 +127,11 @@ public class Item : MonoBehaviour, IColliderbleObject
 
     private void Move()
     {
+        if (_isReserved)
+            MoveToPlayer();
+
         var pos = this.transform.position;
-        pos += Dir * _moveSpeed * Time.fixedDeltaTime + _addtionalPower;
+        pos += Dir * _moveSpeed * Time.fixedDeltaTime * _addtionalPower;
         this.transform.position = pos;
 
         var addtionalPowerInverse = -_addtionalPower;
@@ -132,7 +143,8 @@ public class Item : MonoBehaviour, IColliderbleObject
         if (!_isFixedUpdate)
             return;
 
-        _addtionalPower += dir * pow * Time.fixedDeltaTime;
+        _addtionalPower += pow * Time.fixedDeltaTime;
+        Dir = dir;
 
         //var pos = this.transform.position;
         //pos += dir * pow * Time.fixedDeltaTime;
@@ -148,6 +160,21 @@ public class Item : MonoBehaviour, IColliderbleObject
             Move((vacuumeData._vacuumeTarget - this.transform.position).normalized, vacuumeData._vacuumePow);
         else
             Got();
+    }
+
+    private void MoveToPlayer()
+    {
+        var pos = this.transform.position;
+        var targetDir = PlayerManager.Instance.Player.GetPosition() - pos;
+        targetDir.Normalize();
+        pos += targetDir * _reservedMoveSpeed * Time.fixedDeltaTime;
+        this.transform.position = pos;
+    }
+
+    [CallableEvent("OnTriggerExit")]
+    public void OnAnyExit(object data)
+    {
+        _addtionalPower = 0.0f;
     }
 
     /// <summary>

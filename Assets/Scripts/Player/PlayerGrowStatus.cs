@@ -74,6 +74,8 @@ public class PlayerGrowStatus
         {
             _exp = value;
 
+            EventDispatcher.Instance.Dispatch("UpdateEXP", (float)_exp / _nextBoarder);
+
             // もし経験値ボーダーに達していたら
             if (_exp < _nextBoarder)
                 return;
@@ -121,7 +123,7 @@ public class PlayerGrowStatus
     private void LevelUp()
     {
         // 経験値をリセット
-        _exp = 0;
+        EXP = 0;
         // 代わりにレベルをひとつ上げる
         ++Level;
 

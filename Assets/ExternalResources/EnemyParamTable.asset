@@ -64,11 +64,11 @@ MonoBehaviour:
     Score: 300
   - ID: 7
     Size: 4
-    BulletSize: 2
+    BulletSize: 1
     SpriteID: 102
     ColliderType: 0
-    Life: 200
-    Score: 200
+    Life: 10000
+    Score: 0
   - ID: 8
     Size: 2.5
     BulletSize: 1.5

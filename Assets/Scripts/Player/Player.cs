@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace PlayerBullet
 {
@@ -12,6 +13,16 @@ namespace PlayerBullet
         TwoWay,
         Lazer,
         Wall,
+    }
+
+    public enum DustAction
+    {
+        HealHP,
+        BigLazer,
+        ItemReserver,
+        RingAttack,
+        AirBaster,
+        None
     }
 }
 
@@ -55,6 +66,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     private CleanerUI _cleanerUI;
 
     [SerializeField]
+    private DustMater _dustUI;
+
+    [SerializeField]
     private ParticleSystem _deadParticle;
 
     [SerializeField]
@@ -64,6 +78,10 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public BulletShooter Shooter
     { get; set; }
+
+    [Header("UI")]
+    [SerializeField]
+    private PlayerUI _playerUI;
 
     /// <summary>
     /// 弾発射のインターバルか
@@ -112,6 +130,37 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     private readonly int _maxDustValue = 15;
     private int _dustValue;
+    private int _dustLevel;
+    private int _dustValueSetter
+    {
+        set
+        {
+            _dustValue = Mathf.Max(0, Mathf.Min(_maxDustValue, value));
+            _dustLevel = CalcDustLevel();
+
+            _dustUI.UpdateValue(new DustValuePackage 
+            { 
+                DustValue = _dustValue, 
+                DustLevel = _dustLevel 
+            }, _maxDustValue);
+
+            int CalcDustLevel()
+            {
+                var t = Mathf.InverseLerp(0, _maxDustValue, _dustValue);
+                t *= 100;
+
+                return t switch
+                {
+                    <= 0.001f => 0,
+                    <= 20.0f => 1,
+                    <= 40.0f => 2,
+                    <= 60.0f => 3,
+                    <= 80.0f => 4,
+                    _ => 5
+                };
+            }
+        }
+    }
     private readonly int _maxLife = 10;
     private int _life;
     public int Life
@@ -164,6 +213,10 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         // 弾を発射する為の構造体はここで作っちゃう
         CreateBulletParameter();
         CreatePlayerShotList();
+
+        _playerUI.Initialize();
+        _dustUI.Initialize();
+        _dustValueSetter = 0;
 
         _circle = new SelfMade.Circle(_hitBox)
         {
@@ -282,23 +335,34 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         if (_dustValue < 1)
             return;
 
-        if (_dustValue < _maxDustValue)
+        switch (_defaultStatus.DustActions[_dustLevel])
         {
-            ShootLazer((BulletStructs.LazerParam)_bulletData[PlayerBullet.ShootType.Lazer]);
+            case PlayerBullet.DustAction.BigLazer:
+                ShootLazer((BulletStructs.LazerParam)_bulletData[PlayerBullet.ShootType.Lazer]);
+                break;
+            case PlayerBullet.DustAction.HealHP:
+                HealHP(1);
+                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
+                break;
+            case PlayerBullet.DustAction.ItemReserver:
+                EventDispatcher.Instance.Dispatch("ReserveItem");
+                break;
+            case PlayerBullet.DustAction.RingAttack:
+
+                break;
+            case PlayerBullet.DustAction.AirBaster:
+                _camera.Shake(_bombTime * 10, 1.0f);
+
+                _airBaster.EnActive();
+
+                _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
+
+                CRISoundManager.Instance.PlaySE(SFX.AirBaster);
+                CRISoundManager.Instance.BombEffect(_bombTime * 100);
+                break;
         }
-        else
-        {
-            _camera.Shake(_bombTime * 10, 1.0f);
 
-            _airBaster.EnActive();
-
-            _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
-
-            CRISoundManager.Instance.PlaySE(SFX.AirBaster);
-            CRISoundManager.Instance.BombEffect(_bombTime * 100);
-        }
-
-        _dustValue = 0;
+        _dustValueSetter = 0;
         _cleanerUI.UpdataValue(0.0f);
     }
 
@@ -406,14 +470,14 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
             {
                 Origin = this.transform.position,
                 ColCategory = ColliderCategory.PlayerBomb,
-                OpenTime = 0.6f,
+                OpenTime = 0.2f,
                 CloseTime = 1.0f,
                 KeepTime = 0.2f,
                 SpriteType = SpriteData.SpriteType.PlayerLazer,
-                Width = 0.3f,
+                Width = 5.0f,
                 Length = 3.0f,
-                MoveSpeed = 13.0f,
-                Interval = 0.7f
+                MoveSpeed = 5.0f,
+                Interval = 1.0f
             });
 
         _bulletData.Add(PlayerBullet.ShootType.Wall,
@@ -507,8 +571,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
             //    CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
             //    break;
             case ItemType.Garbage:
-                _dustValue += item.Value;
-                _dustValue = Mathf.Min(_dustValue, _maxDustValue);
+                _dustValueSetter = _dustValue + item.Value;
                 _cleanerUI.UpdataValue(_dustValue / (float)_maxDustValue);
                 CRISoundManager.Instance.PlaySE(SFX.TypeText);
                 break;

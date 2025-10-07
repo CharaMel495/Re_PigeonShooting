@@ -18,4 +18,6 @@ public class PlayerDefaultStatus : ScriptableObject
     public float DashTime = 0.1f;
     // 成長する順番
     public PlayerGrowStatus.GrowStatus[] GrowOrder;
+    // ほこりの溜まり具合に応じた行動
+    public PlayerBullet.DustAction[] DustActions;
 }

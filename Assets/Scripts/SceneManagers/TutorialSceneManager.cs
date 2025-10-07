@@ -47,6 +47,18 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
     private TextWrapper _topText;
 
     private CurrentState _state;
+    private CurrentState StateSetter
+    {
+        set
+        {
+            _lastState = _state;
+            _state = value;
+        }
+    }
+
+    private CurrentState _lastState;
+
+    private Tutorial.Tutorials _currentTutorial;
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;
     private Dictionary<CurrentState, Action> _cancelKeyPressed;
@@ -62,11 +74,11 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
     {
         InputManager.Instance.ChangeInputHandler(InputHandler.UI);
 
-        _state = CurrentState.Loading;
+        StateSetter = CurrentState.Loading;
 
         _tutorialMenu.Initialize(CreateButtonFunc());
 
-        _tutorialMenu.EnActive();
+        //_tutorialMenu.EnActive();
 
         _tutorialChecker.Initialize();
 
@@ -107,11 +119,13 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         TutorialPlayerManager.Instance.Initialize();
         EnemyManager.Instance.Initialize();
 
-        _loadingCutin.ExitCutin(() => _state = CurrentState.Top);
+        _loadingCutin.ExitCutin(() => StateSetter = CurrentState.Top);
 
         EventDispatcher.Instance.Bind(this);
 
         CRISoundManager.Instance.PlayBGM(BGM.Tutorial);
+
+        SetUpTutorial(Tutorials.Move);
 
         Action[] CreateButtonFunc()
         {
@@ -139,8 +153,11 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
         _dirInputed[_state]?.Invoke(inputDir);
 
+        //if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI))
+        //    _loadingCutin.EnterCutin(BackToTop);
+
         if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI))
-            _loadingCutin.EnterCutin(BackToTop);
+            SwitchMenu();
     }
 
     private void MoveMenu(Direction dir)
@@ -148,54 +165,72 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         switch (dir)
         {
             case Direction.Up:
-                _tutorialMenu.MoveButton(_lastSelectedTutrial);
+                _tutorialMenu.MoveButton(false);
+                _lastSelectedTutrial = _tutorialMenu.CurrentButton;
                 break;
 
             case Direction.Down:
-                _lastSelectedTutrial = _tutorialMenu.CurrentButton;
-                _tutorialMenu.MoveButton(5);
-                break;
-
-            case Direction.Right:
-
-                if (_tutorialMenu.CurrentButton >= 4)
-                    break;
-
                 _tutorialMenu.MoveButton(true);
                 _lastSelectedTutrial = _tutorialMenu.CurrentButton;
                 break;
 
-            case Direction.Left:
-                _tutorialMenu.MoveButton(false);
-                _lastSelectedTutrial = _tutorialMenu.CurrentButton;
-                break;
+            //case Direction.Right:
+
+            //    _tutorialMenu.MoveButton(true);
+            //    _lastSelectedTutrial = _tutorialMenu.CurrentButton;
+            //    break;
+
+            //case Direction.Left:
+            //    _tutorialMenu.MoveButton(false);
+            //    _lastSelectedTutrial = _tutorialMenu.CurrentButton;
+            //    break;
         }
     }
 
     private void SetUpTutorial(Tutorials tutorial)
     {
         _tutorialMenu.DisActive();
-        _state = CurrentState.Loading;
+        StateSetter = CurrentState.Loading;
         _supporter.SetUp(tutorial);
+        _supporter.ClearnUp();
         _loadingCutin.ExitCutin(StartTutorial);
         _tutorialChecker.SetUp(tutorial);
         _topText.SetTextAlpha(0.0f);
+        _currentTutorial = tutorial;
+    }
+
+    private void SetUpNextTutorial()
+    {
+        var tutorialNum = (int)_currentTutorial + 1;
+
+        if (tutorialNum <= (int)Tutorials.AirBaster)
+            SetUpTutorial((Tutorials)tutorialNum);
+        else
+            SceneManager.LoadScene("MainGame");
     }
 
     public void StartTutorial()
     {
-        _state = CurrentState.ExamTutorial;
+        StateSetter = CurrentState.ExamTutorial;
         _supporter.PlayNext();
     }
 
     [CallableEvent("EndTutorial")]
     public void EndTutorial(object data)
     {
-        _state = CurrentState.Loading;
-        _loadingCutin.EnterCutin(() => BackToTop());
+        StateSetter = CurrentState.Loading;
+        _loadingCutin.EnterCutin(() => SetUpNextTutorial());
     }
 
-    private void BackToTop()
+    private void SwitchMenu()
+    {
+        if (_state == CurrentState.Top)
+            CloseMenu();
+        else
+            OpenMenu();
+    }
+
+    private void OpenMenu()
     {
         if (_state == CurrentState.Top)
             return;
@@ -206,26 +241,36 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
         InputManager.Instance.ChangeInputHandler(InputHandler.UI);
 
-        _state = CurrentState.Loading;
+        StateSetter = CurrentState.Top;
 
-        _supporter.ClearnUp();
+        //_supporter.ClearnUp();
 
-        _loadingCutin.ExitCutin(() => _state = CurrentState.Top);
+        //_loadingCutin.ExitCutin(() => _state = CurrentState.Top);
 
         _topText.SetTextAlpha(1.0f);
+    }
+
+    private void CloseMenu()
+    {
+        if (_state != CurrentState.Top)
+            return;
+
+        _tutorialMenu.DisActive();
+
+        StateSetter = _lastState;
     }
 
     [CallableEvent("EnterPlayingMode")]
     public void EnterPlayingMode(object data)
     {
-        _state = CurrentState.PlayTutorial;
+        StateSetter = CurrentState.PlayTutorial;
         TutorialSpawn(_tutorialChecker.EnterCheckingMode());
     }
 
     [CallableEvent("CorrectTutorial")]
     public void CorrectTutorial(object data)
     {
-        _state = CurrentState.ExamTutorial;
+        StateSetter = CurrentState.ExamTutorial;
         _supporter.PlayNext();
     }
 

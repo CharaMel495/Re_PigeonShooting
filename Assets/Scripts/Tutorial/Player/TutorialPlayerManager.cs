@@ -61,13 +61,12 @@ public class TutorialPlayerManager : SingletonMonoBehaviour<TutorialPlayerManage
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), _player.GetBulletParameter(joyStickMap, slopeCondition));
 
         if (InputManager.CheckKey(InputManager.VacuumKey, InputHandler.Player, isPrevious: true))
-            if (InputManager.CheckKey(InputManager.DashKey, InputHandler.Player))
-                EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"));
-            else
-                EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"));
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"));
         else
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyReleased, "Player"));
 
+        if (InputManager.CheckKey(InputManager.BombKey, InputHandler.Player))
+            EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"));
 
         if (InputManager.CheckKey(InputManager.DashKey, InputHandler.Player))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnDashKeyPressed, "Player"));
