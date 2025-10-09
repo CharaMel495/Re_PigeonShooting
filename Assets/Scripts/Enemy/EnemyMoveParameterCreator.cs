@@ -124,6 +124,14 @@ public class EnemyMoveParameterCreator
                 return new EnemyDataStructs.NoMove
                 {
                 };
+
+            // 13
+            case EnemyEnums.EnemyID.プレイヤーのリングボムとして使う敵:
+                return new EnemyDataStructs.SpiralMove
+                {
+                    Acceleration = 0,
+                    MoveSpeed = 400,
+                };
         }
 
 

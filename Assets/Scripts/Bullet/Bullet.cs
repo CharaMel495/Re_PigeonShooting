@@ -51,11 +51,14 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     public string Name
     { get; private set; }
 
+    public int Damage
+    { get; set; }
+
     public ICollider Collider
     { get; set; }
 
     public object TriggerEnterEventData
-        => new DamageEventData { Damage = 1 };
+        => new DamageEventData { Damage = Damage };
 
     public object TriggerStayEventData
         => null;

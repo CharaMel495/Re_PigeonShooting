@@ -27,7 +27,7 @@ public class EnemyPool
     /// </summary>
     public EnemyPool(Enemy bulletPrefab, Transform root, Rect playArea)
     {
-        _enemyPool = new Enemy[300];
+        _enemyPool = new Enemy[500];
         _root = root;
         CreatePool(bulletPrefab, playArea);
     }

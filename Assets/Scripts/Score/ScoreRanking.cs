@@ -12,8 +12,16 @@ public class ScoreRanking : ScriptableObject
         ScoreList = new();
     }
 
-    public void AddScore()
-    {
+    public int GetHighScore()
+        => ScoreList.First();
 
+    public void AddScore(ScoreHolder newScore)
+    {
+        ScoreList.Add(newScore.Score);
+
+        ScoreList = ScoreList
+            .OrderByDescending(s => s) // ← ここで降順！
+            .Take(30)
+            .ToList();
     }
 }

@@ -30,7 +30,8 @@ namespace EnemyEnums
         バリア突進敵,
         レーザー発射敵,
         バリア突進中ボス,
-        何もしない敵
+        何もしない敵,
+        プレイヤーのリングボムとして使う敵
     }
 }
 
@@ -331,7 +332,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             var moveData = (EnemyDataStructs.SlavedSpiralMove)enemyData.MoveData;
 
             moveData.Distance = radius;
-            moveData.AddtionalTime = ratio * i * Mathf.Deg2Rad;
+            moveData.AngleRad = ratio * i * Mathf.Deg2Rad;
             moveData.IsRightSpin = isRightSpiral;
 
             enemy.MoveData = moveData;
@@ -349,6 +350,70 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
             collider.ActorName = enemy.Name;
             collider.ColCategory = ColliderCategory.EnemyBody;
+            // オーナー登録
+            collider.Owner = enemy;
+            ColliderManager.Instance.AddCollider(collider);
+            enemy.Collider = collider;
+
+            // 管理リストへ追加
+            _activeEnemys.Add(enemy);
+            returnList.Add(enemy);
+
+            ++_createID;
+            if (_createID >= 100000)
+                _createID = 0;
+        }
+
+        return returnList;
+    }
+
+
+    /// <summary>
+    /// プレイヤーの味方になる敵を生成するメソッド
+    /// </summary>
+    public List<Enemy> CreateSpiralRingBombEnemy(int tableID, Vector3 center, int count, float radius, bool isRightSpiral)
+    {
+        float ratio = 360f / count;
+        float currentTime = Time.time;
+
+        var returnList = new List<Enemy>();
+
+        for (int i = 0; i < count; ++i)
+        {
+            var enemyData = StructEnemyParamFromMasterData(tableID, EnemyEnums.EnemyType.Normal);
+            enemyData.Origin = center;
+
+            // 敵を生成
+            var enemy = _pool.GetEnemyFromPool();
+            enemy.transform.localScale = enemyData.Scale;
+
+            // ステータス注入
+            enemy.Life = enemyData.Life;
+            enemy.Score = enemyData.Score;
+
+            // 既にある MoveData を取り出して設定追加
+            var moveData = (EnemyDataStructs.SpiralMove)enemyData.MoveData;
+
+            moveData.Distance = radius;
+            moveData.AngleRad = ratio * i * Mathf.Deg2Rad;
+            moveData.IsRightSpin = isRightSpiral;
+            moveData.Origin = center;
+
+            enemy.MoveData = moveData;
+
+            // 行動情報注入
+            enemy.ActionData = enemyData.ActionData;
+            if (enemy.ActionData != null)
+                enemy.ActionData.BulletData.Scale = enemyData.BulletSize;
+
+            // 初期化処理
+            enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
+            //enemy.transform.parent = parent;
+
+            // コライダー生成＆登録
+            var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);
+            collider.ActorName = enemy.Name;
+            collider.ColCategory = ColliderCategory.PlayerBomb;
             // オーナー登録
             collider.Owner = enemy;
             ColliderManager.Instance.AddCollider(collider);

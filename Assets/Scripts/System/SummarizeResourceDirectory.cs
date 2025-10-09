@@ -18,16 +18,17 @@ public class SummarizeResourceDirectory
     public const string HEALITEM_TEX = "Assets/Textures/HealBattery.png";
     public const string POWITEM_TEX = "Assets/Textures/PoweBattery.png";
     public const string DUSTITEM_TEX = "Assets/Textures/Dust.png";
-    public const string EXPITEM_TEX = "Assets/Textures/EXP.png";
+    public const string EXPITEM_TEX = "Assets/Textures/Item/EXP_Green.png";
     public const string TUTORIALTEXTS = "Assets/ExternalResources/TutorialTexts.asset";
     public const string BULLETPOWERUPICON_TEX = "Assets/Textures/UI/GrowUI/Icon_BulletPowerUp.png";
     public const string BULLETRATEUPICON_TEX = "Assets/Textures/UI/GrowUI/Icon_BulletRateUp.png";
     public const string BULLETUPICON_TEX = "Assets/Textures/UI/GrowUI/Icon_BulletUp.png";
     public const string BULLETDUSTPROOFUPICON_TEX = "Assets/Textures/UI/GrowUI/Icon_DustProof.png";
+    public const string RINGBOMB_TEX = "Assets/Textures/UI/UI_DustPanel.png";
 
     // UsingFont
-
     public const string FONT = "Assets/Font/PixelMplus12-Regular SDF.asset";
+
     //public const string FONT = "Assets/Font/KH-Dot-Dougenzaka-16 SDF.asset";
 
     // ScriptableObjectDirectory

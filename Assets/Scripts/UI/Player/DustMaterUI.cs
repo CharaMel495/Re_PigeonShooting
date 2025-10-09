@@ -15,9 +15,13 @@ public class DustMater : MonoBehaviour
     [Header("レベル周り")]
     [SerializeField]
     private Sprite[] _levelSprites;
+    [SerializeField]
+    private Sprite[] _actionSprites;
 
     [SerializeField]
     private ImageWrapper _dustLevel;
+    [SerializeField]
+    private ImageWrapper _actionImage;
 
     [Header("ほこりのバー関係")]
 
@@ -37,6 +41,7 @@ public class DustMater : MonoBehaviour
     public void Initialize()
     {
         _dustLevel.Initialize();
+        _actionImage.Initialize();
         _dustBar.Initialize();
         _dustBarTransform = _dustBar.GetComponent<RectTransform>();
         ResetUI();
@@ -65,5 +70,6 @@ public class DustMater : MonoBehaviour
 
         // レベルに応じて表示を切り替える
         _dustLevel.SetSprite(_levelSprites[Mathf.Max(0, Mathf.Min(dustData.DustLevel, 5))]);
+        _actionImage.SetSprite(_actionSprites[Mathf.Max(0, Mathf.Min(dustData.DustLevel, 5))]);
     }
 }

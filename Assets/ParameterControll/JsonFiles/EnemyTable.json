@@ -116,6 +116,15 @@
 			"ColliderType":"0",
 			"Life":"15",
 			"Score":"0"
+		},
+		{
+			"ID":"13",
+			"Size":"2",
+			"BulletSize":"0",
+			"SpriteID":"3",
+			"ColliderType":"0",
+			"Life":"999999",
+			"Score":"0"
 		}
 	]
 }

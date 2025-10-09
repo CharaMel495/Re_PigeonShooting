@@ -8,6 +8,7 @@ namespace BulletStructs
     {
         public float MoveSpeed { get; set; }
         public float Acceleration { get; set; }
+        public int Damage { get; set; }
     }
 
     public struct StraightMove : IBulletMoveData
@@ -15,6 +16,7 @@ namespace BulletStructs
         public Vector3 MoveDir { get; set; }
         public float MoveSpeed { get; set; }
         public float Acceleration { get; set; }
+        public int Damage { get; set; }
     }
 
     public struct StraightAndAimingMove : IBulletMoveData
@@ -27,6 +29,7 @@ namespace BulletStructs
         public Vector3 SecondDir { get; set; }
         public ITargetProvider Target { get; set; }
         public bool IsStraight { get; set; }
+        public int Damage { get; set; }
     }
 
     public interface IBulletCreateData
@@ -38,6 +41,7 @@ namespace BulletStructs
         public SpriteData.SpriteType SpriteType { get; }
         public IBulletMoveData CreateMoveData();
         public ColliderCategory ColCategory { get; set; }
+        public int Damage { get; set; }
     }
 
     /// <summary>
@@ -45,6 +49,7 @@ namespace BulletStructs
     /// </summary>
     public struct NoBullet : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public Vector3 Dir { get; set; }
@@ -59,6 +64,7 @@ namespace BulletStructs
     /// </summary>
     public struct StaraightShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; } 
@@ -81,6 +87,7 @@ namespace BulletStructs
 
     public struct TwoWayStraightShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -107,6 +114,7 @@ namespace BulletStructs
     /// </summary>
     public struct ThreeWayShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -133,6 +141,7 @@ namespace BulletStructs
     /// </summary>
     public struct FourWayShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -156,6 +165,7 @@ namespace BulletStructs
 
     public struct MultiWayShot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -183,6 +193,7 @@ namespace BulletStructs
     /// </summary>
     public struct SpreadEightShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -208,6 +219,7 @@ namespace BulletStructs
     /// </summary>
     public struct StraightAimingShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -236,6 +248,7 @@ namespace BulletStructs
     /// </summary>
     public struct SpreadEightAimingShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -261,6 +274,7 @@ namespace BulletStructs
 
     public struct RingShot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -292,6 +306,7 @@ namespace BulletStructs
     /// </summary>
     public struct FiveWayAndBackMonoShoot : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public SpriteData.SpriteType SpriteType { get; set; }
@@ -315,6 +330,7 @@ namespace BulletStructs
 
     public struct LazerParam : IBulletCreateData
     {
+        public int Damage { get; set; }
         public Vector3 Origin { get; set; }
         public Vector3 Scale { get; set; }
         public Vector3 Dir { get; set; }

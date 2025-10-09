@@ -283,7 +283,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
                     var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
                     var spawnPos = playerPos + (Vector3.left * 3);
                     var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
-                    item.Initialize(ItemType.Battery_Green);
+                    item.Initialize(ItemType.EXP);
                 }
                 break;
 
@@ -300,7 +300,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
                     var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
                     var spawnPos = playerPos + (Vector3.right * 3);
                     var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
-                    item.Initialize(ItemType.Battery_Red);
+                    item.Initialize(ItemType.EXP);
                 }
                 break;
 

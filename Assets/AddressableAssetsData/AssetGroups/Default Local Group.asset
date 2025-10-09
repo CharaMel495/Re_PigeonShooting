@@ -115,8 +115,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cdbf68e9cd74d254889063ab830fe8b1
+    m_Address: Assets/Textures/Item/EXP_Green.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d33f844dd940a7341be5eb39290a6a85
     m_Address: Assets/Textures/HealBattery.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df544ebb24d65664eb06afa92a26820a
+    m_Address: Assets/Textures/UI/UI_DustPanel.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -19,6 +19,9 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     private ButtonMenuController _titleMenu;
 
     [SerializeField]
+    private ScoreBoardController _scoreBoard;
+
+    [SerializeField]
     private LoadingCutIn _loadingCutin;
 
     [SerializeField]
@@ -36,6 +39,8 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     public override void Initialize()
     {
         _titleMenu.Initialize(CreateButtonFunc());
+
+        _scoreBoard.Initialize();
 
         _state = CurrentState.Top;
 
@@ -61,7 +66,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
             { CurrentState.TitleMenu, CloseMenu },
             { CurrentState.Option, null },
             { CurrentState.Credit, null },
-            { CurrentState.Ranking, null },
+            { CurrentState.Ranking, CloseScoreBoard },
             { CurrentState.Exit, null },
         };
 
@@ -71,7 +76,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
             { CurrentState.TitleMenu, MoveMenu },
             { CurrentState.Option, null },
             { CurrentState.Credit, null },
-            { CurrentState.Ranking, null },
+            { CurrentState.Ranking, MoveScoreBoard },
             { CurrentState.Exit, null },
         };
 
@@ -84,7 +89,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
                     () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("Tutorial")),
                     null,
                     null,
-                    null,
+                    OpenScoreBoard,
                     () => _loadingCutin.EnterCutin(() => GameManager.EndGame()),
                 };
         }
@@ -138,5 +143,22 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     private void SelectMenu()
     {
         _titleMenu.SelectButton();
+    }
+
+    private void OpenScoreBoard()
+    {
+        _scoreBoard.EnActive();
+        _state = CurrentState.Ranking;
+    }
+
+    private void CloseScoreBoard()
+    {
+        _scoreBoard.DisActive();
+        _state = CurrentState.TitleMenu;
+    }
+
+    private void MoveScoreBoard(bool isDown)
+    {
+        _scoreBoard.Scroll(isDown);
     }
 }

@@ -59,53 +59,63 @@ public class EnemyAction
 
             case EnemyDataStructs.SpiralMove:
                 {
-                    // 移動データを取得
                     var moveData = (EnemyDataStructs.SpiralMove)enemy.MoveData;
-                    // 現在の座標を取得
-                    var pos = enemy.transform.position;
-                    var euler = enemy.transform.localEulerAngles;
-                    moveData.MoveDir = Quaternion.AngleAxis
-                        (moveData.SpiralRatio * Time.fixedDeltaTime, Vector3.forward) * moveData.MoveDir;
-                    moveData.MoveSpeed += moveData.ElaspedTime * moveData.Acceleration;
-                    // 移動後座標を計算
-                    pos += moveData.MoveDir * moveData.MoveSpeed * Time.fixedDeltaTime;
-                    // それっぽく見せる為に回転もかける
-                    euler.z += moveData.SpiralRatio * Time.fixedDeltaTime * 3.0f;
-                    if (euler.z > 180)
-                        euler.z -= 360;
-                    if (euler.z < -180)
-                        euler.z += 360;
-                    enemy.transform.localEulerAngles = euler;
-                    // 座標を更新
-                    enemy.transform.position = pos;
-                    enemy.MoveData.MoveDir = moveData.MoveDir;
-                }
-                break;
 
-            case EnemyDataStructs.SlavedSpiralMove:
-                {
-                    var moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
                     float spinDir = (moveData.IsRightSpin ? 1f : -1f);
 
-                    // ローカルな時間経過
-                    float elapsed = moveData.ElaspedTime + moveData.AddtionalTime;
+                    // 角度を進める
+                    moveData.AngleRad += moveData.MoveSpeed * spinDir * Time.fixedDeltaTime;
 
-                    // 回転角（等角速度回転）
-                    float angleRad = (elapsed * moveData.MoveSpeed) * spinDir * Time.fixedDeltaTime;
+                    // 中心点からのオフセット計算（自己中心なのでワールド座標）
+                    Vector3 offset = new Vector3(
+                        Mathf.Cos(moveData.AngleRad),
+                        Mathf.Sin(moveData.AngleRad),
+                        0f
+                    ) * moveData.Distance;
 
-                    var pos = enemy.transform.localPosition;
-                    pos.x = Mathf.Cos(angleRad) * moveData.Distance;
-                    pos.y = Mathf.Sin(angleRad) * moveData.Distance;
-                    enemy.MoveData.MoveDir = (pos - enemy.transform.localPosition).normalized;
-                    enemy.transform.localPosition = pos;
+                    // 新しい位置を反映
+                    Vector3 newPos = moveData.Origin + offset;
+                    enemy.MoveData.MoveDir = (newPos - enemy.transform.position).normalized;
+                    enemy.transform.position = newPos;
 
-                    // 回転演出（好みに合わせて）
+                    // 回転演出
                     var euler = enemy.transform.localEulerAngles;
                     euler.z += moveData.MoveSpeed * Time.fixedDeltaTime * 3.0f;
                     if (euler.z > 180f) euler.z -= 360f;
                     if (euler.z < -180f) euler.z += 360f;
                     enemy.transform.localEulerAngles = euler;
 
+                    // MoveDataの更新（忘れずに！）
+                    enemy.MoveData = moveData;
+                }
+                break;
+
+
+            case EnemyDataStructs.SlavedSpiralMove:
+                {
+                    var moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
+
+                    float spinDir = (moveData.IsRightSpin ? 1f : -1f);
+
+                    // 角度を加算更新（ここが肝）
+                    moveData.AngleRad += moveData.MoveSpeed * spinDir * Time.fixedDeltaTime;
+
+                    // 位置更新
+                    var pos = enemy.transform.localPosition;
+                    pos.x = Mathf.Cos(moveData.AngleRad) * moveData.Distance;
+                    pos.y = Mathf.Sin(moveData.AngleRad) * moveData.Distance;
+                    enemy.MoveData.MoveDir = (pos - enemy.transform.localPosition).normalized;
+                    enemy.transform.localPosition = pos;
+
+                    // 回転演出（任意）
+                    var euler = enemy.transform.localEulerAngles;
+                    euler.z += moveData.MoveSpeed * Time.fixedDeltaTime * 3.0f;
+                    if (euler.z > 180f) euler.z -= 360f;
+                    if (euler.z < -180f) euler.z += 360f;
+                    enemy.transform.localEulerAngles = euler;
+
+                    // MoveDataを戻す（構造体の場合忘れずに！）
+                    enemy.MoveData = moveData;
                 }
                 break;
 

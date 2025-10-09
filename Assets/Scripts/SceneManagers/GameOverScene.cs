@@ -14,6 +14,9 @@ public class GameOverScene : SceneManagerBase<GameOverScene>
     private ScoreHolder _scoreHolder;
 
     [SerializeField]
+    private ScoreRanking _scoreRankingData;
+
+    [SerializeField]
     private ScoreUI _scoreUI;
 
     public override void Initialize()
@@ -26,7 +29,8 @@ public class GameOverScene : SceneManagerBase<GameOverScene>
 
         _loadingCutin.ExitCutin();
 
-        _scoreUI.Initialize(_scoreHolder.Score);
+        _scoreRankingData.AddScore(_scoreHolder);
+        _scoreUI.Initialize(_scoreHolder.Score, _scoreRankingData.GetHighScore());
 
         InputManager.Instance.ChangeInputHandler(InputHandler.UI);
 

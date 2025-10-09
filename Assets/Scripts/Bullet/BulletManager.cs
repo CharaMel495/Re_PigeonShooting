@@ -119,6 +119,8 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
         bullet.transform.localScale = bulletData.Scale;
         // リストに登録
         _activeBullets.Add(bullet);
+        // ダメージ情報を注入
+        bullet.Damage = bulletData.Damage;
 
         // アクティブ化
         bullet.EnActive(SpriteManager.GetSprite(bulletData.SpriteType), $"Bullet_{_createID}");

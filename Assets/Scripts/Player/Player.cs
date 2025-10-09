@@ -363,7 +363,16 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 break;
             case PlayerBullet.DustAction.RingAttack:
                 // TODO ここにリング攻撃を記述する
-                ShootLazer((BulletStructs.LazerParam)_bulletData[PlayerBullet.ShootType.Lazer]);
+                var rings = EnemyManager.Instance.CreateSpiralRingBombEnemy(tableID: 13, this.transform.position, 8, 5.0f, true);
+
+                _timer.CreateTask(() =>
+                {
+                    foreach (var ring in rings)
+                    {
+                        ring.IsDestroyWaiting = true;
+                    }
+                }, 3.0f);
+
                 break;
             case PlayerBullet.DustAction.AirBaster:
                 _camera.Shake(_bombTime * 10, 1.0f);
@@ -468,6 +477,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 ColCategory = ColliderCategory.PlayerBullet,
                 ShotValue = _status.ShotValue,
                 SpriteType = SpriteData.SpriteType.PlayerBullet,
+                Damage = _status.ShotPower
             });
 
         _bulletData.Add(PlayerBullet.ShootType.MonoStraight, 
@@ -476,7 +486,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 Scale = new (0.5f, 0.5f),
                 Dir = transform.right,
                 MoveSpeed = 30.0f,
-                ColCategory = ColliderCategory.PlayerBullet
+                ColCategory = ColliderCategory.PlayerBullet,
+                Damage = 1
             });
 
         _bulletData.Add(PlayerBullet.ShootType.TwoWay,
@@ -487,7 +498,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 Dir = transform.right,
                 MoveSpeed = 50.0f,
                 BulletSpan = 0.4f,
-                ColCategory = ColliderCategory.PlayerBullet
+                ColCategory = ColliderCategory.PlayerBullet,
+                Damage = 1
             });
 
         _bulletData.Add(PlayerBullet.ShootType.ThreeWay,
@@ -498,7 +510,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 Dir = transform.right,
                 MoveSpeed = 50.0f,
                 AngleSpan = 90.0f,
-                ColCategory = ColliderCategory.PlayerBullet
+                ColCategory = ColliderCategory.PlayerBullet,
+                Damage = 1
             });
 
         _bulletData.Add(PlayerBullet.ShootType.Lazer,
@@ -513,7 +526,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 Width = 5.0f,
                 Length = 100.0f,
                 MoveSpeed = 10.0f,
-                Interval = 10.0f
+                Interval = 10.0f,
+                Damage = _status.ShotPower << 3
             });
 
         _bulletData.Add(PlayerBullet.ShootType.Wall,
@@ -528,7 +542,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 Width = 5.0f,
                 Length = 0.35f,
                 MoveSpeed = 3.0f,
-                Interval = 2.0f
+                Interval = 2.0f,
+                Damage = 1
             });
     }
 

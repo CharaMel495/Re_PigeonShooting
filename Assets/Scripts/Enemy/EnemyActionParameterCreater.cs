@@ -23,6 +23,7 @@ public class EnemyActionParameterCreater
                         Acceleration = 0.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
                         ColCategory = ColliderCategory.EnemyBullet,
+                        Damage = 1
                     }
                 };
 
@@ -43,7 +44,8 @@ public class EnemyActionParameterCreater
                         Acceleration = 0.0f,
                         AngleSpan = 30.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
-                        ColCategory = ColliderCategory.EnemyBullet
+                        ColCategory = ColliderCategory.EnemyBullet,
+                        Damage = 1
                     }
                 };
 
@@ -71,7 +73,8 @@ public class EnemyActionParameterCreater
                         MoveSpeed = 5.5f,
                         SecondMoveSpeed = 7.0f,
                         Scale = Vector3.one * 1.0f,
-                        SpriteType = SpriteData.SpriteType.EnemyBullet
+                        SpriteType = SpriteData.SpriteType.EnemyBullet,
+                        Damage = 1
                     }
                 };
 
@@ -92,6 +95,7 @@ public class EnemyActionParameterCreater
                         Acceleration = 0.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
                         ColCategory = ColliderCategory.EnemyBullet,
+                        Damage = 1
                     }
                 };
 
@@ -107,7 +111,8 @@ public class EnemyActionParameterCreater
                         Acceleration = 0.0f,
                         AngleSpan = 30.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
-                        ColCategory = ColliderCategory.EnemyBullet
+                        ColCategory = ColliderCategory.EnemyBullet,
+                        Damage = 1
                     }
                 };
 
@@ -138,6 +143,7 @@ public class EnemyActionParameterCreater
                         Length = 20.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
                         ColCategory = ColliderCategory.EnemyBullet,
+                        Damage = 1
                     }
                 };
 
@@ -154,7 +160,8 @@ public class EnemyActionParameterCreater
                         MoveSpeed = 4.0f,
                         Acceleration = 0.5f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
-                        ColCategory = ColliderCategory.EnemyBullet
+                        ColCategory = ColliderCategory.EnemyBullet,
+                        Damage = 1
                     }
                 };
 
@@ -163,6 +170,11 @@ public class EnemyActionParameterCreater
                 return new EnemyDataStructs.NoAction
                 {
                 };
+
+            // 13
+            case EnemyEnums.EnemyID.プレイヤーのリングボムとして使う敵:
+                return new EnemyDataStructs.NoAction
+                { BulletData = new BulletStructs.NoBullet { } };
         }
 
         return null;

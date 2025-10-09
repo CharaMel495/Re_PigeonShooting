@@ -10,6 +10,7 @@ namespace SpriteData
         Player = 0,
         PlayerBullet,
         PlayerLazer,
+        PlayerRingBomb,
         // 敵系　100番台
         NormalEnemy = 100,
         Missile,
@@ -53,6 +54,7 @@ public class SpriteManager
                 SpriteData.SpriteType.NormalEnemy => SummarizeResourceDirectory.SIMPLEENEMY_TEX,
                 SpriteData.SpriteType.Player => SummarizeResourceDirectory.PLAYER_TEX,
                 SpriteData.SpriteType.PlayerLazer => SummarizeResourceDirectory.PLAYERLAZER_TEX,
+                SpriteData.SpriteType.PlayerRingBomb => SummarizeResourceDirectory.RINGBOMB_TEX,
                 SpriteData.SpriteType.SpinningEnemy => SummarizeResourceDirectory.SPINNINGENEMY_TEX,
                 SpriteData.SpriteType.BossShip => SummarizeResourceDirectory.BOSS01_TEX,
                 SpriteData.SpriteType.Missile => SummarizeResourceDirectory.MISSILE_TEX,

@@ -66,7 +66,10 @@ namespace EnemyDataStructs
         public float Acceleration { get; set; }
         public float ElaspedTime { get; set; }
         public Vector3 MoveDir { get; set; }
-        public float SpiralRatio { get; set; }
+        public Vector3 Origin { get; set; }
+        public float Distance { get; set; }
+        public float AngleRad { get; set; }
+        public bool IsRightSpin { get; set; }
     }
 
     /// <summary>
@@ -80,7 +83,7 @@ namespace EnemyDataStructs
         public float ElaspedTime { get; set; }
         public Vector3 MoveDir { get; set; }
         public float Distance { get; set; }
-        public float AddtionalTime { get; set; }
+        public float AngleRad { get; set; }
         public bool IsRightSpin { get; set; }
     }
 
