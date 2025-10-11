@@ -20,7 +20,7 @@ public class Lazer : MonoBehaviour, IColliderbleObject
     { get; set; }
 
     public object TriggerEnterEventData
-        => null;
+        => new DamageEventData { Damage = _damage };
 
     public object TriggerStayEventData 
         => null;
@@ -36,6 +36,8 @@ public class Lazer : MonoBehaviour, IColliderbleObject
 
     private SelfMade.Rectangle _rect;
 
+    private int _damage;
+
     public void Initialize(Sprite sprite, LazerParam param)
     {
         _renderer.Initialize();
@@ -46,6 +48,8 @@ public class Lazer : MonoBehaviour, IColliderbleObject
         _param.Dir = (_param.Target - this.transform.position).normalized;
         float angle = Mathf.Atan2(_param.Dir.y, _param.Dir.x) * Mathf.Rad2Deg; // ラジアン→度
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        _damage = param.Damage;
+        _renderer.SetSprite(SpriteManager.GetSprite(_param.SpriteType));
     }
 
     private void FixedUpdate()

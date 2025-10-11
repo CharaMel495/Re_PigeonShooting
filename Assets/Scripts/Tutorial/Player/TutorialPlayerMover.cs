@@ -53,7 +53,7 @@ public class TutorialPlayerMover
             player.MoveDir = _inputDir;
         }
 
-        if (_moveTime > 5.0f)
+        if (_moveTime > 3.0f)
             EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Move);
     }
 

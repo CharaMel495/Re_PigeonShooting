@@ -79,7 +79,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     { get; set; }
 
     public object TriggerEnterEventData 
-        => new DamageEventData { Damage = 1 };
+        => new DamageEventData { Damage = HasDamage };
 
     public object TriggerStayEventData 
         => null;
@@ -89,6 +89,12 @@ public class Enemy : MonoBehaviour, IColliderbleObject
 
     private bool _isDestroyedByShot = true;
 
+    public bool IsNotDamagedEnemy
+    { get; set; }
+
+    public int HasDamage
+    { get; set; }
+
     public void Initialize(Rect playArea)
     {
         _renderer.Initialize();
@@ -96,6 +102,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
         _timer = new();
         _timer.Initialize();
         _playArea = playArea;
+        IsNotDamagedEnemy = false;
     }
 
     public void EnActive(Sprite sprite, string name)
@@ -114,6 +121,9 @@ public class Enemy : MonoBehaviour, IColliderbleObject
 
         if (MoveData is EnemyDataStructs.MissileMove)
             this.transform.up = MoveData.MoveDir;
+
+        IsNotDamagedEnemy = false;
+        HasDamage = 1;
     }
 
     private void FixedUpdate()
@@ -160,7 +170,7 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     [CallableEvent("OnTriggerEnter")]
     public void OnHit(object data)
     {
-        if (_isInvincible)
+        if (_isInvincible || IsNotDamagedEnemy)
             return;
 
         if (!(data is DamageEventData damageData))

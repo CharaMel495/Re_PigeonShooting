@@ -30,6 +30,9 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     [SerializeField]
     private ScoreHolder _highScore;
 
+    [SerializeField]
+    private ScoreRanking _scoreData;
+
     private CurrentState _state;
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;

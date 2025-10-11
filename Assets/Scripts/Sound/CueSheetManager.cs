@@ -37,6 +37,18 @@ public enum SFX
     Powerup
 }
 
+public enum Voice
+{
+    ItemReserve_Voice,
+    Heal_Voice,
+    Beam_Voice,
+    Ring_Voice,
+    AirBaster_Voice,
+    Dead_Voice,
+    Start_Voice,
+    BossDefeat_Voice,
+    Result_Voice
+}
 
 /// <summary>
 /// SE/BGM enumに対応するキューシート情報を保持・提供するクラス
@@ -92,6 +104,12 @@ public class CueSheetManager
         foreach (SFX se in Enum.GetValues(typeof(SFX)))
         {
             await LoadCueSheetAsync(se, token);
+        }
+
+        // SE用のロード
+        foreach (Voice voice in Enum.GetValues(typeof(Voice)))
+        {
+            await LoadCueSheetAsync(voice, token);
         }
     }
 

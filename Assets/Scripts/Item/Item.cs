@@ -113,7 +113,7 @@ public class Item : MonoBehaviour, IColliderbleObject
         {
             return type switch
             {
-                ItemType.Garbage => 0.75f,
+                ItemType.Garbage => 0.45f,
                 ItemType.EXP => 1.0f,
                 _ => 0
             };

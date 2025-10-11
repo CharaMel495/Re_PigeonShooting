@@ -33,7 +33,7 @@
 			"Distance":"16",
 			"AngleRange":"360",
 			"HPScale":"2",
-			"SpeedScale":"1.4",
+			"SpeedScale":"1.1",
 			"SpawnShape":"Random"
 		},
 		{
@@ -45,7 +45,7 @@
 			"Distance":"16",
 			"AngleRange":"360",
 			"HPScale":"3",
-			"SpeedScale":"1.5",
+			"SpeedScale":"1.2",
 			"SpawnShape":"Random"
 		},
 		{

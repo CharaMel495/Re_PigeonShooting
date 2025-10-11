@@ -124,7 +124,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     public bool IsDash
     { get; private set; } = false;
 
-    private readonly float _bombTime = 0.1f;
+    [SerializeField]
+    private ParticleSystem _bombEffect;
+    private readonly float _bombTime = 0.25f;
     private int _maxDashStock;
     private int _dashStock;
 
@@ -223,6 +225,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _lifeImage.Initialize();
         Life = _maxLife;
         _isInvincible = false;
+        IsDestroyWaiting = false;
 
         // 弾を発射する為の構造体はここで作っちゃう
         CreateBulletParameter();
@@ -353,13 +356,16 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         {
             case PlayerBullet.DustAction.BigLazer:
                 ShootLazer((BulletStructs.LazerParam)_bulletData[PlayerBullet.ShootType.Lazer]);
+                //CRISoundManager.Instance.PlayVoice(Voice.Beam_Voice);
                 break;
             case PlayerBullet.DustAction.HealHP:
                 HealHP(1);
                 CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
+                //CRISoundManager.Instance.PlayVoice(Voice.Heal_Voice);
                 break;
             case PlayerBullet.DustAction.ItemReserver:
                 EventDispatcher.Instance.Dispatch("ReserveItem");
+                //CRISoundManager.Instance.PlayVoice(Voice.ItemReserve_Voice);
                 break;
             case PlayerBullet.DustAction.RingAttack:
                 // TODO ここにリング攻撃を記述する
@@ -373,16 +379,19 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                     }
                 }, 3.0f);
 
+                //CRISoundManager.Instance.PlayVoice(Voice.Ring_Voice);
                 break;
             case PlayerBullet.DustAction.AirBaster:
                 _camera.Shake(_bombTime * 10, 1.0f);
 
+                _bombEffect.Play();
                 _airBaster.EnActive();
 
                 _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
 
                 CRISoundManager.Instance.PlaySE(SFX.AirBaster);
-                CRISoundManager.Instance.BombEffect(_bombTime * 100);
+                CRISoundManager.Instance.BombEffect(_bombTime * 50);
+                //CRISoundManager.Instance.PlayVoice(Voice.AirBaster_Voice);
                 break;
         }
 
@@ -470,7 +479,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
             new BulletStructs.MultiWayShot
             {
                 Origin = this.transform.position,
-                Scale = new(1.0f, 1.3f),
+                Scale = new(1.3f, 1.3f),
                 Dir = transform.right,
                 MoveSpeed = 30.0f,
                 AngleSpan = 90.0f,
@@ -523,11 +532,11 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 CloseTime = 1.0f,
                 KeepTime = 10.0f,
                 SpriteType = SpriteData.SpriteType.PlayerLazer,
-                Width = 5.0f,
-                Length = 100.0f,
+                Width = 10.0f,
+                Length = 45.0f,
                 MoveSpeed = 10.0f,
                 Interval = 10.0f,
-                Damage = _status.ShotPower << 3
+                Damage = 30
             });
 
         _bulletData.Add(PlayerBullet.ShootType.Wall,
@@ -543,7 +552,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 Length = 0.35f,
                 MoveSpeed = 3.0f,
                 Interval = 2.0f,
-                Damage = 1
+                Damage = 30
             });
     }
 
@@ -631,6 +640,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 ++_status.EXP;
                 break;
         }
+
+        EventDispatcher.Instance.Dispatch("AddScore", 10);
     }
 
     private void GetDamage(DamageEventData data)
@@ -657,7 +668,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         Time.timeScale = 0.25f;
 
+        IsDestroyWaiting = true;
         CRISoundManager.Instance.PlaySE(SFX.BossExplode);
+        //CRISoundManager.Instance.PlayVoice(Voice.Dead_Voice);
 
         Instantiate(_deadParticle, this.transform.position, Quaternion.identity);
 
@@ -704,6 +717,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _camera.Shake(5.0f, 2.0f);
 
         Time.timeScale = 0.1f;
+
+        //CRISoundManager.Instance.PlayVoice(Voice.BossDefeat_Voice);
 
         _durator.CreateTask(ResumeTime, () => 
         { 

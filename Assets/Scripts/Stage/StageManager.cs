@@ -62,8 +62,14 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         _waveController.Update();
 
         if (EnemyManager.Instance.IsBossMode)
-            return;
+        {
+            _timerCounter = 300;
+            int minutes = (int)(_timerCounter / 60);
+            int seconds = (int)(_timerCounter % 60);
 
+            _timerText.SetText($"{minutes:00}:{seconds:00}");
+            return;
+        }
         UpdateTimerUI();   
     }
 

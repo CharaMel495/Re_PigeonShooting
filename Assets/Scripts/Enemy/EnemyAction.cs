@@ -61,6 +61,8 @@ public class EnemyAction
                 {
                     var moveData = (EnemyDataStructs.SpiralMove)enemy.MoveData;
 
+                    var lastPos = enemy.transform.position;
+
                     float spinDir = (moveData.IsRightSpin ? 1f : -1f);
 
                     // 角度を進める
@@ -77,6 +79,8 @@ public class EnemyAction
                     Vector3 newPos = moveData.Origin + offset;
                     enemy.MoveData.MoveDir = (newPos - enemy.transform.position).normalized;
                     enemy.transform.position = newPos;
+
+                    moveData.MoveDir = (newPos - lastPos).normalized;
 
                     // 回転演出
                     var euler = enemy.transform.localEulerAngles;
@@ -95,6 +99,8 @@ public class EnemyAction
                 {
                     var moveData = (EnemyDataStructs.SlavedSpiralMove)enemy.MoveData;
 
+                    var lastPos = enemy.transform.position;
+
                     float spinDir = (moveData.IsRightSpin ? 1f : -1f);
 
                     // 角度を加算更新（ここが肝）
@@ -104,7 +110,7 @@ public class EnemyAction
                     var pos = enemy.transform.localPosition;
                     pos.x = Mathf.Cos(moveData.AngleRad) * moveData.Distance;
                     pos.y = Mathf.Sin(moveData.AngleRad) * moveData.Distance;
-                    enemy.MoveData.MoveDir = (pos - enemy.transform.localPosition).normalized;
+                    moveData.MoveDir = (pos - enemy.transform.localPosition).normalized;
                     enemy.transform.localPosition = pos;
 
                     // 回転演出（任意）

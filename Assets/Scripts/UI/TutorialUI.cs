@@ -43,6 +43,8 @@ public class TutorialUI : MonoBehaviour
     public bool IsEndTutorial
         => _textIdx >= _tutorialTexts.Length;
 
+    private int _typeTextTaskID;
+
     public void Initialize(TutorialTextSet[] tutorialTexts)
     {
         _backGround.Initialize();
@@ -57,6 +59,8 @@ public class TutorialUI : MonoBehaviour
         _tutorialTexts = tutorialTexts;
         _textIdx = 0;
         _typeIndex = 0;
+
+        EventDispatcher.Instance.Bind(this);
     }
 
     public void ClearnUp()
@@ -110,7 +114,7 @@ public class TutorialUI : MonoBehaviour
             _lockText.SetTextAlpha(0.0f);
         }
         else
-        _timer.CreateTask(TypeText, _typeSpeed);
+            _typeTextTaskID = _timer.CreateTask(TypeText, _typeSpeed);
 
         CRISoundManager.Instance.PlaySE(SFX.TypeText);
     }
@@ -126,5 +130,19 @@ public class TutorialUI : MonoBehaviour
             _nextText.SetText("End");
 
         _nextObj.SetActive(true);
+    }
+
+    [CallableEvent("StopTyping")]
+    public void StopTyping(object data)
+    {
+        if (_timer.GetTaskFromID(_typeTextTaskID) != null)
+            _timer.StopTask(_typeTextTaskID);
+    }
+
+    [CallableEvent("ResumeTyping")]
+    public void ResumeTyping(object data)
+    {
+        if (_timer.GetTaskFromID(_typeTextTaskID) != null)
+            _timer.ReAwakeTask(_typeTextTaskID);
     }
 }

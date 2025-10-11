@@ -77,6 +77,8 @@ public class CRISoundManager : MonoBehaviour
     private float _seThrottleInterval = 0.04f; // 40ms
     private readonly System.Collections.Generic.Dictionary<SFX, float> _nextPlayable
         = new System.Collections.Generic.Dictionary<SFX, float>();
+    private readonly System.Collections.Generic.Dictionary<Voice, float> _voivePlayable
+        = new System.Collections.Generic.Dictionary<Voice, float>();
 
     // 時刻取得は unscaledTime を推奨（TimeScale 0 演出中でも動く）
     private float Now => Time.unscaledTime;
@@ -192,6 +194,39 @@ public class CRISoundManager : MonoBehaviour
         source.cueSheet = cueSheet.Name;
         source.volume = SEVolume * MasterVolume;
         source.Play(se.ToString());
+    }
+
+    // 既存の PlaySE(SFX se) を差し替え（間引き＋プール）
+    public void PlayVoice(Voice voice)
+    {
+        if (!_isInitialized)
+            return;
+
+        // スロットル：短時間の多重発火を抑制
+        if (_voivePlayable.TryGetValue(voice, out var t) && Now < t) return;
+        _voivePlayable[voice] = Now + _seThrottleInterval;
+
+        // プールから次のソースを取得
+        var src = GetNextSeSource();
+        if (src == null) return; // ありえないけど念のため
+
+        var cueSheet = _cueSheetManager.GetCueSheet(voice);
+        if (cueSheet == null) return;
+
+        src.cueSheet = cueSheet.Name;
+        src.volume = SEVolume * MasterVolume; // 念のため直前反映
+        src.Play(voice.ToString());
+    }
+
+    // 明示ソース版は残す（ピンポイント再生用）
+    public void PlayVoice(Voice voice, CriAtomSource source)
+    {
+        var cueSheet = _cueSheetManager.GetCueSheet(voice);
+        if (cueSheet == null) return;
+
+        source.cueSheet = cueSheet.Name;
+        source.volume = SEVolume * MasterVolume;
+        source.Play(voice.ToString());
     }
 
     private CriAtomSource GetNextSeSource()

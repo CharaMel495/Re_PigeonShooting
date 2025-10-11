@@ -390,7 +390,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             // ステータス注入
             enemy.Life = enemyData.Life;
             enemy.Score = enemyData.Score;
-
+            
             // 既にある MoveData を取り出して設定追加
             var moveData = (EnemyDataStructs.SpiralMove)enemyData.MoveData;
 
@@ -408,7 +408,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
 
             // 初期化処理
             enemy.EnActive(SpriteManager.GetSprite(enemyData.SpriteType), $"Enemy_{_createID}");
-            //enemy.transform.parent = parent;
+            // 本質的には的じゃないので無敵フラグを仕込む
+            enemy.IsNotDamagedEnemy = true;
+            enemy.HasDamage = 10;
 
             // コライダー生成＆登録
             var collider = ColliderManager.Instance.CreateCollider(enemy.transform, ColliderType.Rectangle);

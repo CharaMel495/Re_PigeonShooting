@@ -21,9 +21,10 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
     [SerializeField]
     private ScoreHolder _scoreHolder;
 
-    private bool _isPausing = false;
+    [SerializeField]
+    private TextWrapper _scoreText;
 
-    private static int _score;
+    private bool _isPausing = false;
 
     public override void Initialize()
     {
@@ -44,6 +45,11 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
         EventDispatcher.Instance.Bind(this);
 
         InputManager.Instance.ChangeInputHandler(InputHandler.Player);
+
+        _scoreText.Initialize();
+        _scoreText.SetText($"{_scoreHolder.Score:D8}pts");
+
+        //CRISoundManager.Instance.PlayVoice(Voice.Start_Voice);
 
         Action[] CreateButtonFunc()
         {
@@ -103,6 +109,7 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
     public void AddScore(object data)
     {
         _scoreHolder.Score += (int)data;
+        _scoreText.SetText($"{_scoreHolder.Score:D8}pts");
     }
 
     [CallableEvent("GameOver")]

@@ -230,39 +230,39 @@ MonoBehaviour:
     EventID: 7
     IsClearEnemys: 0
   - ID: 54
-    StartTime: 290
+    StartTime: 285
     EventID: 9
     IsClearEnemys: 0
   - ID: 55
-    StartTime: 290
+    StartTime: 285
     EventID: 2
     IsClearEnemys: 0
   - ID: 56
-    StartTime: 290
+    StartTime: 285
     EventID: 6
     IsClearEnemys: 0
   - ID: 57
-    StartTime: 293
+    StartTime: 290
     EventID: 9
     IsClearEnemys: 0
   - ID: 58
-    StartTime: 293
+    StartTime: 290
     EventID: 2
     IsClearEnemys: 0
   - ID: 59
-    StartTime: 293
+    StartTime: 290
     EventID: 6
     IsClearEnemys: 0
   - ID: 60
-    StartTime: 296
+    StartTime: 290
     EventID: 9
     IsClearEnemys: 0
   - ID: 61
-    StartTime: 296
+    StartTime: 290
     EventID: 2
     IsClearEnemys: 0
   - ID: 62
-    StartTime: 296
+    StartTime: 290
     EventID: 6
     IsClearEnemys: 0
   - ID: 63

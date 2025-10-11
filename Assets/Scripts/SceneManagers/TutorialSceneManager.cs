@@ -156,7 +156,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         //if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI))
         //    _loadingCutin.EnterCutin(BackToTop);
 
-        if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI))
+        if (InputManager.CheckKey(InputManager.PauseKey, InputManager.CurrentHandler))
             SwitchMenu();
     }
 
@@ -189,6 +189,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
     private void SetUpTutorial(Tutorials tutorial)
     {
+        EventDispatcher.Instance.Dispatch("PlayerEndTutorial");
         _tutorialMenu.DisActive();
         StateSetter = CurrentState.Loading;
         _supporter.SetUp(tutorial);
@@ -201,6 +202,8 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
 
     private void SetUpNextTutorial()
     {
+        EventDispatcher.Instance.Dispatch("PlayerEndTutorial");
+
         var tutorialNum = (int)_currentTutorial + 1;
 
         if (tutorialNum <= (int)Tutorials.AirBaster)
@@ -225,9 +228,17 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
     private void SwitchMenu()
     {
         if (_state == CurrentState.Top)
+        {
+            InputManager.Instance.ReturnHandle();
             CloseMenu();
+            EventDispatcher.Instance.Dispatch("ResumeTyping");
+        }
         else
+        {
+            InputManager.Instance.ChangeInputHandler(InputHandler.UI);
             OpenMenu();
+            EventDispatcher.Instance.Dispatch("StopTyping");
+        }
     }
 
     private void OpenMenu()
@@ -236,8 +247,6 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
             return;
 
         _tutorialMenu.EnActive(_tutorialMenu.CurrentButton);
-
-        EventDispatcher.Instance.Dispatch("PlayerEndTutorial");
 
         InputManager.Instance.ChangeInputHandler(InputHandler.UI);
 

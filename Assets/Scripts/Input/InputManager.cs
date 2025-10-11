@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Threading.Tasks;
+using UnityEngine;
+using static UnityEngine.Rendering.VirtualTexturing.Debugging;
 
 /// <summary>
 /// 現在誰に入力情報を渡すか
@@ -77,6 +78,102 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     public static KeyCode PauseKey
     { get => IsGamePadMode ? KeyCode.JoystickButton7 : KeyCode.Escape; }
+
+    // --- トリガーの状態保持用 ---
+    private static float _prevRTriggerValue = 0f;
+    private static float _prevLTriggerValue = 0f;
+
+    // --- トリガーを押した・離した閾値 ---
+    private const float _TRIGGER_THRESHOLD = 0.1f;
+
+    /// <summary>
+    /// Rトリガーが押された瞬間か？
+    /// </summary>
+    public static bool IsRTriggerPressed(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return false;
+
+        float now = Input.GetAxisRaw("RTrigger");
+        bool isPressed = now > _TRIGGER_THRESHOLD && _prevRTriggerValue <= _TRIGGER_THRESHOLD;
+        _prevRTriggerValue = now;
+        return isPressed;
+    }
+
+    /// <summary>
+    /// Rトリガーが離された瞬間か？
+    /// </summary>
+    public static bool IsRTriggerReleased(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return false;
+
+        float now = Input.GetAxisRaw("RTrigger");
+        bool isReleased = now <= _TRIGGER_THRESHOLD && _prevRTriggerValue > _TRIGGER_THRESHOLD;
+        _prevRTriggerValue = now;
+        return isReleased;
+    }
+
+    /// <summary>
+    /// Lトリガーが押された瞬間か？
+    /// </summary>
+    public static bool IsLTriggerPressed(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return false;
+
+        float now = Input.GetAxisRaw("LTrigger");
+        bool isPressed = now > _TRIGGER_THRESHOLD && _prevLTriggerValue <= _TRIGGER_THRESHOLD;
+        _prevLTriggerValue = now;
+        return isPressed;
+    }
+
+    /// <summary>
+    /// Lトリガーが離された瞬間か？
+    /// </summary>
+    public static bool IsLTriggerReleased(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return false;
+
+        float now = Input.GetAxisRaw("LTrigger");
+        bool isReleased = now <= _TRIGGER_THRESHOLD && _prevLTriggerValue > _TRIGGER_THRESHOLD;
+        _prevLTriggerValue = now;
+        return isReleased;
+    }
+
+
+    public static bool IsRTriggerDown(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return false;
+
+        return Input.GetAxisRaw("RTrigger") > Mathf.Epsilon; 
+    }
+
+    public static float GetRTriggerCondition(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return 0.0f;
+
+        return Input.GetAxis("RTrigger");
+    }
+
+    public static bool IsLTriggerDown(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return false;
+
+        return Input.GetAxisRaw("LTrigger") > Mathf.Epsilon;
+    }
+
+    public static float GetLTriggerCondition(InputHandler handle)
+    {
+        if (CurrentHandler != handle)
+            return 0.0f;
+
+        return Input.GetAxis("LTrigger");
+    }
 
     private Timer _timer;
 

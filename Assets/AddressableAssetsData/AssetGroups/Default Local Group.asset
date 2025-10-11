@@ -20,6 +20,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0befec5d867e28f41ab6fed4c4694f18
+    m_Address: Assets/Textures/Bullet/PlayerBullet.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1277093e5b9b572409c92a4a394d493c
+    m_Address: Assets/Textures/Bullet/Enemy_Bullet2.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1585600f3f50e4843bd4a3d50749f91d
     m_Address: Assets/ExternalResources/TutorialTexts.asset
     m_ReadOnly: 0
@@ -47,6 +57,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 30d1e658654353c4ea1efabb25621506
     m_Address: Assets/Textures/UI/GrowUI/Icon_BulletUp.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44d693a9848283441844f792d6c56fdc
+    m_Address: Assets/Textures/Bullet/UI_G_Ring.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -82,6 +97,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: af073278cfebd9e429e45756871c7ef8
     m_Address: Assets/Textures/Coolie_pixel.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af4f3dfef0ebadf48aa4c64f891f0b3b
+    m_Address: Assets/Textures/Bullet/Enemy_Bullet.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -132,6 +152,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: df82e5758bc4afc43bc699cfa73c80ba
     m_Address: Assets/Textures/Circle.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e00b0363731dd8b409faf658a514d3ac
+    m_Address: Assets/Textures/Bullet/UI_G_Rezer.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

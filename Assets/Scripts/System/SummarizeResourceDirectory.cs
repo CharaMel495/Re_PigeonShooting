@@ -14,7 +14,7 @@ public class SummarizeResourceDirectory
     public const string SPINNINGENEMY_TEX = "Assets/Textures/CandyBall.png";
     public const string BOSS01_TEX = "Assets/Textures/Coolie_pixel.png";
     public const string MISSILE_TEX = "Assets/Textures/IceMissile.png";
-    public const string ENEMYBULLET01_TEX = "Assets/Textures/SimpleBullet.png";
+    public const string ENEMYBULLET01_TEX = "Assets/Textures/Bullet/Enemy_Bullet2.png";
     public const string HEALITEM_TEX = "Assets/Textures/HealBattery.png";
     public const string POWITEM_TEX = "Assets/Textures/PoweBattery.png";
     public const string DUSTITEM_TEX = "Assets/Textures/Dust.png";
@@ -24,7 +24,7 @@ public class SummarizeResourceDirectory
     public const string BULLETRATEUPICON_TEX = "Assets/Textures/UI/GrowUI/Icon_BulletRateUp.png";
     public const string BULLETUPICON_TEX = "Assets/Textures/UI/GrowUI/Icon_BulletUp.png";
     public const string BULLETDUSTPROOFUPICON_TEX = "Assets/Textures/UI/GrowUI/Icon_DustProof.png";
-    public const string RINGBOMB_TEX = "Assets/Textures/UI/UI_DustPanel.png";
+    public const string RINGBOMB_TEX = "Assets/Textures/Bullet/UI_G_Ring.png";
 
     // UsingFont
     public const string FONT = "Assets/Font/PixelMplus12-Regular SDF.asset";

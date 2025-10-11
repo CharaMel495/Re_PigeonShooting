@@ -8,7 +8,6 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
         public Vector3 _vacuumeTarget;
     }
 
-    [SerializeField]
     private SpriteRendererWrapper _renderer;
 
     private Transform _ownerTransform;
@@ -24,6 +23,8 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
     public bool IsDestroyWaiting
     { get; private set; }
 
+    protected bool _isActive;
+
     public object TriggerStayEventData
     {
         get
@@ -35,8 +36,10 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
 
     public object TriggerExitEventData => null;
 
-    public void Initialize(string vacuumeOwnerName, Transform ownerTransform)
+    virtual public void Initialize(string vacuumeOwnerName, Transform ownerTransform)
     {
+        _isActive = false;
+
         _circle = new SelfMade.Circle(this.transform)
         {
             ActorName = $"{vacuumeOwnerName}Vacuum",
@@ -52,6 +55,7 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
             _vacuumeTarget = _ownerTransform.position
         };
 
+        _renderer = this.GetComponent<SpriteRendererWrapper>();
         _renderer.Initialize();
 
         EventDispatcher.Instance.Bind(this, _circle.ActorName);
@@ -68,11 +72,13 @@ public class ItemVacuumer : MonoBehaviour, IColliderbleObject
     {
         _renderer.SetEnabled(true);
         ColliderManager.Instance.AddCollider(this._circle);
+        _isActive = true;
     }
 
     public void DisActive()
     {
         _renderer.SetEnabled(false);
         ColliderManager.Instance.RemoveCollider(this._circle);
+        _isActive = false;
     }
 }

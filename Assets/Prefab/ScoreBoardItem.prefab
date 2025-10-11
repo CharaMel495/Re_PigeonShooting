@@ -441,7 +441,7 @@ MonoBehaviour:
   _rankText: {fileID: 4225281506462616636}
   _crownImage: {fileID: 3887061215883085081}
   _crownSprites:
-  - {fileID: 21300000, guid: 44ba768448ae62e4e83638080b132a8a, type: 3}
-  - {fileID: 21300000, guid: 44ba768448ae62e4e83638080b132a8a, type: 3}
-  - {fileID: 21300000, guid: 44ba768448ae62e4e83638080b132a8a, type: 3}
+  - {fileID: 21300000, guid: 1375c1fa06e88d24182c56d93da6a647, type: 3}
+  - {fileID: 21300000, guid: ce97f3326533e2c44b88b4f796eaf1e7, type: 3}
+  - {fileID: 21300000, guid: 289ce977b3b0d6a46ace0a088eaf36a1, type: 3}
   - {fileID: 8995154407686431259, guid: 16b285f4d99da0242bec758d8db221c1, type: 3}

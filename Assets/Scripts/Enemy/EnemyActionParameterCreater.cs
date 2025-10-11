@@ -91,7 +91,7 @@ public class EnemyActionParameterCreater
                     Target = PlayerManager.Instance.Player,
                     BulletData = new BulletStructs.StaraightShoot
                     {
-                        MoveSpeed = 4.0f,
+                        MoveSpeed = 8.0f,
                         Acceleration = 0.0f,
                         SpriteType = SpriteData.SpriteType.EnemyBullet,
                         ColCategory = ColliderCategory.EnemyBullet,

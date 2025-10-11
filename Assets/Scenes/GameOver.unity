@@ -995,7 +995,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scoreText: {fileID: 1952499323}
   _highText: {fileID: 1892359227}
-  _highScore: {fileID: 11400000, guid: 2886504e9f003304b8519050997b44dd, type: 2}
 --- !u!1 &898048962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1073,6 +1072,7 @@ MonoBehaviour:
   _loadingCutin: {fileID: 1886404740}
   _gameOverMenu: {fileID: 1479301234}
   _scoreHolder: {fileID: 11400000, guid: c6284ad2c25ebfa4e8f059d935edfaa5, type: 2}
+  _scoreRankingData: {fileID: 11400000, guid: 0dbf7b77015873b448487b78d59f0e28, type: 2}
   _scoreUI: {fileID: 892723974}
 --- !u!4 &1335756911
 Transform:

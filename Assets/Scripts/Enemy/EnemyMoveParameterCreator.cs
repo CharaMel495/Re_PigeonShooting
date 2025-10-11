@@ -75,7 +75,7 @@ public class EnemyMoveParameterCreator
                 return new EnemyDataStructs.SlavedSpiralMove
                 {
                     Acceleration = 0,
-                    MoveSpeed = 100.0f,
+                    MoveSpeed = 4.0f,
                 };
 
             // 7
@@ -83,7 +83,7 @@ public class EnemyMoveParameterCreator
                 return new EnemyDataStructs.SlavedSpiralMove
                 {
                     Acceleration = 0,
-                    MoveSpeed = 120.0f,
+                    MoveSpeed = 10.0f,
                 };
 
             // 8
@@ -91,7 +91,7 @@ public class EnemyMoveParameterCreator
                 return new EnemyDataStructs.SlavedSpiralMove
                 {
                     Acceleration = 0,
-                    MoveSpeed = 100.0f,
+                    MoveSpeed = 2.0f,
                 };
 
             // 9
@@ -130,7 +130,7 @@ public class EnemyMoveParameterCreator
                 return new EnemyDataStructs.SpiralMove
                 {
                     Acceleration = 0,
-                    MoveSpeed = 400,
+                    MoveSpeed = 8,
                 };
         }
 

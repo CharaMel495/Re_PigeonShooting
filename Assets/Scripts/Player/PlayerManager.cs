@@ -60,10 +60,14 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     /// </summary>
     private void CheckPlayerEvent()
     {
+        if (_player.IsDestroyWaiting)
+            return;
+
         if (InputManager.IsShotKeyDowning(out Vector2 joyStickMap, out float slopeCondition, InputHandler.Player))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnShotKeyPressed, "Player"), _player.GetBulletParameter(joyStickMap, slopeCondition));
 
-        if (InputManager.CheckKey(InputManager.VacuumKey, InputHandler.Player, isPrevious: true))
+        if (InputManager.CheckKey(InputManager.VacuumKey, InputHandler.Player, isPrevious: true) ||
+            InputManager.IsRTriggerDown(InputHandler.Player))
              EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyPressed, "Player"));
         else
              EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnVacuumKeyReleased, "Player"));
@@ -71,7 +75,8 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         if (InputManager.CheckKey(InputManager.BombKey, InputHandler.Player))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnAirBasterKeyPressed, "Player"));            
 
-        if (InputManager.CheckKey(InputManager.DashKey, InputHandler.Player))
+        if (InputManager.CheckKey(InputManager.DashKey, InputHandler.Player) ||
+            InputManager.IsLTriggerPressed(InputHandler.Player))
             EventDispatcher.Instance.Dispatch(EventNames.GetEventName(Events.OnDashKeyPressed, "Player"));
 
         if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.Player))

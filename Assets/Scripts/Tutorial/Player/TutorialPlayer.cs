@@ -283,7 +283,8 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
             return;
 
         // インターバルをセット
-        //_intervalTime = Mathf.Lerp(_MINFIREINTERVAL, _MAXFIREINTERVAL, (_dustValue / (float)_maxDustValue));
+        //_intervalTime = Mathf.Lerp(_status.MinShotRate, _status.MaxShotRate, (_dustValue / (float)_maxDustValue));
+
         _intervalTime = _status.ShotRate;
 
         var lessShotProbabirity = Mathf.Lerp(0, _status.LessShotProbabirity, (_dustValue / (float)_maxDustValue));
@@ -321,8 +322,6 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         _vacuume.DisActive();
         _isVacuuming = false;
         _animator.SetBool(_animParamVacuume, _isVacuuming);
-
-        EventDispatcher.Instance.Dispatch("CheckTutorial", Tutorial.CheckLists.Vacuum);
     }
 
     public void AirBaster()
@@ -354,8 +353,6 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
         //ColliderManager.Instance.RemoveCollider(_circle);
 
         _timer.CreateTask(EndDash, _dashTime);
-
-        
     }
 
     private void EndDash()
@@ -407,6 +404,7 @@ public class TutorialPlayer : MonoBehaviour, ITargetProvider, IColliderbleObject
                 ColCategory = ColliderCategory.PlayerBullet,
                 ShotValue = 3,
                 SpriteType = SpriteData.SpriteType.PlayerBullet,
+                Damage = 1
             });
 
         _bulletData.Add(PlayerBullet.ShootType.MonoStraight,

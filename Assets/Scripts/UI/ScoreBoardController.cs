@@ -22,6 +22,12 @@ public class ScoreBoardController : MonoBehaviour
     [SerializeField]
     private float _scrollSpeed;
 
+    [SerializeField] 
+    private RectTransform _handleTrransform;
+
+    [SerializeField]
+    private RectTransform _cookieTransform;
+
     public void Initialize()
     {
         _boardItems = new();
@@ -30,6 +36,17 @@ public class ScoreBoardController : MonoBehaviour
         {
             _boardItems.Add(Instantiate(_boardItemPrefab, _boardItemRoot));
         }
+    }
+
+    private void Update()
+    {
+        _cookieTransform.position = _handleTrransform.position;
+        transform.localScale = Vector3.one;
+        var euler = _cookieTransform.eulerAngles;
+        euler.z += Time.fixedDeltaTime * 50.0f;
+        _cookieTransform.eulerAngles = euler;
+
+        _scrollRect.verticalScrollbar.size = 0;
     }
 
     public void EnActive()
