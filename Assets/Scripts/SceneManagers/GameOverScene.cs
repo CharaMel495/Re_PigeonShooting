@@ -34,8 +34,6 @@ public class GameOverScene : SceneManagerBase<GameOverScene>
 
         InputManager.Instance.ChangeInputHandler(InputHandler.UI);
 
-        //CRISoundManager.Instance.PlayVoice(Voice.Result_Voice);
-
         Action[] CreateButtonFunc()
         {
             return new Action[]

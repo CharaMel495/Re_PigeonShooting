@@ -11,6 +11,13 @@ public class BulletShooter
     /// </summary>
     private Transform _transformCache;
 
+    public Timer ShootTimer { get; set; }
+
+    public BulletShooter()
+    {
+        ShootTimer = new();
+    }
+
     public void Shoot(BulletStructs.IBulletCreateData shootData)
     {
         switch (shootData)
@@ -137,8 +144,99 @@ public class BulletShooter
                     BulletManager.Instance.CreateBullet(data);
                 }
                 break;
+
+            case BulletStructs.CurveAndStraight:
+                {
+                    var data = (BulletStructs.CurveAndStraight)shootData;
+
+                    for (int i = 0; i < data.Length; ++i)
+                    {
+                        ShootTimer.CreateTask(() => BulletManager.Instance.CreateBullet(data), i * data.Span);
+                    }
+                }
+                break;
+
+            case BulletStructs.StraightAndCurve:
+                {
+                    var data = (BulletStructs.StraightAndCurve)shootData;
+
+                    for (int i = 0; i < data.Length; ++i)
+                    {
+                        ShootTimer.CreateTask(() => BulletManager.Instance.CreateBullet(data), i * data.Span);
+                    }
+                }
+                break;
+
+            case BulletStructs.Curve:
+                {
+                    BulletManager.Instance.CreateBullet((BulletStructs.Curve)shootData);
+                }
+                break;
+
+            case BulletStructs.MultiCurve:
+                {
+                    var data = (BulletStructs.MultiCurve)shootData;
+
+                    for (int i = 0; i < data.Value; ++i)
+                    {
+                        ShootTimer.CreateTask(() => BulletManager.Instance.CreateBullet(data), i * data.Span);
+                    }
+                }
+                break;
+            case BulletStructs.Bounce:
+                {
+                    BulletManager.Instance.CreateBullet((BulletStructs.Bounce)shootData);
+                }
+                break;
+            case BulletStructs.MultiBounce:
+                {
+                    var data = (BulletStructs.MultiBounce)shootData;
+
+                    for (int i = 0; i < data.Value; ++i)
+                    {
+                        ShootTimer.CreateTask(() => BulletManager.Instance.CreateBullet(data), i * data.Span);
+                    }
+                }
+                break;
+            case BulletStructs.BounceRing:
+                {
+                    var data = (BulletStructs.BounceRing)shootData;
+                    // シフト演算でサクッと計算(360 ÷ 8)
+                    float angleSpan = (float)(360 >> 3);
+
+                    Vector3 dir = data.Dir.normalized;
+
+                    Debug.Log(dir.magnitude);
+
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                    dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * dir;
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                    dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * dir;
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                    dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * dir;
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                    dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * dir;
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                    dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * dir;
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                    dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * dir;
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                    dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * dir;
+                    data.Origin = dir.normalized * data.Distance;
+                    BulletManager.Instance.CreateBullet(data);
+                }
+                break;
         }
     }
+
+
 
     public void Shoot(BulletStructs.IBulletCreateData shootData, float slopeCondition)
     {
@@ -332,6 +430,12 @@ public class BulletShooter
                     data.Dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * data.Dir;
                     BulletManager.Instance.CreateBullet(data);
                 }
+                break;
+
+            case BulletStructs.CurveAndStraight:
+
+
+
                 break;
         }
     }

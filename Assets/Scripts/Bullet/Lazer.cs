@@ -139,6 +139,11 @@ public class Lazer : MonoBehaviour, IColliderbleObject
     private void EndLazer()
     {
         ColliderManager.Instance.RemoveCollider(_rect);
+        IsDestroyWaiting = true;
+    }
+
+    public void DestroyByColliderManager()
+    {
         Destroy(this.gameObject);
     }
 }

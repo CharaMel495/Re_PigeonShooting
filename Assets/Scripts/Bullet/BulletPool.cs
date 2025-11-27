@@ -21,13 +21,16 @@ public class BulletPool
     /// </summary>
     private BulletPool() { }
 
+    private int _nextPool;
+
     /// <summary>
     /// コンストラクタ
     /// </summary>
     public BulletPool(Bullet bulletPrefab, Transform root, Rect playArea)
     {
-        _bulletPool = new Bullet[1000];
+        _bulletPool = new Bullet[3000];
         _root = root;
+        _nextPool = -1;
         CreatePool(bulletPrefab, playArea);
     }
 
@@ -51,6 +54,16 @@ public class BulletPool
     /// <returns>プールの内非アクティブな最初の弾を返す</returns>
     public Bullet GetBulletFromPool()
     {
-        return _bulletPool.First(bullet => !bullet.IsActive);
+    BEGIN:
+
+        ++_nextPool;
+
+        if (_nextPool >= _bulletPool.Length)
+            _nextPool = 0;
+
+        if (_bulletPool[_nextPool].IsActive)
+            goto BEGIN;
+        else
+            return _bulletPool[_nextPool];
     }
 }

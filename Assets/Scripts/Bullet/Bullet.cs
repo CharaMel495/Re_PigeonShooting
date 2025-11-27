@@ -34,12 +34,12 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     /// <summary>
     /// 画面外の生存時間は5秒(300f)
     /// </summary>
-    private const int _LIFETIME = 30;
+    private const float _LIFETIME = 2.0f;
 
     /// <summary>
     /// 残り生存期間
     /// </summary>
-    public int RemainLifeTime
+    public float RemainLifeTime
     { get; private set; }
 
     /// <summary>
@@ -99,9 +99,9 @@ public class Bullet : MonoBehaviour, IColliderbleObject
 
     public void OutOfView()
     {
-        --RemainLifeTime;
+        RemainLifeTime -= Time.fixedDeltaTime;
 
-        if (RemainLifeTime < 1)
+        if (RemainLifeTime < 0)
             IsDestroyWaiting = true;
     }
 

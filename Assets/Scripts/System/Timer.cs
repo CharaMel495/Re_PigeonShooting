@@ -125,6 +125,8 @@ public class Timer
         //渡された関数を実行
         _myTasks[key].Func.Invoke();
 
+        //Debug.Log($"Time : {_myTasks[key].Timer}WaitTime : {_myTasks[key].WaitTime}");
+
         //依頼を達成したので除外する
         _myTasks.Remove(key);
     }

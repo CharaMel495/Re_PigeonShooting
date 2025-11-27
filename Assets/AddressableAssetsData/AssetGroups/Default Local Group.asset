@@ -90,8 +90,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b9370394a103ed439b47098294762b8
+    m_Address: Assets/Textures/Bullet/UI_G_Ring_Seika.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 89e274cd2c257a84eabe9d1b0bfffb72
     m_Address: Assets/Textures/EXP.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a73e7c437ab6d040bf3ec0e1b55412e
+    m_Address: Assets/Textures/Bullet/LazerBullet.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -167,6 +177,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f4c0ebdfa71786640b4a4a485ddae6a9
     m_Address: Assets/Textures/Bullet/LazerPixel.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fd80af4f0eca09c4ea0394d70eb248a5
+    m_Address: Assets/ExternalResources/BulletParamPreset.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

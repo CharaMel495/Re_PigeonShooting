@@ -9,7 +9,8 @@ public class ScoreRanking : ScriptableObject
 
     public void ResetList()
     {
-        ScoreList = new();
+        for (int i = 0; i < ScoreList.Count; ++i)
+            ScoreList[i] = 0;
     }
 
     public int GetHighScore()

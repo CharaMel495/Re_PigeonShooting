@@ -1656,7 +1656,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ver1.1.5
+  m_text: Ver1.1.6
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cc948a6f93f20f54cb2010f9824b9207, type: 2}
   m_sharedMaterial: {fileID: 2975510058863447910, guid: cc948a6f93f20f54cb2010f9824b9207, type: 2}
@@ -1895,7 +1895,7 @@ MonoBehaviour:
   _loadingCutin: {fileID: 52848106}
   _textObj: {fileID: 1479864355}
   _highScore: {fileID: 11400000, guid: 2886504e9f003304b8519050997b44dd, type: 2}
-  _scoreData: {fileID: 0}
+  _scoreData: {fileID: 11400000, guid: 0dbf7b77015873b448487b78d59f0e28, type: 2}
 --- !u!4 &1013549120
 Transform:
   m_ObjectHideFlags: 0
@@ -1936,7 +1936,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1031923415}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: f6f4c4a3ceeffa043961d7eb24488af5, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 43ba91a696698f34d8464fb8e5eadcca, type: 3}
   m_TargetCameraAlpha: 0.6
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 357413874}

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BulletStructs;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,7 +36,15 @@ public class SpriteRendererWrapper : MonoBehaviour
     /// カメラに映っているか
     /// </summary>
     public bool IsInCamera
-        => _renderer.isVisible;
+    {
+        get
+        {
+            var screenPos = Camera.main.WorldToScreenPoint(this.transform.position);
+
+            return !(screenPos.x < 0 || screenPos.x > Screen.width ||
+                screenPos.y < 0 || screenPos.y > Screen.height);
+        }
+    }
 
     /// <summary>
     /// 初期化

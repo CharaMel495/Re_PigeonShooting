@@ -109,7 +109,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         // ポーズキー＋決定キー＋吸引キーでハイスコアリセット
         if (InputManager.CheckKey(InputManager.PauseKey, InputHandler.UI, true) && InputManager.CheckKey(InputManager.CancelKey, InputHandler.UI, true) && InputManager.CheckKey(InputManager.VacuumKey, InputHandler.UI))
         {
-            _highScore.Initialize();
+            _scoreData.ResetList();
             CRISoundManager.Instance.PlaySE(SFX.TutorialSuccess);
         }
 

@@ -15,6 +15,7 @@ public class SummarizeResourceDirectory
     public const string BOSS01_TEX = "Assets/Textures/Coolie_pixel.png";
     public const string MISSILE_TEX = "Assets/Textures/IceMissile.png";
     public const string ENEMYBULLET01_TEX = "Assets/Textures/Bullet/Enemy_Bullet2.png";
+    public const string LAZERBULLET01_TEX = "Assets/Textures/Bullet/LazerBullet.png";
     public const string HEALITEM_TEX = "Assets/Textures/HealBattery.png";
     public const string POWITEM_TEX = "Assets/Textures/PoweBattery.png";
     public const string DUSTITEM_TEX = "Assets/Textures/Dust.png";

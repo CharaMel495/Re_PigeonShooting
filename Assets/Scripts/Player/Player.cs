@@ -349,23 +349,20 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
     public void AirBaster()
     {
-        if (_dustValue < 1)
-            return;
+        //if (_dustValue < 1)
+        //    return;
 
         switch (_defaultStatus.DustActions[_dustLevel])
         {
             case PlayerBullet.DustAction.BigLazer:
                 ShootLazer((BulletStructs.LazerParam)_bulletData[PlayerBullet.ShootType.Lazer]);
-                //CRISoundManager.Instance.PlayVoice(Voice.Beam_Voice);
                 break;
             case PlayerBullet.DustAction.HealHP:
                 HealHP(1);
                 CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
-                //CRISoundManager.Instance.PlayVoice(Voice.Heal_Voice);
                 break;
             case PlayerBullet.DustAction.ItemReserver:
                 EventDispatcher.Instance.Dispatch("ReserveItem");
-                //CRISoundManager.Instance.PlayVoice(Voice.ItemReserve_Voice);
                 break;
             case PlayerBullet.DustAction.RingAttack:
                 // TODO ここにリング攻撃を記述する
@@ -379,10 +376,9 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                     }
                 }, 3.0f);
 
-                //CRISoundManager.Instance.PlayVoice(Voice.Ring_Voice);
                 break;
             case PlayerBullet.DustAction.AirBaster:
-                _camera.Shake(_bombTime * 10, 1.0f);
+                _camera.Shake(_bombTime * 3, 1.0f);
 
                 _bombEffect.Play();
                 _airBaster.EnActive();
@@ -391,7 +387,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
                 CRISoundManager.Instance.PlaySE(SFX.AirBaster);
                 CRISoundManager.Instance.BombEffect(_bombTime * 50);
-                //CRISoundManager.Instance.PlayVoice(Voice.AirBaster_Voice);
                 break;
         }
 
@@ -614,8 +609,14 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     [CallableEvent("OnGetItem")]
     public void OnGetItem(object data)
     {
-        if (data is GetItemEventData itemData)
+        if (data is not GetItemEventData itemData)
+        {
+
+        }
+        else
+        {
             GetItem(itemData);
+        }
     }
 
     private void GetItem(GetItemEventData item)
@@ -670,7 +671,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
 
         IsDestroyWaiting = true;
         CRISoundManager.Instance.PlaySE(SFX.BossExplode);
-        //CRISoundManager.Instance.PlayVoice(Voice.Dead_Voice);
 
         Instantiate(_deadParticle, this.transform.position, Quaternion.identity);
 
@@ -717,8 +717,6 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
         _camera.Shake(5.0f, 2.0f);
 
         Time.timeScale = 0.1f;
-
-        //CRISoundManager.Instance.PlayVoice(Voice.BossDefeat_Voice);
 
         _durator.CreateTask(ResumeTime, () => 
         { 

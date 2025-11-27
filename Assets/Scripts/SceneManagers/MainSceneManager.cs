@@ -49,8 +49,6 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
         _scoreText.Initialize();
         _scoreText.SetText($"{_scoreHolder.Score:D8}pts");
 
-        //CRISoundManager.Instance.PlayVoice(Voice.Start_Voice);
-
         Action[] CreateButtonFunc()
         {
             return new Action[]

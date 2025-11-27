@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36eb4d815e741f943a9ad36bed71c3de, type: 3}
+  m_Name: BulletParamPreset
+  m_EditorClassIdentifier: 
+  StraightShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+  TwoWayStraightShoot: []
+  ThreeWayShoot: []
+  FourWayShoot: []
+  MultiWayShot: []
+  SpreadEightShoot: []
+  StraightAimingShoot: []
+  SpreadEightAimingShoot: []
+  RingShot: []
+  FiveWayAndBackMonoShoot: []
+  LazerParam: []
+  CrossLazer:
+  - Scale: {x: 1, y: 1, z: 1}
+    Acceleration: 0
+    SpriteType: 202
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 5
+    AngleSpeed: 40
+  CurveAndStraight:
+  - Scale: {x: 0.3, y: 0.3, z: 0.3}
+    Acceleration: 0
+    SpriteType: 105
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 6
+    SecondMoveSpeed: 6
+    DisAcceleration: 0
+    Span: 0.001
+    CurveAngle: 180
+    AngleSpeed: 180
+    Length: 6
+  - Scale: {x: 0.3, y: 0.3, z: 0.3}
+    Acceleration: 20
+    SpriteType: 105
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 14
+    SecondMoveSpeed: 3
+    DisAcceleration: 10
+    Span: 0.001
+    CurveAngle: 270
+    AngleSpeed: -40
+    Length: 6
+  StraightAndCurve:
+  - Scale: {x: 0.3, y: 0.3, z: 0.3}
+    Acceleration: 20
+    SpriteType: 105
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 14
+    SecondMoveSpeed: 3
+    DisAcceleration: 10
+    Span: 0.001
+    CurveAngle: 270
+    AngleSpeed: 80
+    Length: 6
+  - Scale: {x: 0.3, y: 0.3, z: 0.3}
+    Acceleration: 20
+    SpriteType: 105
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 14
+    SecondMoveSpeed: 3
+    DisAcceleration: 10
+    Span: 0.001
+    CurveAngle: 270
+    AngleSpeed: -80
+    Length: 6
+  Curve:
+  - Scale: {x: 0.7, y: 0.7, z: 0.7}
+    Acceleration: 20
+    SpriteType: 104
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 5
+    AngleSpeed: 80
+  MultiCurve:
+  - Scale: {x: 0.7, y: 0.7, z: 0.7}
+    Acceleration: 5
+    SpriteType: 104
+    ColCategory: 0
+    Damage: 1
+    MoveSpeed: 2
+    AngleSpeed: 90
+    Span: 0.03
+    Value: 6
+  - Scale: {x: 0.7, y: 0.7, z: 0.7}
+    Acceleration: 5
+    SpriteType: 104
+    ColCategory: 0
+    Damage: 1
+    MoveSpeed: 2
+    AngleSpeed: -90
+    Span: 0.03
+    Value: 6
+  Bounce:
+  - Scale: {x: 1, y: 1, z: 1}
+    Acceleration: 0
+    SpriteType: 104
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 10
+    BounceLimit: 4
+  MultiBounce:
+  - Scale: {x: 1, y: 1, z: 1}
+    Acceleration: 0
+    SpriteType: 104
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 10
+    BounceLimit: 4
+    Value: 5
+    Span: 0.1
+  BounceRing:
+  - Scale: {x: 0.5, y: 0.5, z: 0.5}
+    Acceleration: 0
+    SpriteType: 104
+    ColCategory: 1
+    Damage: 1
+    MoveSpeed: 10
+    BounceLimit: 4
+    Distance: 1
