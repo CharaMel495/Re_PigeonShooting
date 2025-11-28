@@ -2474,6 +2474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb45d59dfa6ffc448f76bb5541211ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _loadStage: 2
   _area:
     serializedVersion: 2
     x: -500
@@ -5804,8 +5805,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 7006159334216181747, guid: d9d5a451e9b64f540b97f8492b330ccb, type: 3}
   _lazerPrefab: {fileID: 3731506883417100122, guid: 59cb2140936d87748b2d0de7c4d01e7c, type: 3}
+  _crossLazerPrefab: {fileID: 7156103920373254055, guid: 4ea4f5821f1def3409471d51ff953e06, type: 3}
   _root: {fileID: 588237565}
   _isTutorial: 0
+  _preset: {fileID: 11400000, guid: fd80af4f0eca09c4ea0394d70eb248a5, type: 2}
 --- !u!4 &2017814756
 Transform:
   m_ObjectHideFlags: 0
@@ -5903,10 +5906,10 @@ SceneRoots:
   - {fileID: 737789411}
   - {fileID: 1851327318}
   - {fileID: 1339628550}
-  - {fileID: 784196175}
   - {fileID: 1854864262}
   - {fileID: 1416642728}
   - {fileID: 558771149}
   - {fileID: 424775060}
   - {fileID: 741121977}
   - {fileID: 473967860}
+  - {fileID: 784196175}

@@ -60,6 +60,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 42cdd82728f37254c98000d483689aa7
+    m_Address: Assets/ExternalResources/Normal_WaveTimeTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 44d693a9848283441844f792d6c56fdc
     m_Address: Assets/Textures/Bullet/UI_G_Ring.png
     m_ReadOnly: 0
@@ -135,6 +140,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c1d192f496611834a8994ce48b3ea47c
+    m_Address: Assets/ExternalResources/Easy_WaveTimeTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8896e1d03afe5945b5b64a3c2dff21b
     m_Address: Assets/Textures/SimpleBullet.png
     m_ReadOnly: 0
@@ -167,6 +177,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e00b0363731dd8b409faf658a514d3ac
     m_Address: Assets/Textures/Bullet/UI_G_Rezer.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e18e4efea54bc9743835d3ad4fee7f7f
+    m_Address: Assets/ExternalResources/Hard_WaveTimeTable.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

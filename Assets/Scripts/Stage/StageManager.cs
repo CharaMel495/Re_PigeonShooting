@@ -2,11 +2,22 @@
 using System.Linq;
 using System.Collections.Generic;
 
+public enum StageDifficulty
+{
+    Easy,
+    Normal,
+    Hard
+}
+
 /// <summary>
 /// ステージ管理クラス
 /// </summary>
 public class StageManager : SingletonMonoBehaviour<StageManager>
 {
+    [Header("読み込むステージ")]
+    [SerializeField]
+    private StageDifficulty _loadStage;
+
     [SerializeField]
     private Rect _area;
     public Rect PlayArea
@@ -48,7 +59,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     {
         _createdSpawner = new();
 
-        _waveController = new();
+        _waveController = new(_loadStage);
 
         _bigBossCount = 2;
 

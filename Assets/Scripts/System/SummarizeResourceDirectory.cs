@@ -38,8 +38,12 @@ public class SummarizeResourceDirectory
     public const string ENEMYTABLEASSET_PATH = "Assets/ExternalResources/EnemyParamTable.asset";
     public const string WAVEEVENTTABLE_PATH = "/ParameterControll/JsonFiles/WaveEventTable.json";
     public const string WAVEEVENTTABLEASSET_PATH = "Assets/ExternalResources/WaveEventTable.asset";
-    public const string WAVETIMETABLE_PATH = "/ParameterControll/JsonFiles/WaveTimeTable.json";
-    public const string WAVETIMETABLEASSET_PATH = "Assets/ExternalResources/WaveTimeTable.asset";
+    public const string WAVETIMETABLEEASY_PATH = "/ParameterControll/JsonFiles/Easy_WaveTimeTable.json";
+    public const string WAVETIMETABLENORMAL_PATH = "/ParameterControll/JsonFiles/Normal_WaveTimeTable.json";
+    public const string WAVETIMETABLEHARD_PATH = "/ParameterControll/JsonFiles/Hard_WaveTimeTable.json";
+    public const string WAVETIMETABLEASSETEASY_PATH = "Assets/ExternalResources/Easy_WaveTimeTable.asset";
+    public const string WAVETIMETABLEASSETNORMAL_PATH = "Assets/ExternalResources/Normal_WaveTimeTable.asset";
+    public const string WAVETIMETABLEASSETHARD_PATH = "Assets/ExternalResources/Hard_WaveTimeTable.asset";
 
     ///CRIPath///
 

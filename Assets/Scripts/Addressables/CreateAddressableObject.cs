@@ -56,24 +56,70 @@ public static class CreateAddressableObject
     /// <summary>
     /// 一定時間ごとに起きるウェーブイベントのパラメーターアセットを作る
     /// </summary>
-    [MenuItem("ScriptableObjects/WaveTimeTable")]
-    public static void CreateWaveTimeTableAsset()
+    [MenuItem("ScriptableObjects/EasyStageCreate")]
+    public static void CreateEasyWaveTimeTableAsset()
     {
         // newだと警告吐くので機能でインスタンス化
         var dataAsset = ScriptableObject.CreateInstance<WaveTimeTableAsset>();
 
-        var dataReciever = JsonReader.LoadMonoParameterFromJson<WaveTimeTableReciever>(SummarizeResourceDirectory.WAVETIMETABLE_PATH);
+        var dataReciever = JsonReader.LoadMonoParameterFromJson<WaveTimeTableReciever>(SummarizeResourceDirectory.WAVETIMETABLEEASY_PATH);
 
         // jsonデータをロード
         dataAsset.WaveTimeTable = new(dataReciever.WaveTimeTable);
 
         // アセット作成
-        AssetDatabase.CreateAsset(dataAsset, SummarizeResourceDirectory.WAVETIMETABLEASSET_PATH);
+        AssetDatabase.CreateAsset(dataAsset, SummarizeResourceDirectory.WAVETIMETABLEASSETEASY_PATH);
 
         // Asset作成後、反映させるために必要なメソッド
         AssetDatabase.Refresh();
 
-        Debug.Log($"{SummarizeResourceDirectory.WAVETIMETABLEASSET_PATH}にアセットが作成されました");
+        Debug.Log($"{SummarizeResourceDirectory.WAVETIMETABLEASSETEASY_PATH}にアセットが作成されました");
+    }
+
+    /// <summary>
+    /// 一定時間ごとに起きるウェーブイベントのパラメーターアセットを作る
+    /// </summary>
+    [MenuItem("ScriptableObjects/NormalStageCreate")]
+    public static void CreateNormalWaveTimeTableAsset()
+    {
+        // newだと警告吐くので機能でインスタンス化
+        var dataAsset = ScriptableObject.CreateInstance<WaveTimeTableAsset>();
+
+        var dataReciever = JsonReader.LoadMonoParameterFromJson<WaveTimeTableReciever>(SummarizeResourceDirectory.WAVETIMETABLENORMAL_PATH);
+
+        // jsonデータをロード
+        dataAsset.WaveTimeTable = new(dataReciever.WaveTimeTable);
+
+        // アセット作成
+        AssetDatabase.CreateAsset(dataAsset, SummarizeResourceDirectory.WAVETIMETABLEASSETNORMAL_PATH);
+
+        // Asset作成後、反映させるために必要なメソッド
+        AssetDatabase.Refresh();
+
+        Debug.Log($"{SummarizeResourceDirectory.WAVETIMETABLEASSETNORMAL_PATH}にアセットが作成されました");
+    }
+
+    /// <summary>
+    /// 一定時間ごとに起きるウェーブイベントのパラメーターアセットを作る
+    /// </summary>
+    [MenuItem("ScriptableObjects/HardStageCreate")]
+    public static void CreateHardWaveTimeTableAsset()
+    {
+        // newだと警告吐くので機能でインスタンス化
+        var dataAsset = ScriptableObject.CreateInstance<WaveTimeTableAsset>();
+
+        var dataReciever = JsonReader.LoadMonoParameterFromJson<WaveTimeTableReciever>(SummarizeResourceDirectory.WAVETIMETABLEHARD_PATH);
+
+        // jsonデータをロード
+        dataAsset.WaveTimeTable = new(dataReciever.WaveTimeTable);
+
+        // アセット作成
+        AssetDatabase.CreateAsset(dataAsset, SummarizeResourceDirectory.WAVETIMETABLEASSETHARD_PATH);
+
+        // Asset作成後、反映させるために必要なメソッド
+        AssetDatabase.Refresh();
+
+        Debug.Log($"{SummarizeResourceDirectory.WAVETIMETABLEASSETHARD_PATH}にアセットが作成されました");
     }
 }
 

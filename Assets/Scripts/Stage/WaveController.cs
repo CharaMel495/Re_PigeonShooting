@@ -25,7 +25,10 @@ public class WaveController
     // 経過時間
     private float _elapsedTime;
 
-    public WaveController()
+    private WaveController()
+    { }
+
+    public WaveController(StageDifficulty stage)
     {
         _events = new();
         _holdEvents = new();
@@ -33,7 +36,7 @@ public class WaveController
 
         // 必要なデータをAddressables経由で取得する
         var tableAsset = Addressables.LoadAssetAsync<WaveEventTableAsset>(SummarizeResourceDirectory.WAVEEVENTTABLEASSET_PATH).WaitForCompletion();
-        var timeTableAsset = Addressables.LoadAssetAsync<WaveTimeTableAsset>(SummarizeResourceDirectory.WAVETIMETABLEASSET_PATH).WaitForCompletion();
+        var timeTableAsset = Addressables.LoadAssetAsync<WaveTimeTableAsset>(GetTimeTablePath()).WaitForCompletion();
 
         // ウェーブイベントの登録
         foreach (var eventData in tableAsset.WaveEventTable)
@@ -56,6 +59,17 @@ public class WaveController
             _eventQueue.Enqueue(entry);
 
         _elapsedTime = 0f;
+
+        string GetTimeTablePath()
+        {
+            return stage switch
+            {
+                StageDifficulty.Easy => SummarizeResourceDirectory.WAVETIMETABLEASSETEASY_PATH,
+                StageDifficulty.Normal => SummarizeResourceDirectory.WAVETIMETABLEASSETNORMAL_PATH,
+                StageDifficulty.Hard => SummarizeResourceDirectory.WAVETIMETABLEASSETHARD_PATH,
+                _ => ""
+            };
+        }
     }
 
     public void Update()

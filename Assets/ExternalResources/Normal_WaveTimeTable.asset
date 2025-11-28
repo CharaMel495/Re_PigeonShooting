@@ -1,0 +1,271 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31568f8fd94ba6b4c996e8c0e06cb374, type: 3}
+  m_Name: Normal_WaveTimeTable
+  m_EditorClassIdentifier: 
+  WaveTimeTable:
+  - ID: 0
+    StartTime: 0
+    EventID: -1
+    IsClearEnemys: 0
+  - ID: 1
+    StartTime: 10
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 2
+    StartTime: 20
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 3
+    StartTime: 30
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 4
+    StartTime: 40
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 5
+    StartTime: 50
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 6
+    StartTime: 60
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 7
+    StartTime: 60
+    EventID: 4
+    IsClearEnemys: 0
+  - ID: 8
+    StartTime: 70
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 9
+    StartTime: 70
+    EventID: 4
+    IsClearEnemys: 0
+  - ID: 10
+    StartTime: 80
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 11
+    StartTime: 80
+    EventID: 4
+    IsClearEnemys: 0
+  - ID: 12
+    StartTime: 90
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 13
+    StartTime: 90
+    EventID: 4
+    IsClearEnemys: 0
+  - ID: 14
+    StartTime: 100
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 15
+    StartTime: 100
+    EventID: 4
+    IsClearEnemys: 0
+  - ID: 16
+    StartTime: 110
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 17
+    StartTime: 110
+    EventID: 4
+    IsClearEnemys: 0
+  - ID: 18
+    StartTime: 120
+    EventID: 10
+    IsClearEnemys: 0
+  - ID: 19
+    StartTime: 120
+    EventID: 0
+    IsClearEnemys: 0
+  - ID: 20
+    StartTime: 130
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 21
+    StartTime: 140
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 22
+    StartTime: 150
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 23
+    StartTime: 160
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 24
+    StartTime: 170
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 25
+    StartTime: 180
+    EventID: 10
+    IsClearEnemys: 0
+  - ID: 26
+    StartTime: 180
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 27
+    StartTime: 180
+    EventID: 5
+    IsClearEnemys: 0
+  - ID: 28
+    StartTime: 190
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 29
+    StartTime: 190
+    EventID: 5
+    IsClearEnemys: 0
+  - ID: 30
+    StartTime: 200
+    EventID: 1
+    IsClearEnemys: 0
+  - ID: 31
+    StartTime: 200
+    EventID: 5
+    IsClearEnemys: 0
+  - ID: 32
+    StartTime: 210
+    EventID: 8
+    IsClearEnemys: 0
+  - ID: 33
+    StartTime: 210
+    EventID: 5
+    IsClearEnemys: 0
+  - ID: 34
+    StartTime: 220
+    EventID: 8
+    IsClearEnemys: 0
+  - ID: 35
+    StartTime: 220
+    EventID: 5
+    IsClearEnemys: 0
+  - ID: 36
+    StartTime: 230
+    EventID: 8
+    IsClearEnemys: 0
+  - ID: 37
+    StartTime: 230
+    EventID: 5
+    IsClearEnemys: 0
+  - ID: 38
+    StartTime: 240
+    EventID: 10
+    IsClearEnemys: 0
+  - ID: 39
+    StartTime: 240
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 40
+    StartTime: 240
+    EventID: 2
+    IsClearEnemys: 0
+  - ID: 41
+    StartTime: 240
+    EventID: 6
+    IsClearEnemys: 0
+  - ID: 42
+    StartTime: 250
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 43
+    StartTime: 250
+    EventID: 2
+    IsClearEnemys: 0
+  - ID: 44
+    StartTime: 250
+    EventID: 6
+    IsClearEnemys: 0
+  - ID: 45
+    StartTime: 260
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 46
+    StartTime: 260
+    EventID: 2
+    IsClearEnemys: 0
+  - ID: 47
+    StartTime: 260
+    EventID: 6
+    IsClearEnemys: 0
+  - ID: 48
+    StartTime: 270
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 49
+    StartTime: 270
+    EventID: 3
+    IsClearEnemys: 0
+  - ID: 50
+    StartTime: 270
+    EventID: 7
+    IsClearEnemys: 0
+  - ID: 51
+    StartTime: 280
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 52
+    StartTime: 280
+    EventID: 3
+    IsClearEnemys: 0
+  - ID: 53
+    StartTime: 280
+    EventID: 7
+    IsClearEnemys: 0
+  - ID: 54
+    StartTime: 285
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 55
+    StartTime: 285
+    EventID: 2
+    IsClearEnemys: 0
+  - ID: 56
+    StartTime: 285
+    EventID: 6
+    IsClearEnemys: 0
+  - ID: 57
+    StartTime: 290
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 58
+    StartTime: 290
+    EventID: 2
+    IsClearEnemys: 0
+  - ID: 59
+    StartTime: 290
+    EventID: 6
+    IsClearEnemys: 0
+  - ID: 60
+    StartTime: 290
+    EventID: 9
+    IsClearEnemys: 0
+  - ID: 61
+    StartTime: 290
+    EventID: 2
+    IsClearEnemys: 0
+  - ID: 62
+    StartTime: 290
+    EventID: 6
+    IsClearEnemys: 0
+  - ID: 63
+    StartTime: 300
+    EventID: -1
+    IsClearEnemys: 1
