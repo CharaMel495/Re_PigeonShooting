@@ -285,9 +285,9 @@ public class EnemyAction
         }
     }
 
-    public void Move(Boss boss)
+    public void Move(BossBase boss)
     {
-        if (!boss.IsActionable)
+        if (!boss.IsMovable)
             return;
 
         switch (boss.MoveData)

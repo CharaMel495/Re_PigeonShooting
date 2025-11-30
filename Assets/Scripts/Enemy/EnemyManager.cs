@@ -45,7 +45,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     private Enemy _enemyPrefab;
 
     [SerializeField]
-    private Boss[] _bossPrefab;
+    private BossBase[] _bossPrefab;
 
     [SerializeField]
     private Transform _stoppableArea;
@@ -92,7 +92,7 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     public bool IsBossMode
     { get; set; } = false;
 
-    public Boss CurrentBoss
+    public BossBase CurrentBoss
     { get; private set; }
 
     public void Initialize()

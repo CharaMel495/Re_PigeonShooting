@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ShuBoss : MonoBehaviour
+public class ShuBoss : BossBase
 {
     private enum AnimState
     {
@@ -19,17 +19,24 @@ public class ShuBoss : MonoBehaviour
 
     private int _changeAnimTriggerHash;
 
-    public void Initialize()
+
+    public override void Initialize()
     {
         _changeAnimTriggerHash = Animator.StringToHash("Change");
     }
 
-    private void Start()
-        => Initialize();
-
-    private void Update()
+    public override void Smashed()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-            _animator.SetTrigger(_changeAnimTriggerHash);
+
+    }
+
+    public override void Action()
+    {
+
+    }
+
+    public override void OnHit()
+    {
+
     }
 }

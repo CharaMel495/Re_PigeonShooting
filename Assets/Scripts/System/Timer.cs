@@ -176,7 +176,12 @@ public class Timer
     /// 渡されたタスクをキャンセルする関数
     /// </summary>
     public void CanncellTask(int key)
-        => _myTasks.Remove(key);
+    {
+        if (!_myTasks.ContainsKey(key))
+            return;
+
+        _myTasks.Remove(key);
+    }
 
     public TaskStruct GetTaskFromID(int key)
     {

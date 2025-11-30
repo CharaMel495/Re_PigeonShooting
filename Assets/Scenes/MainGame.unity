@@ -5366,7 +5366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 7149621051588140338, guid: 5af0b73d6a865f447bd8a7b15b184a07, type: 3}
   _bossPrefab:
-  - {fileID: 143330940829165451, guid: a3f60340713df2744bbba690b9a27bf6, type: 3}
+  - {fileID: 8890859805965667907, guid: 2f0ed6a6ba5ab6541b4cda83748fb2ce, type: 3}
   _stoppableArea: {fileID: 1851327318}
   _poolRoot: {fileID: 1854864262}
   _isTutorial: 0
