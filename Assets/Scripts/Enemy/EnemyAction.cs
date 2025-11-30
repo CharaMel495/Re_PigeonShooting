@@ -287,6 +287,9 @@ public class EnemyAction
 
     public void Move(Boss boss)
     {
+        if (!boss.IsActionable)
+            return;
+
         switch (boss.MoveData)
         {
             case EnemyDataStructs.TrackPlayer:

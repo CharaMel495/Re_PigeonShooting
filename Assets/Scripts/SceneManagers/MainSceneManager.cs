@@ -24,6 +24,11 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
     [SerializeField]
     private TextWrapper _scoreText;
 
+    [SerializeField]
+    private PlayerFollowCamera _playerCam;
+    [SerializeField]
+    private BossNameViewer _bossNameViewer;
+
     private bool _isPausing = false;
 
     public override void Initialize()
@@ -48,6 +53,9 @@ public class MainSceneManager : SceneManagerBase<MainSceneManager>
 
         _scoreText.Initialize();
         _scoreText.SetText($"{_scoreHolder.Score:D8}pts");
+
+        _playerCam.Initialize();
+        _bossNameViewer.Initialize();
 
         Action[] CreateButtonFunc()
         {

@@ -92,7 +92,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     public bool IsBossMode
     { get; set; } = false;
 
-    private Boss _currentBoss;
+    public Boss CurrentBoss
+    { get; private set; }
 
     public void Initialize()
     {
@@ -138,10 +139,10 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         // リストを更新
         FlashActiveEnemysList();
 
-        if (_currentBoss == null)
+        if (CurrentBoss == null)
             return;
 
-        _action.Move(_currentBoss);
+        _action.Move(CurrentBoss);
     }
 
     public void CreateEnemy(int tableID, Vector3 createPos, Vector3 moveDir = new())
@@ -488,15 +489,15 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
         return null;
     }
 
-    [CallableEvent("BossEvent")]
+    [CallableEvent("AppearBoss")]
     public void AppearBoss(object data)
     {
         if (data is Vector3 spawnPos)
-            _currentBoss = Instantiate(_bossPrefab[0], spawnPos, Quaternion.identity);
+            CurrentBoss = Instantiate(_bossPrefab[0], spawnPos, Quaternion.identity);
         else
-            _currentBoss = Instantiate(_bossPrefab[0], Vector3.zero, Quaternion.identity);
+            CurrentBoss = Instantiate(_bossPrefab[0], Vector3.zero, Quaternion.identity);
 
-        _currentBoss.Initialize();
+        CurrentBoss.Initialize();
         IsBossMode = true;
 
         CRISoundManager.Instance.PlayBGM(BGM.NormalBoss);
@@ -506,8 +507,8 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     public void BossSmashed(object data)
     {
         EventDispatcher.Instance.Dispatch("PlayerOnBossSmashed");
-        _currentBoss.PlaySmashedEffect();
-        _currentBoss = null;
+        CurrentBoss.PlaySmashedEffect();
+        CurrentBoss = null;
         //IsBossMode = false;
 
         foreach (var enemy in _activeEnemys)
