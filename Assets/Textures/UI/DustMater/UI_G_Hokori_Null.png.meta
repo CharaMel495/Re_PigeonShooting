@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UI_G_Hokori_Null_0: -7973660008843908192
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

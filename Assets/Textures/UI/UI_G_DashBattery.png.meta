@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UI_G_DashBattery_0: 5068584892579118931
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

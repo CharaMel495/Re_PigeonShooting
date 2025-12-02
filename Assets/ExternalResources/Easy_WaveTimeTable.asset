@@ -15,7 +15,7 @@ MonoBehaviour:
   WaveTimeTable:
   - ID: 0
     StartTime: 0
-    EventID: 0
+    EventID: 4
     IsClearEnemys: 0
   - ID: 1
     StartTime: 10
