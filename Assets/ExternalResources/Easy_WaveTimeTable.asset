@@ -43,7 +43,7 @@ MonoBehaviour:
     IsClearEnemys: 0
   - ID: 7
     StartTime: 60
-    EventID: 4
+    EventID: 0
     IsClearEnemys: 0
   - ID: 8
     StartTime: 70
@@ -51,7 +51,7 @@ MonoBehaviour:
     IsClearEnemys: 0
   - ID: 9
     StartTime: 70
-    EventID: 4
+    EventID: 0
     IsClearEnemys: 0
   - ID: 10
     StartTime: 80
@@ -99,7 +99,7 @@ MonoBehaviour:
     IsClearEnemys: 0
   - ID: 21
     StartTime: 140
-    EventID: 1
+    EventID: 0
     IsClearEnemys: 0
   - ID: 22
     StartTime: 150

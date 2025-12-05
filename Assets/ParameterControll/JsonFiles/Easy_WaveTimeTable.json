@@ -45,7 +45,7 @@
 		{
 			"ID":"7",
 			"StartTime":"60",
-			"EventID":"4",
+			"EventID":"0",
 			"IsClearEnemys":"False"
 		},
 		{
@@ -57,7 +57,7 @@
 		{
 			"ID":"9",
 			"StartTime":"70",
-			"EventID":"4",
+			"EventID":"0",
 			"IsClearEnemys":"False"
 		},
 		{
@@ -129,7 +129,7 @@
 		{
 			"ID":"21",
 			"StartTime":"140",
-			"EventID":"1",
+			"EventID":"0",
 			"IsClearEnemys":"False"
 		},
 		{

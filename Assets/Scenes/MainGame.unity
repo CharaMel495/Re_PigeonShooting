@@ -2474,7 +2474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb45d59dfa6ffc448f76bb5541211ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loadStage: 1
+  _loadStage: 0
   _area:
     serializedVersion: 2
     x: -500
