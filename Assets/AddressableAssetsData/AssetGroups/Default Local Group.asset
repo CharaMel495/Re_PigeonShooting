@@ -121,7 +121,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b11e1ecf5a612214bb11d7e823f90dea
-    m_Address: Assets/Textures/PlayerShot.png
+    m_Address: Assets/Textures/Bullet/PlayerShot.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

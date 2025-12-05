@@ -111,7 +111,7 @@ public class WaveController
         {
             var playerPos = PlayerManager.Instance.Player.GetPosition();
 
-            float angle = UnityEngine.Random.Range(0f, 360f);
+            float angle = Random.Range(0f, 360f);
             float rad = angle * Mathf.Deg2Rad;
 
             return playerPos + new Vector3(Mathf.Cos(rad), Mathf.Sin(rad)) * 24f;

@@ -1,9 +1,25 @@
 ﻿using UnityEngine;
+using DG.Tweening;
 
 public class PlayerFollowCamera : MonoBehaviour
 {
+    [Header("追跡対象")]
     [SerializeField]
     private Transform _followTarget;
+
+    [Header("ボス出現時演出周りの設定")]
+    [SerializeField]
+    private float _bossCaptureTime;
+    [SerializeField]
+    private float _bossCaptureSize;
+    [SerializeField]
+    private float _bossNameViewTime;
+    [SerializeField]
+    private float _zoomOutTime;
+    [SerializeField]
+    private float _bossBattleCamSize;
+    [SerializeField]
+    private Vector2 _bossBattlePadding;
 
     private float _halfWidth;
     private float _halfHeight;
@@ -12,20 +28,22 @@ public class PlayerFollowCamera : MonoBehaviour
     private float _shakeTime;
     private float _shakePower;
 
-    private void Start()
+    private bool _isFollowPlayer;
+
+    public void Initialize()
     {
         var cam = GetComponent<Camera>();
         _halfHeight = cam.orthographicSize;
         _halfWidth = _halfHeight * cam.aspect;
+        EventDispatcher.Instance.Bind(this);
+        _isFollowPlayer = true;
     }
 
     private void Update()
     {
-        Follow();
+        if (_isFollowPlayer)
+            Follow();
         UpdateShake();
-
-        if (Input.GetKey(KeyCode.V))
-            Shake(0.5f, 2.0f);
     }
 
     private void Follow()
@@ -72,6 +90,64 @@ public class PlayerFollowCamera : MonoBehaviour
         else
         {
             _shakeOffset = Vector3.zero;
+        }
+    }
+
+    [CallableEvent("BossEvent")]
+    public void WhenBossAppeared(object data)
+    {
+        // ボスを出現させる
+        EventDispatcher.Instance.Dispatch("AppearBoss", data);
+
+        // 入力をプレイヤーから奪う
+        InputManager.Instance.ChangeInputHandler(InputHandler.UI);
+
+        // ボスをクローズアップ
+        var pos = EnemyManager.Instance.CurrentBoss.transform.position;
+        pos.z = -10;
+        this.transform.DOMove(pos, _bossCaptureTime).SetEase(Ease.InCubic).
+            OnComplete(ViewBossName);
+        var cam = GetComponent<Camera>();
+        cam.DOOrthoSize(_bossCaptureSize, _bossCaptureTime);
+
+        _isFollowPlayer = false;
+
+        void ViewBossName()
+        {
+            // ボスの名前をUIに表示
+            EventDispatcher.Instance.Dispatch("ViewBossName", EnemyManager.Instance.CurrentBoss.BossName);
+
+            var cam = GetComponent<Camera>();
+            cam.DOOrthoSize(_bossCaptureSize + 1.0f, _bossNameViewTime).
+                OnComplete(StartBossBattle);
+        }
+
+        void StartBossBattle()
+        {
+            InputManager.Instance.ReturnHandle();
+
+            PlayerManager.Instance.Player.OnGetItem(new GetItemEventData { Value = 10, ItemType = ItemType.Battery_Green });
+
+            var cam = GetComponent<Camera>();
+            cam.DOOrthoSize(_bossBattleCamSize, _zoomOutTime).
+                OnComplete(() => StageManager.Instance.SetBossBattlePlayArea(GetCameraWorldRect(cam)));
+
+            // 現在映しているカメラ領域から戦闘エリア矩形を作成する
+            Rect GetCameraWorldRect(Camera cam)
+            {
+                float height = cam.orthographicSize * 2f;
+                float width = height * cam.aspect;
+
+                float left = cam.transform.position.x - width / 2f + _bossBattlePadding.x;
+                float bottom = cam.transform.position.y - height / 2f + _bossBattlePadding.y;
+
+                // ボス戦開始
+                EventDispatcher.Instance.Dispatch("StartBossBattle");
+
+                // パディングを×２してるのは、両端それぞれにパディングをかけるから
+                return new Rect(left, bottom, width - _bossBattlePadding.x * 2, height - _bossBattlePadding.y * 2);
+            }
+
         }
     }
 }

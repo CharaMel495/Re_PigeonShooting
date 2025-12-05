@@ -17,11 +17,16 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     [Header("読み込むステージ")]
     [SerializeField]
     private StageDifficulty _loadStage;
+    public StageDifficulty Difficulty
+        => _loadStage;
 
     [SerializeField]
     private Rect _area;
+    private Rect _bossBattleArea;
     public Rect PlayArea
-        => _area;
+        => _isBossBattle ? _bossBattleArea : _area;
+
+    private bool _isBossBattle;
 
     [SerializeField]
     private float _spawnInterval;
@@ -65,6 +70,10 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
 
         _timerText.Initialize();
         _timerCounter = 0;
+
+        _isBossBattle = false;
+
+        EventDispatcher.Instance.Bind(this);
     }
 
     // Update is called once per frame
@@ -115,5 +124,17 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
         spawnPos = new Vector3(x, y, 0);
 
         return spawnPos;
+    }
+
+    public void SetBossBattlePlayArea(Rect rect)
+    {
+        _bossBattleArea = rect;
+        _isBossBattle = true;
+    }
+
+    [CallableEvent("ResumeArea")]
+    public void ResumeArea()
+    {
+        _isBossBattle = false;
     }
 }

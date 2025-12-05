@@ -230,4 +230,25 @@ public class BulletManager : SingletonMonoBehaviour<BulletManager>
         // メソッドの最初に飛ぶ
         goto MethodTop;
     }
+
+    public void BomberedAllEnemyBullet(object data)
+    {
+        if (data is DamageEventData)
+        {
+            foreach (var bullet in _activeBullets)
+            {
+                if (bullet.Collider.ColCategory == ColliderCategory.EnemyBullet)
+                    bullet.OnHit(data);
+            }
+        }
+    }
+
+    public void ClearAllEnemyBullet()
+    {
+        foreach (var bullet in _activeBullets)
+        {
+            if (bullet.Collider.ColCategory == ColliderCategory.EnemyBullet)
+                bullet.IsDestroyWaiting = true;
+        }
+    }
 }

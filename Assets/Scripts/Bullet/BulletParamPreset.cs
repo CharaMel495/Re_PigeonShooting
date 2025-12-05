@@ -10,6 +10,7 @@ public class BulletParamPreset : ScriptableObject
     public ThreeWayShoot[] ThreeWayShoot;
     public FourWayShoot[] FourWayShoot;
     public MultiWayShot[] MultiWayShot;
+    public SpreadFourShoot[] SpreadFourShoot;
     public SpreadEightShoot[] SpreadEightShoot;
     public StraightAimingShoot[] StraightAimingShoot;
     public SpreadEightAimingShoot[] SpreadEightAimingShoot;

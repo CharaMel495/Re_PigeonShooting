@@ -202,6 +202,26 @@ namespace BulletStructs
     }
 
     /// <summary>
+    /// 4方向スプレッド弾
+    /// </summary>
+    [System.Serializable]
+    public class SpreadFourShoot : IBulletCreateData
+    {
+        public float MoveSpeed;
+
+        public SpreadFourShoot GetData() => this;
+        public override IBulletMoveData CreateMoveData()
+        {
+            return new StraightMove
+            {
+                MoveDir = Dir,
+                MoveSpeed = MoveSpeed,
+                Acceleration = Acceleration
+            };
+        }
+    }
+
+    /// <summary>
     /// 8方向スプレッド弾
     /// </summary>
     [System.Serializable]

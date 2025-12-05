@@ -24,6 +24,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     [SerializeField]
     private BackGroundScroller _bgScroller;
 
+    [SerializeField]
+    private PlayerUI _playerUI;
+
     /// <summary>
     /// 初期化を行う関数
     /// </summary>
@@ -31,8 +34,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     {
         _player.Initialize();
         _player.Shooter = BulletManager.Instance.Shooter;
-        _mover = new(_moveSpeed, StageManager.Instance.PlayArea);
+        _mover = new(_moveSpeed);
         _mover.Initialize(_moveSpeed, StageManager.Instance.PlayArea);
+        _playerUI.Initialize();
 
         EventDispatcher.Instance.Bind(this);
     }
@@ -46,7 +50,8 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     private void FixedUpdate()
     {
         _mover.MovePlayer(_player, out Vector3 moveValue);
-        _bgScroller.UpdateOffset(moveValue);
+        if (!EnemyManager.Instance.IsBossMode)
+            _bgScroller.UpdateOffset(moveValue);
     }
 
     [CallableEvent("BossSmashed")]
