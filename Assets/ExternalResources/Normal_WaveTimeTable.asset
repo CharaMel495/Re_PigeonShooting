@@ -15,7 +15,7 @@ MonoBehaviour:
   WaveTimeTable:
   - ID: 0
     StartTime: 0
-    EventID: -1
+    EventID: 0
     IsClearEnemys: 0
   - ID: 1
     StartTime: 10
@@ -143,7 +143,7 @@ MonoBehaviour:
     IsClearEnemys: 0
   - ID: 32
     StartTime: 210
-    EventID: 8
+    EventID: 4
     IsClearEnemys: 0
   - ID: 33
     StartTime: 210
@@ -151,121 +151,73 @@ MonoBehaviour:
     IsClearEnemys: 0
   - ID: 34
     StartTime: 220
-    EventID: 8
+    EventID: 0
     IsClearEnemys: 0
   - ID: 35
-    StartTime: 220
+    StartTime: 230
     EventID: 5
     IsClearEnemys: 0
   - ID: 36
-    StartTime: 230
-    EventID: 8
-    IsClearEnemys: 0
-  - ID: 37
-    StartTime: 230
-    EventID: 5
-    IsClearEnemys: 0
-  - ID: 38
     StartTime: 240
     EventID: 10
     IsClearEnemys: 0
+  - ID: 37
+    StartTime: 240
+    EventID: 6
+    IsClearEnemys: 0
+  - ID: 38
+    StartTime: 240
+    EventID: 2
+    IsClearEnemys: 0
   - ID: 39
     StartTime: 240
-    EventID: 9
+    EventID: 6
     IsClearEnemys: 0
   - ID: 40
-    StartTime: 240
-    EventID: 2
+    StartTime: 250
+    EventID: 6
     IsClearEnemys: 0
   - ID: 41
-    StartTime: 240
-    EventID: 6
+    StartTime: 250
+    EventID: 2
     IsClearEnemys: 0
   - ID: 42
-    StartTime: 250
-    EventID: 9
+    StartTime: 260
+    EventID: 0
     IsClearEnemys: 0
   - ID: 43
-    StartTime: 250
-    EventID: 2
-    IsClearEnemys: 0
-  - ID: 44
-    StartTime: 250
+    StartTime: 260
     EventID: 6
     IsClearEnemys: 0
-  - ID: 45
-    StartTime: 260
-    EventID: 9
+  - ID: 44
+    StartTime: 270
+    EventID: 5
     IsClearEnemys: 0
-  - ID: 46
-    StartTime: 260
+  - ID: 45
+    StartTime: 270
     EventID: 2
     IsClearEnemys: 0
+  - ID: 46
+    StartTime: 270
+    EventID: 5
+    IsClearEnemys: 0
   - ID: 47
-    StartTime: 260
+    StartTime: 280
     EventID: 6
     IsClearEnemys: 0
   - ID: 48
-    StartTime: 270
-    EventID: 9
+    StartTime: 280
+    EventID: 2
     IsClearEnemys: 0
   - ID: 49
-    StartTime: 270
-    EventID: 3
+    StartTime: 290
+    EventID: 6
     IsClearEnemys: 0
   - ID: 50
-    StartTime: 270
-    EventID: 7
+    StartTime: 290
+    EventID: 5
     IsClearEnemys: 0
   - ID: 51
-    StartTime: 280
-    EventID: 9
-    IsClearEnemys: 0
-  - ID: 52
-    StartTime: 280
-    EventID: 3
-    IsClearEnemys: 0
-  - ID: 53
-    StartTime: 280
-    EventID: 7
-    IsClearEnemys: 0
-  - ID: 54
-    StartTime: 285
-    EventID: 9
-    IsClearEnemys: 0
-  - ID: 55
-    StartTime: 285
-    EventID: 2
-    IsClearEnemys: 0
-  - ID: 56
-    StartTime: 285
-    EventID: 6
-    IsClearEnemys: 0
-  - ID: 57
-    StartTime: 290
-    EventID: 9
-    IsClearEnemys: 0
-  - ID: 58
-    StartTime: 290
-    EventID: 2
-    IsClearEnemys: 0
-  - ID: 59
-    StartTime: 290
-    EventID: 6
-    IsClearEnemys: 0
-  - ID: 60
-    StartTime: 290
-    EventID: 9
-    IsClearEnemys: 0
-  - ID: 61
-    StartTime: 290
-    EventID: 2
-    IsClearEnemys: 0
-  - ID: 62
-    StartTime: 290
-    EventID: 6
-    IsClearEnemys: 0
-  - ID: 63
     StartTime: 300
     EventID: -1
     IsClearEnemys: 1

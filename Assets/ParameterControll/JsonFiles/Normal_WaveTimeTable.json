@@ -3,7 +3,7 @@
 		{
 			"ID":"0",
 			"StartTime":"0",
-			"EventID":"-1",
+			"EventID":"0",
 			"IsClearEnemys":"False"
 		},
 		{
@@ -195,7 +195,7 @@
 		{
 			"ID":"32",
 			"StartTime":"210",
-			"EventID":"8",
+			"EventID":"4",
 			"IsClearEnemys":"False"
 		},
 		{
@@ -207,179 +207,107 @@
 		{
 			"ID":"34",
 			"StartTime":"220",
-			"EventID":"8",
+			"EventID":"0",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"35",
-			"StartTime":"220",
+			"StartTime":"230",
 			"EventID":"5",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"36",
-			"StartTime":"230",
-			"EventID":"8",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"37",
-			"StartTime":"230",
-			"EventID":"5",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"38",
 			"StartTime":"240",
 			"EventID":"10",
 			"IsClearEnemys":"False"
 		},
 		{
+			"ID":"37",
+			"StartTime":"240",
+			"EventID":"6",
+			"IsClearEnemys":"False"
+		},
+		{
+			"ID":"38",
+			"StartTime":"240",
+			"EventID":"2",
+			"IsClearEnemys":"False"
+		},
+		{
 			"ID":"39",
 			"StartTime":"240",
-			"EventID":"9",
+			"EventID":"6",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"40",
-			"StartTime":"240",
-			"EventID":"2",
+			"StartTime":"250",
+			"EventID":"6",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"41",
-			"StartTime":"240",
-			"EventID":"6",
+			"StartTime":"250",
+			"EventID":"2",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"42",
-			"StartTime":"250",
-			"EventID":"9",
+			"StartTime":"260",
+			"EventID":"0",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"43",
-			"StartTime":"250",
-			"EventID":"2",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"44",
-			"StartTime":"250",
+			"StartTime":"260",
 			"EventID":"6",
 			"IsClearEnemys":"False"
 		},
 		{
-			"ID":"45",
-			"StartTime":"260",
-			"EventID":"9",
+			"ID":"44",
+			"StartTime":"270",
+			"EventID":"5",
 			"IsClearEnemys":"False"
 		},
 		{
-			"ID":"46",
-			"StartTime":"260",
+			"ID":"45",
+			"StartTime":"270",
 			"EventID":"2",
 			"IsClearEnemys":"False"
 		},
 		{
+			"ID":"46",
+			"StartTime":"270",
+			"EventID":"5",
+			"IsClearEnemys":"False"
+		},
+		{
 			"ID":"47",
-			"StartTime":"260",
+			"StartTime":"280",
 			"EventID":"6",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"48",
-			"StartTime":"270",
-			"EventID":"9",
+			"StartTime":"280",
+			"EventID":"2",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"49",
-			"StartTime":"270",
-			"EventID":"3",
+			"StartTime":"290",
+			"EventID":"6",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"50",
-			"StartTime":"270",
-			"EventID":"7",
+			"StartTime":"290",
+			"EventID":"5",
 			"IsClearEnemys":"False"
 		},
 		{
 			"ID":"51",
-			"StartTime":"280",
-			"EventID":"9",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"52",
-			"StartTime":"280",
-			"EventID":"3",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"53",
-			"StartTime":"280",
-			"EventID":"7",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"54",
-			"StartTime":"285",
-			"EventID":"9",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"55",
-			"StartTime":"285",
-			"EventID":"2",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"56",
-			"StartTime":"285",
-			"EventID":"6",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"57",
-			"StartTime":"290",
-			"EventID":"9",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"58",
-			"StartTime":"290",
-			"EventID":"2",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"59",
-			"StartTime":"290",
-			"EventID":"6",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"60",
-			"StartTime":"290",
-			"EventID":"9",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"61",
-			"StartTime":"290",
-			"EventID":"2",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"62",
-			"StartTime":"290",
-			"EventID":"6",
-			"IsClearEnemys":"False"
-		},
-		{
-			"ID":"63",
 			"StartTime":"300",
 			"EventID":"-1",
 			"IsClearEnemys":"True"
