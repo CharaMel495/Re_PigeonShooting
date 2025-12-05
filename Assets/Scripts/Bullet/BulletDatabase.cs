@@ -44,6 +44,9 @@ public class BulletDatabase
         _idxDic.Add(typeof(MultiWayShot), list.Count);
         foreach (var item in preset.MultiWayShot)
             list.Add(item);
+        _idxDic.Add(typeof(SpreadFourShoot), list.Count);
+        foreach (var item in preset.SpreadFourShoot)
+            list.Add(item);
         _idxDic.Add(typeof(SpreadEightShoot), list.Count);
         foreach (var item in preset.SpreadEightShoot)
             list.Add(item);

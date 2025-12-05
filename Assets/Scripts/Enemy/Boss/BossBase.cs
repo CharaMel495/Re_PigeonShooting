@@ -7,6 +7,12 @@ using static UnityEngine.ParticleSystem;
 public abstract class BossBase : MonoBehaviour, IColliderbleObject
 {
     [SerializeField]
+    protected Item _itemPrefab;
+
+    [SerializeField]
+    protected ImageWrapper _lifeImage;
+
+    [SerializeField]
     protected ParticleSystem _smashedParticle;
     // やられた時に、パーティクルを出す回数
     protected int _effectCount = 50;
@@ -56,9 +62,9 @@ public abstract class BossBase : MonoBehaviour, IColliderbleObject
     public abstract void Initialize();
     public abstract void Smashed();
     public abstract void Action();
-    public abstract void OnHit();
+    public abstract void OnHit(object data);
 
-    public void StartAction(object data)
+    public virtual void StartAction(object data)
     {
         IsActionable = true;
         IsMovable = true;
@@ -79,6 +85,7 @@ public abstract class BossBase : MonoBehaviour, IColliderbleObject
         else
         {
             CRISoundManager.Instance.PlaySE(SFX.BossExplode);
+            _renderer.SetSpriteAlpha(0.0f);
             IsDestroyWaiting = true;
         }
     }
@@ -87,5 +94,48 @@ public abstract class BossBase : MonoBehaviour, IColliderbleObject
     {
         ColliderManager.Instance.RemoveCollider(Collider);
         Destroy(this.gameObject);
+    }
+
+    protected void ThrowItem(ItemType type)
+    {
+        var item = Instantiate(_itemPrefab, this.transform.position, Quaternion.identity);
+        item.Initialize(type);
+        item.Dir = RandomVector3();
+        item.AddtionalPower = 7.5f;
+
+        Vector3 RandomVector3()
+        {
+            Vector3 v = Vector3.zero;
+            v.x = UnityEngine.Random.Range(-1.0f, 1.0f);
+            v.y = UnityEngine.Random.Range(-1.0f, 1.0f);
+            v.z = 0;
+            return v.normalized;
+        }
+    }
+
+    protected void UpdateLifeUI(float ratio)
+    {
+        // 0～1で clamping
+        ratio = Mathf.Clamp01(ratio);
+
+        // ゲージの進行
+        _lifeImage.SetFillAmount(ratio);
+
+        // 色の変化（緑→黄→赤）
+        Color newColor;
+        if (ratio > 0.5f)
+        {
+            // 緑→黄（0.5～1.0）
+            float t = (ratio - 0.5f) * 2f;
+            newColor = Color.Lerp(Color.yellow, Color.green, t);
+        }
+        else
+        {
+            // 黄→赤（0.0～0.5）
+            float t = ratio * 2f;
+            newColor = Color.Lerp(Color.red, Color.yellow, t);
+        }
+
+        _lifeImage.SetImageColor(newColor);
     }
 }

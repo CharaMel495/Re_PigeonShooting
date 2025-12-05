@@ -17,6 +17,8 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     [Header("読み込むステージ")]
     [SerializeField]
     private StageDifficulty _loadStage;
+    public StageDifficulty Difficulty
+        => _loadStage;
 
     [SerializeField]
     private Rect _area;

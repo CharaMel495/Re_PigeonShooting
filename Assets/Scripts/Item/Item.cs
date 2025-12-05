@@ -23,6 +23,8 @@ public class Item : MonoBehaviour, IColliderbleObject
 {
     [SerializeField]
     private float _moveSpeed;
+    public float MoveSpeed
+    { get => _moveSpeed; set => _moveSpeed = value; }
 
     [SerializeField]
     private float _reservedMoveSpeed;
@@ -36,7 +38,8 @@ public class Item : MonoBehaviour, IColliderbleObject
     /// </summary>
     private ITargetProvider _vacuumedTarget;
 
-    private float _addtionalPower;
+    public float AddtionalPower
+    { get; set; }
     private float _addtionalPowerWeight;
 
     /// <summary>
@@ -94,7 +97,7 @@ public class Item : MonoBehaviour, IColliderbleObject
         _value = value;
         _renderer.SetSprite(SpriteManager.GetSprite(CastSpriteType()));
 
-        _addtionalPower = 0f;
+        AddtionalPower = 0f;
         _addtionalPowerWeight = DesideWeight();
 
         SpriteData.SpriteType CastSpriteType()
@@ -143,11 +146,11 @@ public class Item : MonoBehaviour, IColliderbleObject
             MoveToPlayer();
 
         var pos = this.transform.position;
-        pos += Dir * _moveSpeed * Time.fixedDeltaTime * _addtionalPower;
+        pos += Dir * _moveSpeed * Time.fixedDeltaTime * AddtionalPower;
         this.transform.position = pos;
 
-        var addtionalPowerInverse = -_addtionalPower;
-        _addtionalPower += addtionalPowerInverse * Time.fixedDeltaTime;
+        var addtionalPowerInverse = -AddtionalPower;
+        AddtionalPower += addtionalPowerInverse * Time.fixedDeltaTime;
     }
 
     private void Move(Vector3 dir, float pow)
@@ -155,7 +158,7 @@ public class Item : MonoBehaviour, IColliderbleObject
         if (!_isFixedUpdate)
             return;
 
-        _addtionalPower += pow * Time.fixedDeltaTime * _addtionalPowerWeight;
+        AddtionalPower += pow * Time.fixedDeltaTime * _addtionalPowerWeight;
         Dir = dir;
 
         //var pos = this.transform.position;
@@ -179,15 +182,15 @@ public class Item : MonoBehaviour, IColliderbleObject
         var pos = this.transform.position;
         var targetDir = PlayerManager.Instance.Player.GetPosition() - pos;
         targetDir.Normalize();
-        _addtionalPower += _reservedMoveSpeed * _addtionalPowerWeight * Time.fixedDeltaTime;
-        pos += targetDir * _addtionalPower * Time.fixedDeltaTime;
+        AddtionalPower += _reservedMoveSpeed * _addtionalPowerWeight * Time.fixedDeltaTime;
+        pos += targetDir * AddtionalPower * Time.fixedDeltaTime;
         this.transform.position = pos;
     }
 
     [CallableEvent("OnTriggerExit")]
     public void OnAnyExit(object data)
     {
-        _addtionalPower = 0.0f;
+        AddtionalPower = 0.0f;
     }
 
     /// <summary>

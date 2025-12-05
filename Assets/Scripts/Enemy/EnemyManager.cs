@@ -493,9 +493,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     public void AppearBoss(object data)
     {
         if (data is Vector3 spawnPos)
-            CurrentBoss = Instantiate(_bossPrefab[0], spawnPos, Quaternion.identity);
+            CurrentBoss = Instantiate(_bossPrefab[(int)StageManager.Instance.Difficulty], spawnPos, Quaternion.identity);
         else
-            CurrentBoss = Instantiate(_bossPrefab[0], Vector3.zero, Quaternion.identity);
+            CurrentBoss = Instantiate(_bossPrefab[(int)StageManager.Instance.Difficulty], Vector3.zero, Quaternion.identity);
 
         CurrentBoss.Initialize();
         IsBossMode = true;
@@ -506,6 +506,9 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
     [CallableEvent("BossSmashed")]
     public void BossSmashed(object data)
     {
+        if (CurrentBoss == null)
+            return;
+
         EventDispatcher.Instance.Dispatch("PlayerOnBossSmashed");
         CurrentBoss.PlaySmashedEffect();
         CurrentBoss = null;
@@ -515,10 +518,24 @@ public class EnemyManager : SingletonMonoBehaviour<EnemyManager>
             enemy.IsDestroyWaiting = true;
     }
 
+    [CallableEvent("BomberedAllEnemy")]
+    public void BomberedAllEnemy(object data)
+    {
+        if (data is DamageEventData)
+        {
+            foreach (var enemy in _activeEnemys)
+                enemy.OnHit(data);
+
+            BulletManager.Instance.BomberedAllEnemyBullet(data);
+        }
+    }
+
     [CallableEvent("ClearAllEnemy")]
     public void ClearAllEnemy(object data)
     {
         foreach (var enemy in _activeEnemys)
             enemy.IsDestroyWaiting = true;
+
+        BulletManager.Instance.ClearAllEnemyBullet();
     }
 }

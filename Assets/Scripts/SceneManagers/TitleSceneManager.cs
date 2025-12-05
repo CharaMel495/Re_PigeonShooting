@@ -33,6 +33,9 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     [SerializeField]
     private ScoreRanking _scoreData;
 
+    [SerializeField]
+    private ImageWrapper _creditImage;
+
     private CurrentState _state;
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;
@@ -42,6 +45,9 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     public override void Initialize()
     {
         _titleMenu.Initialize(CreateButtonFunc());
+
+        _creditImage.Initialize();
+        _creditImage.SetImageAlpha(0.0f);
 
         _scoreBoard.Initialize();
 
@@ -68,7 +74,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
             { CurrentState.Top, null },
             { CurrentState.TitleMenu, CloseMenu },
             { CurrentState.Option, null },
-            { CurrentState.Credit, null },
+            { CurrentState.Credit, CloseCredit },
             { CurrentState.Ranking, CloseScoreBoard },
             { CurrentState.Exit, null },
         };
@@ -91,7 +97,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
                 {
                     () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("Tutorial")),
                     null,
-                    null,
+                    OpenCredit,
                     OpenScoreBoard,
                     () => _loadingCutin.EnterCutin(() => GameManager.EndGame()),
                 };
@@ -157,6 +163,18 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     private void CloseScoreBoard()
     {
         _scoreBoard.DisActive();
+        _state = CurrentState.TitleMenu;
+    }
+
+    private void OpenCredit()
+    {
+        _creditImage.SetImageAlpha(1.0f);
+        _state = CurrentState.Credit;
+    }
+
+    private void CloseCredit()
+    {
+        _creditImage.SetImageAlpha(0.0f);
         _state = CurrentState.TitleMenu;
     }
 

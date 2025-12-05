@@ -8,6 +8,7 @@ public class CookieMachine : BossBase
     {
         public int Life;
         public int Score;
+        public float ItemProbability;
         public float MoveSpeed;
         public float ActionInterval;
         public float TurnRate;
@@ -36,9 +37,13 @@ public class CookieMachine : BossBase
         _timer = new();
         _timer.Initialize();
         _renderer.Initialize();
+        _lifeImage.Initialize();
 
         // パラメータを取得
         _param = _paramAsset.Parameter;
+        UpdateLifeUI(1.0f);
+
+        Life = _param.Life;
 
         // 弾発射周りのクラスをセットアップ
         _shooter = BulletManager.Instance.Shooter;
@@ -95,13 +100,21 @@ public class CookieMachine : BossBase
     }
 
     [CallableEvent("OnTriggerEnter")]
-    public override void OnHit()
+    public override void OnHit(object data)
     {
-        --Life;
-
-        if (Life < 1)
+        if (data is DamageEventData damgeData)
         {
-            Smashed();
+            Life -= damgeData.Damage;
+
+            UpdateLifeUI(Life / (float)_param.Life);
+
+            if (UnityEngine.Random.value < _param.ItemProbability)
+                ThrowItem(UnityEngine.Random.value < 0.5 ? ItemType.EXP : ItemType.Garbage);
+
+            if (Life < 1)
+            {
+                Smashed();
+            }
         }
     }
 }

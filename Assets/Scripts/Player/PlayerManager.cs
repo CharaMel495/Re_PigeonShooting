@@ -24,6 +24,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     [SerializeField]
     private BackGroundScroller _bgScroller;
 
+    [SerializeField]
+    private PlayerUI _playerUI;
+
     /// <summary>
     /// 初期化を行う関数
     /// </summary>
@@ -33,6 +36,7 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
         _player.Shooter = BulletManager.Instance.Shooter;
         _mover = new(_moveSpeed);
         _mover.Initialize(_moveSpeed, StageManager.Instance.PlayArea);
+        _playerUI.Initialize();
 
         EventDispatcher.Instance.Bind(this);
     }

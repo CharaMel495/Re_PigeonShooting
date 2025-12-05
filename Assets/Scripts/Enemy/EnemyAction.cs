@@ -297,17 +297,41 @@ public class EnemyAction
                     // 移動データを取得
                     var moveData = (EnemyDataStructs.TrackPlayer)boss.MoveData;
 
-                    Vector3 dir = (moveData.Target.GetPosition() - boss.transform.position).normalized;
+                    Vector3 toTarget = (moveData.Target.GetPosition() - boss.transform.position).normalized;
+                    float angleDiff = Mathf.Acos(Mathf.Clamp(Vector3.Dot(moveData.MoveDir, toTarget), -1.0f, 1.0f));
+                    float maxRotate = moveData.TurnRate * Time.fixedDeltaTime;
+                    float distance = toTarget.sqrMagnitude;
+
+                    if (angleDiff < maxRotate)
+                    {
+                        moveData.MoveDir = toTarget;
+                    }
+                    else
+                    {
+                        Vector3 axis = Vector3.Cross(moveData.MoveDir, toTarget).normalized;
+                        moveData.MoveDir = RotateVector(moveData.MoveDir, axis, maxRotate);
+                    }
 
                     // 現在の移動速度を経過時間から計算
-                    moveData.MoveSpeed = moveData.MoveSpeed + moveData.Acceleration * moveData.ElaspedTime;
+                    var moveSpeed = moveData.MoveSpeed + moveData.Acceleration * moveData.ElaspedTime;
 
                     // 移動（前方向へ）
-                    boss.transform.position += dir * moveData.MoveSpeed * Time.fixedDeltaTime;
+                    boss.transform.position += moveData.MoveDir * moveSpeed * Time.fixedDeltaTime;
 
                     boss.MoveData = moveData;
                 }
                 break;
+        }
+
+        Vector3 RotateVector(Vector3 v, Vector3 axis, float angle)
+        {
+            // axis は正規化されている前提
+            float cos = Mathf.Cos(angle);
+            float sin = Mathf.Sin(angle);
+
+            return v * cos
+                 + Vector3.Cross(axis, v) * sin
+                 + axis * Vector3.Dot(axis, v) * (1f - cos);
         }
     }
 }

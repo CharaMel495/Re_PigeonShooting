@@ -97,7 +97,7 @@ public class PlayerFollowCamera : MonoBehaviour
     public void WhenBossAppeared(object data)
     {
         // ボスを出現させる
-        EventDispatcher.Instance.Dispatch("AppearBoss");
+        EventDispatcher.Instance.Dispatch("AppearBoss", data);
 
         // 入力をプレイヤーから奪う
         InputManager.Instance.ChangeInputHandler(InputHandler.UI);
@@ -124,10 +124,9 @@ public class PlayerFollowCamera : MonoBehaviour
 
         void StartBossBattle()
         {
-            // ボスの名前をUIに表示
-            EventDispatcher.Instance.Dispatch($"StartBossBattle");
-
             InputManager.Instance.ReturnHandle();
+
+            PlayerManager.Instance.Player.OnGetItem(new GetItemEventData { Value = 10, ItemType = ItemType.Battery_Green });
 
             var cam = GetComponent<Camera>();
             cam.DOOrthoSize(_bossBattleCamSize, _zoomOutTime).
@@ -141,6 +140,9 @@ public class PlayerFollowCamera : MonoBehaviour
 
                 float left = cam.transform.position.x - width / 2f + _bossBattlePadding.x;
                 float bottom = cam.transform.position.y - height / 2f + _bossBattlePadding.y;
+
+                // ボス戦開始
+                EventDispatcher.Instance.Dispatch("StartBossBattle");
 
                 // パディングを×２してるのは、両端それぞれにパディングをかけるから
                 return new Rect(left, bottom, width - _bossBattlePadding.x * 2, height - _bossBattlePadding.y * 2);

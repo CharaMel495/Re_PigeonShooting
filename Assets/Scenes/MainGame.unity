@@ -910,6 +910,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _expSlider: {fileID: 1557059694}
+  _dustMater: {fileID: 1181137}
+  _scoreUI: {fileID: 1425995392}
+  _timerUI: {fileID: 641832300}
 --- !u!1 &290720704
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,6 +1736,7 @@ MonoBehaviour:
   _player: {fileID: 2035035486}
   _moveSpeed: 8
   _bgScroller: {fileID: 1191556167}
+  _playerUI: {fileID: 270170821}
 --- !u!4 &521067980
 Transform:
   m_ObjectHideFlags: 0
@@ -3790,7 +3794,7 @@ SpriteRenderer:
   m_SortingLayerID: -244042751
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d9a7a81121d70d541828ba9f687b90d3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7103afecb50273546a4d4b273fcdb1de, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -4620,7 +4624,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 35, y: 35, z: 35}
+  m_LocalScale: {x: 90, y: 90, z: 90}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2035035488}
@@ -5367,6 +5371,8 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 7149621051588140338, guid: 5af0b73d6a865f447bd8a7b15b184a07, type: 3}
   _bossPrefab:
   - {fileID: 8890859805965667907, guid: 2f0ed6a6ba5ab6541b4cda83748fb2ce, type: 3}
+  - {fileID: -5614571882975965385, guid: fed9bbca117af4a45940c3e4017f9c86, type: 3}
+  - {fileID: 8883790266657399972, guid: a7c11b1ac028d3c4fb6abfa2120b82e6, type: 3}
   _stoppableArea: {fileID: 1851327318}
   _poolRoot: {fileID: 1854864262}
   _isTutorial: 0
@@ -5491,15 +5497,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2275721571885089005, guid: acdb90624a404aa438447006f1026065, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2275721571885089005, guid: acdb90624a404aa438447006f1026065, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2275721571885089005, guid: acdb90624a404aa438447006f1026065, type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2275721571885089005, guid: acdb90624a404aa438447006f1026065, type: 3}
       propertyPath: m_LocalPosition.x

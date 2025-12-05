@@ -46,7 +46,7 @@ public class Bullet : MonoBehaviour, IColliderbleObject
     /// 破棄待ちフラグ
     /// </summary>
     public bool IsDestroyWaiting
-    { get; private set; }
+    { get; set; }
 
     public string Name
     { get; private set; }

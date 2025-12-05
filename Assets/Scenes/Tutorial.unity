@@ -1630,8 +1630,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 7006159334216181747, guid: d9d5a451e9b64f540b97f8492b330ccb, type: 3}
   _lazerPrefab: {fileID: 3731506883417100122, guid: 59cb2140936d87748b2d0de7c4d01e7c, type: 3}
+  _crossLazerPrefab: {fileID: 7156103920373254055, guid: 4ea4f5821f1def3409471d51ff953e06, type: 3}
   _root: {fileID: 1739829835}
   _isTutorial: 1
+  _preset: {fileID: 11400000, guid: fd80af4f0eca09c4ea0394d70eb248a5, type: 2}
 --- !u!4 &674371849
 Transform:
   m_ObjectHideFlags: 0
@@ -5305,6 +5307,7 @@ MonoBehaviour:
   _tutorialChecker: {fileID: 516136872}
   _itemPrefab: {fileID: 8700866266521278825, guid: 2907665a82bff7c459e44635d6738da7, type: 3}
   _topText: {fileID: 715952840}
+  _followCamera: {fileID: 1323599835}
   IsAirBasterOK: 0
 --- !u!4 &2129685772
 Transform:
