@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parameter:
     Life: 7500
-    Score: 10000
+    Score: 50000
     TouchDamage: 1
     ItemProbability: 0.02
     AssaultSpeed: 7

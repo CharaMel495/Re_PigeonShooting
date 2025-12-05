@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: CookieMachineParameter
   m_EditorClassIdentifier: 
   Parameter:
-    Life: 300
+    Life: 1000
     Score: 5000
+    ItemProbability: 0
     MoveSpeed: 1
     ActionInterval: 1
     TurnRate: 80

@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: RollCastleParameter
   m_EditorClassIdentifier: 
   Parameter:
-    Life: 500
-    Score: 8000
+    Life: 5000
+    Score: 10000
+    ItemProbability: 0
     CrossBulletInterval: 0.05
     CrossBuletTime: 10
     CurveShotInterval: 0.5
     CurveShotTime: 10
     CrossLazerInterval: 3
     CrossLazerTime: 9
-    CrossBulletTurnRate: 1
+    CrossBulletTurnRate: 0.6
     CurveShotTurnRate: 3
     TouchDamage: 1
     CrossBullet:
