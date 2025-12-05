@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6dfaf5d543fc364689dc4575924796e, type: 3}
+  m_Name: ShuBossParameter
+  m_EditorClassIdentifier: 
+  Parameter:
+    Life: 7500
+    Score: 10000
+    TouchDamage: 1
+    ItemProbability: 0.02
+    AssaultSpeed: 7
+    AssaultTurnRate: 0.8
+    EightSpreadInterval: 0.5
+    SpreadEightBullet:
+      Scale: {x: 1, y: 1, z: 0.5}
+      Acceleration: 0
+      SpriteType: 104
+      ColCategory: 4
+      Damage: 1
+      MoveSpeed: 10
+    EightSpreadTurnRate: 2
+    AssaultTime: 10
+    StraightAndCurve:
+      Scale: {x: 1, y: 1, z: 1}
+      Acceleration: 5
+      SpriteType: 105
+      ColCategory: 4
+      Damage: 1
+      MoveSpeed: 5
+      SecondMoveSpeed: 5
+      DisAcceleration: 5
+      Span: 0.001
+      CurveAngle: 270
+      AngleSpeed: 90
+      Length: 6
+    CurveAndStraight:
+      Scale: {x: 1, y: 1, z: 1}
+      Acceleration: 5
+      SpriteType: 105
+      ColCategory: 4
+      Damage: 1
+      MoveSpeed: 10
+      SecondMoveSpeed: 5
+      DisAcceleration: 7
+      Span: 0.001
+      CurveAngle: 270
+      AngleSpeed: -90
+      Length: 6
+    SnakeBulletInterval: 0.1
+    SnakeBulletTime: 20
+    Bounce:
+      Scale: {x: 1, y: 1, z: 1}
+      Acceleration: 0
+      SpriteType: 104
+      ColCategory: 4
+      Damage: 1
+      MoveSpeed: 15
+      BounceLimit: 1
+    BounveBulletTurnRate: 2
+    BounceBulletInterval: 0.1
+    BounceBulletTime: 15
+    FourWayShot:
+      Scale: {x: 1, y: 1, z: 1}
+      Acceleration: 0
+      SpriteType: 104
+      ColCategory: 4
+      Damage: 1
+      MoveSpeed: 20
+      AngleSpan: 50
+    CrossLazer:
+      Scale: {x: 1, y: 1, z: 1}
+      Acceleration: 10
+      SpriteType: 105
+      ColCategory: 4
+      Damage: 1
+      MoveSpeed: 1
+      AngleSpeed: 180
+    FourWayInterval: 0.1
+    CrossLazerInterval: 2.5
+    CrossLazerWithFourSpreadTime: 10
+    CurveShot:
+      Scale: {x: 1, y: 1, z: 1}
+      Acceleration: 5
+      SpriteType: 105
+      ColCategory: 4
+      Damage: 1
+      MoveSpeed: 5
+      AngleSpeed: 90
+      Span: 0.005
+      Value: 7
+    CurveShotInterval: 0.2
+    CurveShotTime: 10
+    CurveShotTurnRate: 3

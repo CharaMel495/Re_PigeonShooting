@@ -46,6 +46,9 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
     [SerializeField]
     private TextWrapper _topText;
 
+    [SerializeField]
+    private TutorialCamera _followCamera;
+
     private CurrentState _state;
     private CurrentState StateSetter
     {
@@ -198,6 +201,7 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
         _tutorialChecker.SetUp(tutorial);
         _topText.SetTextAlpha(0.0f);
         _currentTutorial = tutorial;
+        _followCamera.IsFollowPlayer = true;
     }
 
     private void SetUpNextTutorial()
@@ -290,9 +294,22 @@ public class TutorialSceneManager : SceneManagerBase<TutorialSceneManager>
             case CheckLists.Move_ItemGet:
                 {
                     var playerPos = TutorialPlayerManager.Instance.Player.GetPosition();
-                    var spawnPos = playerPos + (Vector3.left * 3);
+                    Vector3 spawnPos = playerPos +(Vector3.left * 3);
+                    if (!TutorialStageManager.Instance.PlayArea.Contains(spawnPos))
+                        spawnPos = playerPos + (Vector3.right * 3);
                     var item = Instantiate(_itemPrefab, spawnPos, Quaternion.identity);
                     item.Initialize(ItemType.EXP);
+
+                    _followCamera.IsFollowPlayer = false;
+
+                    Vector3 RandomVector3()
+                    {
+                        Vector3 v = Vector3.zero;
+                        v.x = UnityEngine.Random.Range(-1.0f, 1.0f);
+                        v.y = UnityEngine.Random.Range(-1.0f, 1.0f);
+                        v.z = 0;
+                        return v.normalized;
+                    }
                 }
                 break;
 

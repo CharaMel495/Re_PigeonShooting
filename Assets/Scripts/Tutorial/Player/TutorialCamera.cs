@@ -12,6 +12,10 @@ public class TutorialCamera : MonoBehaviour
     private float _shakeTime;
     private float _shakePower;
 
+    private bool _isFollowPlayer = true;
+    public bool IsFollowPlayer
+    { set => _isFollowPlayer = value; }
+
     private void Start()
     {
         var cam = GetComponent<Camera>();
@@ -21,11 +25,10 @@ public class TutorialCamera : MonoBehaviour
 
     private void Update()
     {
-        Follow();
-        UpdateShake();
+        if (_isFollowPlayer)
+            Follow();
 
-        if (Input.GetKey(KeyCode.V))
-            Shake(0.5f, 2.0f);
+        UpdateShake();
     }
 
     private void Follow()

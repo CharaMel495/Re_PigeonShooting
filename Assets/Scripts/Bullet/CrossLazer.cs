@@ -28,6 +28,8 @@ public class CrossLazer : MonoBehaviour, IColliderbleObject
 
     private CrossLazerParam _param;
 
+    private float _moveSpeed;
+
     private Timer _timer;
 
     private Durator _durator;
@@ -81,6 +83,8 @@ public class CrossLazer : MonoBehaviour, IColliderbleObject
 
         _rects = new();
 
+        _moveSpeed = _param.MoveSpeed;
+
         for (int i = 0; i < _childLazers.Length; ++i)
         {
             SelfMade.Rectangle rect = new(_childLazers[i].transform);
@@ -109,8 +113,10 @@ public class CrossLazer : MonoBehaviour, IColliderbleObject
 
     private void Move()
     {
+        _moveSpeed += _param.Acceleration * Time.fixedDeltaTime;
+
         var pos = this.transform.position;
-        pos += _dir * _param.MoveSpeed * Time.fixedDeltaTime;
+        pos += _dir * _moveSpeed * Time.fixedDeltaTime;
         pos.z = 0;
         this.transform.position = pos;
 

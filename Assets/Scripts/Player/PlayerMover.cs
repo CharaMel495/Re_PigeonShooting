@@ -4,24 +4,20 @@ public class PlayerMover
 {
     private float _moveSpeed;
 
-    private Rect _playerArea;
-
     private Vector3 _inputDir;
 
     private bool _inputLock = false;
 
     private float _dashMag = 5.0f;
 
-    public PlayerMover(float moveSpeed, Rect area)
+    public PlayerMover(float moveSpeed)
     {
         _moveSpeed = moveSpeed;
-        _playerArea = area;
     }
 
     public void Initialize(float moveSpeed, Rect area)
     {
         _moveSpeed = moveSpeed;
-        _playerArea = area;
     }
 
     public void MovePlayer(Player player, out Vector3 moveValue)
@@ -55,22 +51,26 @@ public class PlayerMover
 
     private bool CheckArea(Vector3 pos, Vector3 padding)
     {
+        var playerArea = StageManager.Instance.PlayArea;
+
         return
-            pos.x < _playerArea.min.x + padding.x ||
-            pos.y < _playerArea.min.y + padding.y ||
-            pos.x > _playerArea.max.x - padding.x ||
-            pos.y > _playerArea.max.y - padding.y;
+            pos.x < playerArea.min.x + padding.x ||
+            pos.y < playerArea.min.y + padding.y ||
+            pos.x > playerArea.max.x - padding.x ||
+            pos.y > playerArea.max.y - padding.y;
     }
 
     private void CrrectInArea(ref Vector3 pos, Vector3 padding)
     {
-        if (pos.x < _playerArea.min.x + padding.x)
-            pos.x = _playerArea.min.x + padding.x;
-        if (pos.y < _playerArea.min.y + padding.y)
-            pos.y = _playerArea.min.y + padding.y;
-        if (pos.x > _playerArea.max.x - padding.x)
-            pos.x = _playerArea.max.x - padding.x;
-        if (pos.y > _playerArea.max.y - padding.y)
-            pos.y = _playerArea.max.y - padding.y;
+        var playerArea = StageManager.Instance.PlayArea;
+
+        if (pos.x < playerArea.min.x + padding.x)
+            pos.x = playerArea.min.x + padding.x;
+        if (pos.y < playerArea.min.y + padding.y)
+            pos.y = playerArea.min.y + padding.y;
+        if (pos.x > playerArea.max.x - padding.x)
+            pos.x = playerArea.max.x - padding.x;
+        if (pos.y > playerArea.max.y - padding.y)
+            pos.y = playerArea.max.y - padding.y;
     }
 }

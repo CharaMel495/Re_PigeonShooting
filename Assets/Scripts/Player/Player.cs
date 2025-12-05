@@ -383,6 +383,8 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 _bombEffect.Play();
                 _airBaster.EnActive();
 
+                EventDispatcher.Instance.Dispatch("BomberedAllEnemy", new DamageEventData { Damage = 100 });
+
                 _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
 
                 CRISoundManager.Instance.PlaySE(SFX.AirBaster);
@@ -623,10 +625,10 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
     {
         switch (item.ItemType)
         {
-            //case ItemType.Battery_Green:
-            //    HealHP(item.Value);
-            //    CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
-            //    break;
+            case ItemType.Battery_Green:
+                HealHP(item.Value);
+                CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);
+                break;
             //case ItemType.Battery_Red:
             //    //Level += item.Value;
             //    CRISoundManager.Instance.PlaySE(SFX.BatteryCharge);

@@ -66,6 +66,22 @@ public class BulletShooter
                 }
                 break;
 
+            case BulletStructs.SpreadFourShoot:
+                {
+                    var data = (BulletStructs.SpreadFourShoot)shootData;
+                    // シフト演算でサクッと計算(360 ÷ 4)
+                    float angleSpan = (float)(360 >> 2);
+
+                    BulletManager.Instance.CreateBullet(data);
+                    data.Dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * data.Dir;
+                    BulletManager.Instance.CreateBullet(data);
+                    data.Dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * data.Dir;
+                    BulletManager.Instance.CreateBullet(data);
+                    data.Dir = Quaternion.AngleAxis(angleSpan, Vector3.forward) * data.Dir;
+                    BulletManager.Instance.CreateBullet(data);
+                }
+                break;
+
             case BulletStructs.SpreadEightShoot:
                 {
                     var data = (BulletStructs.SpreadEightShoot)shootData;

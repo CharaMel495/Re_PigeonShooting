@@ -65,6 +65,12 @@ public class Boss : MonoBehaviour, IColliderbleObject
     public object TriggerExitEventData
         => null;
 
+    public bool IsActionable
+    { get; private set; }
+
+    public string BossName
+    { get; set; }
+
     public void Initialize()
     {
         _renderer.Initialize();
@@ -73,13 +79,15 @@ public class Boss : MonoBehaviour, IColliderbleObject
         _rect = new(this.transform)
         {
             ColCategory = ColliderCategory.EnemyBody,
-            ActorName = "BossShip",
+            ActorName = "Boss",
             Owner = this
         };
         ColliderManager.Instance.AddCollider(_rect);
 
         _timer = new();
         _timer.Initialize();
+
+        BossName = "試作型クッキー戦艦";
 
         MoveData = new EnemyDataStructs.TrackPlayer
         {
@@ -157,16 +165,15 @@ public class Boss : MonoBehaviour, IColliderbleObject
         _currentPattern = 0;
         _currentAction = _actionPattern[_currentPattern];
 
-        EnemyManager.Instance.CreateSpiralBarrierEnemy(
-                    (int)EnemyEnums.EnemyID.渦巻ぐるぐる敵,
-                    this.transform.position,
-                    30,
-                    15.0f,
-                    UnityEngine.Random.Range(0, 100) % 2 == 0,
-                    this.transform);
+        IsActionable = false;
 
         EventDispatcher.Instance.Bind(this, _rect.ActorName);
+        EventDispatcher.Instance.Subscribe("StartBossBattle", StartAction);
     }
+
+
+    public void StartAction(object data)
+        => IsActionable = true;
 
     private void FixedUpdate()
     {
@@ -178,7 +185,7 @@ public class Boss : MonoBehaviour, IColliderbleObject
 
         if (currentAction.RemainInterval > 0.0f)
             currentAction.RemainInterval -= Time.fixedDeltaTime;
-        else
+        else if (IsActionable)
             Action();
 
         if (currentAction.IsFinished())
