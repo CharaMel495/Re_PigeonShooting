@@ -85,11 +85,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 53bc9225ed9d92449ae74d91acbd3baf
-    m_Address: Assets/Font/Hangyaku-G3rpg SDF.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5b65b6f8366275a4c81e22a3aa33fa7c
     m_Address: Assets/Textures/CandyBall.png
     m_ReadOnly: 0
@@ -155,11 +150,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cc948a6f93f20f54cb2010f9824b9207
-    m_Address: Assets/Font/PixelMplus12-Regular SDF.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cdbf68e9cd74d254889063ab830fe8b1
     m_Address: Assets/Textures/Item/EXP_Green.png
     m_ReadOnly: 0
@@ -197,6 +187,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f4c0ebdfa71786640b4a4a485ddae6a9
     m_Address: Assets/Textures/Bullet/LazerPixel.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fd74f7d7dbe6eb14b90b9bec5c63c88c
+    m_Address: Assets/Font/PixelMplus12-Regular SDF.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

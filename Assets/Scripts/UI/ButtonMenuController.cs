@@ -53,6 +53,39 @@ public class ButtonMenuController : MonoBehaviour
     private void Update()
         => _durator.Update();
 
+    public void MoveButton(Direction dir)
+    {
+        int nextIdx = -1;
+        var currentButton = _buttons[CurrentButton];
+
+        switch (dir)
+        {
+            case Direction.Up:
+                nextIdx = currentButton.MoveRuler.UpButtonNum;
+                break;
+            case Direction.Down:
+                nextIdx = currentButton.MoveRuler.DownButtonNum;
+                break;
+            case Direction.Left:
+                nextIdx = currentButton.MoveRuler.LeftButtonNum;
+                break;
+            case Direction.Right:
+                nextIdx = currentButton.MoveRuler.RightButtonNum;
+                break;
+            default:
+                return;
+        }
+
+        var nextButton = _buttons[nextIdx];
+
+        if (currentButton.IsMoving || nextButton.IsMoving)
+            return;
+
+        currentButton.DisActive();
+        nextButton.EnActive();
+        CurrentButton = nextIdx;
+    }
+
     public void MoveButton(bool isDown)
     {
         int nextIdx = CurrentButton + (isDown ? 1 : -1);

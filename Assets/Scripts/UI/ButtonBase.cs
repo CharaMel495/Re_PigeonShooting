@@ -2,9 +2,20 @@
 using System;
 using UnityEngine;
 
+[System.Serializable]
+public class ButtonMovingRuler
+{
+    public int UpButtonNum;
+    public int RightButtonNum;
+    public int LeftButtonNum;
+    public int DownButtonNum;
+}
+
 public abstract class ButtonBase : MonoBehaviour
 {
     protected Action _onPressedFunc;
+
+    public ButtonMovingRuler MoveRuler;
 
     public abstract bool IsMoving { get; }
 

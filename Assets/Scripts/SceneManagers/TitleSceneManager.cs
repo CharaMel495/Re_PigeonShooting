@@ -40,7 +40,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
 
     private Dictionary<CurrentState, Action> _desideKeyPressed;
     private Dictionary<CurrentState, Action> _cancelKeyPressed;
-    private Dictionary<CurrentState, Action<bool>> _dirInputed;
+    private Dictionary<CurrentState, Action<Direction>> _dirInputed;
 
     public override void Initialize()
     {
@@ -79,7 +79,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
             { CurrentState.Exit, null },
         };
 
-        _dirInputed = new Dictionary<CurrentState, Action<bool>>
+        _dirInputed = new Dictionary<CurrentState, Action<Direction>>
         {
             { CurrentState.Top, null },
             { CurrentState.TitleMenu, MoveMenu },
@@ -95,10 +95,19 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         {
             return new Action[]
                 {
-                    () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("Tutorial")),
+                    // ゲーム開始
+                    () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("MainGame")),
+                    // 難易度変更
                     null,
+                    // チュートリアル開始
+                    () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("Tutorial")),
+                    // オプション
+                    null,
+                    // クレジット
                     OpenCredit,
+                    // スコアボード
                     OpenScoreBoard,
+                    // ゲーム終了
                     () => _loadingCutin.EnterCutin(() => GameManager.EndGame()),
                 };
         }
@@ -119,13 +128,19 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
             CRISoundManager.Instance.PlaySE(SFX.TutorialSuccess);
         }
 
-        Direction inputDir = InputManager.CheckInputDirection(InputHandler.UI);
+        Direction inputDir = InputManager.CheckInputDirection(InputHandler.UI, true);
 
         if (inputDir == Direction.Down)
-            _dirInputed[_state]?.Invoke(true);
+            _dirInputed[_state]?.Invoke(Direction.Down);
 
         if (inputDir == Direction.Up)
-            _dirInputed[_state]?.Invoke(false);
+            _dirInputed[_state]?.Invoke(Direction.Up);
+
+        if (inputDir == Direction.Right)
+            _dirInputed[_state]?.Invoke(Direction.Right);
+
+        if (inputDir == Direction.Left)
+            _dirInputed[_state]?.Invoke(Direction.Left);
     }
 
     private void OpenMenu()
@@ -144,9 +159,9 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         _textObj.SetActive(true);
     }
 
-    private void MoveMenu(bool isDown)
+    private void MoveMenu(Direction dir)
     {
-        _titleMenu.MoveButton(isDown);
+        _titleMenu.MoveButton(dir);
     }
 
     private void SelectMenu()
@@ -178,8 +193,13 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         _state = CurrentState.TitleMenu;
     }
 
-    private void MoveScoreBoard(bool isDown)
+    private void MoveScoreBoard(Direction dir)
     {
+        if (dir != Direction.Up && dir != Direction.Down)
+            return;
+
+        bool isDown = dir == Direction.Down;
+
         _scoreBoard.Scroll(isDown);
     }
 }
