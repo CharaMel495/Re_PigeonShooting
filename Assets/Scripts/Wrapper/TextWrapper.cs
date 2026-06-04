@@ -16,6 +16,9 @@ public class TextWrapper : MonoBehaviour
     /// </summary>
     private TextMeshProUGUI _text;
 
+    private void Start()
+        => Initialize();
+
     /// <summary>
     /// 初期化
     /// </summary>

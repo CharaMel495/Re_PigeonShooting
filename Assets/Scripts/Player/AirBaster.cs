@@ -48,12 +48,12 @@ public class AirBaster : MonoBehaviour, IColliderbleObject
     public void EnActive()
     {
         _renderer.SetEnabled(true);
-        //ColliderManager.Instance.AddCollider(this._circle);
+        ColliderManager.Instance.AddCollider(this._circle);
     }
 
     public void DisActive()
     {
         _renderer.SetEnabled(false);
-        //ColliderManager.Instance.RemoveCollider(this._circle);
+        ColliderManager.Instance.RemoveCollider(this._circle);
     }
 }

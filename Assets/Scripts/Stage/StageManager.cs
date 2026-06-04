@@ -14,11 +14,11 @@ public enum StageDifficulty
 /// </summary>
 public class StageManager : SingletonMonoBehaviour<StageManager>
 {
+    public StageDifficulty Difficulty
+        => _challengeData.ChallengeDifficulty;
     [Header("読み込むステージ")]
     [SerializeField]
-    private StageDifficulty _loadStage;
-    public StageDifficulty Difficulty
-        => _loadStage;
+    private ChallengeData _challengeData;
 
     [SerializeField]
     private Rect _area;
@@ -64,7 +64,7 @@ public class StageManager : SingletonMonoBehaviour<StageManager>
     {
         _createdSpawner = new();
 
-        _waveController = new(_loadStage);
+        _waveController = new(_challengeData.ChallengeDifficulty);
 
         _bigBossCount = 2;
 

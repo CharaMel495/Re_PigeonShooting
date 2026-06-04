@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class TileButton : ButtonBase
 {
-    [SerializeField]
-    private ImageWrapper _backGroundImage;
 
     [SerializeField]
     private TextWrapper _text;
@@ -12,12 +10,27 @@ public class TileButton : ButtonBase
     [SerializeField]
     private string _viewText;
 
+    [Header("前面画像用項目")]
+    [SerializeField]
+    private ImageWrapper _frontImage;
+    [SerializeField]
+    private float _maxFRSize;
+    [SerializeField]
+    private float _minFRSize;
+    [SerializeField]
+    private float _scalingTimeFR;
+    [SerializeField]
+    private Color _frontCol = Color.white;
+
+    [Header("背景画像用項目")]
+    [SerializeField]
+    private ImageWrapper _backGroundImage;
     [SerializeField]
     private float _maxBGSize;
     [SerializeField]
     private float _minBGSize;
     [SerializeField]
-    private float _scalingTime;
+    private float _scalingTimeBG;
 
     [SerializeField]
     private Color _backCol = Color.white;
@@ -31,8 +44,11 @@ public class TileButton : ButtonBase
     private Durator _durator;
     private int _duratorTaskID;
 
-    private Vector3 _maxCache;
-    private Vector3 _minCache;
+
+    private Vector3 _maxCacheFR;
+    private Vector3 _minCacheFR;
+    private Vector3 _maxCacheBG;
+    private Vector3 _minCacheBG;
 
     public override void Initialize(Action func = null)
     {
@@ -41,6 +57,9 @@ public class TileButton : ButtonBase
         _timer = new();
         _durator = new();
 
+        _frontImage.Initialize();
+        _frontImage.SetImageAlpha(0.0f);
+        _frontImage.SetImageColor(_frontCol);
         _backGroundImage.Initialize();
         _backGroundImage.SetImageAlpha(0.0f);
         _backGroundImage.SetImageColor(_backCol);
@@ -50,8 +69,10 @@ public class TileButton : ButtonBase
 
         _isMoving = false;
 
-        _maxCache = new(_maxBGSize, _maxBGSize, _maxBGSize);
-        _minCache = new(_minBGSize, _minBGSize, _minBGSize);
+        _maxCacheFR = new(_maxFRSize, _maxFRSize, _maxFRSize);
+        _minCacheBG = new(_minFRSize, _minFRSize, _minFRSize);
+        _maxCacheBG = new(_maxBGSize, _maxBGSize, _maxBGSize);
+        _minCacheBG = new(_minBGSize, _minBGSize, _minBGSize);
     }
 
     private void FixedUpdate()
@@ -66,9 +87,6 @@ public class TileButton : ButtonBase
 
         RestartBackGround();
 
-        //_isMoving = true;
-        //_timer.CreateTask(() => _isMoving = false, _ENACTIVEDWAITTIME);
-
         return true;
     }
 
@@ -79,6 +97,58 @@ public class TileButton : ButtonBase
         _durator.CanncellTask(_duratorTaskID);
 
         return true;
+    }
+
+    public override void Selected()
+    {
+        if (IsMoving)
+            return;
+
+        base.Selected();
+
+        StartScaleDown();
+    }
+
+    private void StartScaleDown()
+    {
+        _isMoving = true;
+        _backGroundImage.transform.localScale = _maxCacheFR;
+        _durator.CreateTask(ScaleDownFrontImage, StartScaleUp, _scalingTimeFR);
+    }
+
+    private void StartScaleUp()
+    {
+        _backGroundImage.transform.localScale = _minCacheFR;
+        _durator.CreateTask(ScaleUpFrontImage, 
+            OnSelectedAnimEnd, _scalingTimeFR);
+    }
+
+    private void OnSelectedAnimEnd()
+    {
+        _backGroundImage.transform.localScale = _maxCacheFR;
+        _isMoving = false;
+    }
+
+    private void ScaleDownFrontImage(float elapsedTime, float endTime)
+    {
+        var t = Mathf.InverseLerp(0, endTime, elapsedTime);
+        var scale = Mathf.Lerp(_maxFRSize, _minFRSize, t);
+        var currentFRScale = _backGroundImage.transform.localScale;
+        currentFRScale.x = scale;
+        currentFRScale.y = scale;
+        currentFRScale.z = scale;
+        _frontImage.transform.localScale = currentFRScale;
+    }
+
+    private void ScaleUpFrontImage(float elapsedTime, float endTime)
+    {
+        var t = Mathf.InverseLerp(0, endTime, elapsedTime);
+        var scale = Mathf.Lerp(_minFRSize, _maxFRSize, t);
+        var currentFRScale = _backGroundImage.transform.localScale;
+        currentFRScale.x = scale;
+        currentFRScale.y = scale;
+        currentFRScale.z = scale;
+        _frontImage.transform.localScale = currentFRScale;
     }
 
     private void UpdateBackGroundImage(float elapsedTime, float endTime)
@@ -96,7 +166,7 @@ public class TileButton : ButtonBase
     private void RestartBackGround()
     {
         _backGroundImage.SetImageAlpha(0.0f);
-        _backGroundImage.transform.localScale = _minCache;
-        _duratorTaskID = _durator.CreateTask(UpdateBackGroundImage, RestartBackGround, _scalingTime);
+        _backGroundImage.transform.localScale = _minCacheBG;
+        _duratorTaskID = _durator.CreateTask(UpdateBackGroundImage, RestartBackGround, _scalingTimeBG);
     }
 }

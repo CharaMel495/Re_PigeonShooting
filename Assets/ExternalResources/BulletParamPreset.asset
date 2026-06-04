@@ -19,16 +19,101 @@ MonoBehaviour:
     ColCategory: 0
     Damage: 0
     MoveSpeed: 0
-  TwoWayStraightShoot: []
-  ThreeWayShoot: []
-  FourWayShoot: []
-  MultiWayShot: []
-  SpreadEightShoot: []
-  StraightAimingShoot: []
-  SpreadEightAimingShoot: []
-  RingShot: []
-  FiveWayAndBackMonoShoot: []
-  LazerParam: []
+  TwoWayStraightShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+    BulletSpan: 0
+  ThreeWayShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+    AngleSpan: 0
+  FourWayShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+    AngleSpan: 0
+  MultiWayShot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+    AngleSpan: 0
+    ShotValue: 0
+  SpreadFourShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+  SpreadEightShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+  StraightAimingShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+    DisAcceleration: 0
+  SpreadEightAimingShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+    DisAcceleration: 0
+  RingShot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    SecondDir: {x: 0, y: 0, z: 0}
+    MoveSpeed: 0
+    SecondMoveSpeed: 0
+    DisAcceleration: 0
+  FiveWayAndBackMonoShoot:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    MoveSpeed: 0
+    AngleSpan: 0
+  LazerParam:
+  - Scale: {x: 0, y: 0, z: 0}
+    Acceleration: 0
+    SpriteType: 0
+    ColCategory: 0
+    Damage: 0
+    OpenTime: 0
+    CloseTime: 0
+    KeepTime: 0
+    Width: 0
+    Length: 0
+    MoveSpeed: 0
+    Target: {x: 0, y: 0, z: 0}
+    Interval: 0
   CrossLazer:
   - Scale: {x: 1, y: 1, z: 1}
     Acceleration: 0

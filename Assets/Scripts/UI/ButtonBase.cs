@@ -24,7 +24,7 @@ public abstract class ButtonBase : MonoBehaviour
     /// <summary>
     /// このボタンが選択された際の処理
     /// </summary>
-    public void Selected()
+    public virtual void Selected()
         => _onPressedFunc?.Invoke();
 
     public abstract bool EnActive();

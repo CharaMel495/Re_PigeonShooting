@@ -41,7 +41,7 @@ public class ScoreBoardController : MonoBehaviour
     private void Update()
     {
         _cookieTransform.position = _handleTrransform.position;
-        transform.localScale = Vector3.one;
+        transform.localScale = Vector3.one * 0.4f;
         var euler = _cookieTransform.eulerAngles;
         euler.z += Time.fixedDeltaTime * 50.0f;
         _cookieTransform.eulerAngles = euler;

@@ -170,13 +170,16 @@ public class Enemy : MonoBehaviour, IColliderbleObject
     [CallableEvent("OnTriggerEnter")]
     public void OnHit(object data)
     {
-        if (_isInvincible || IsNotDamagedEnemy)
+        if (IsNotDamagedEnemy)
             return;
 
         if (!(data is DamageEventData damageData))
             return;
         else
         {
+            if (_isInvincible && damageData.Damage < 50)
+                return;
+
             _isInvincible = true;
 
             Life -= damageData.Damage;

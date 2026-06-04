@@ -383,7 +383,7 @@ public class Player : MonoBehaviour, ITargetProvider, IColliderbleObject
                 _bombEffect.Play();
                 _airBaster.EnActive();
 
-                EventDispatcher.Instance.Dispatch("BomberedAllEnemy", new DamageEventData { Damage = 100 });
+                //EventDispatcher.Instance.Dispatch("BomberedAllEnemy", new DamageEventData { Damage = 100 });
 
                 _timer.CreateTask(() => _airBaster.DisActive(), _bombTime);
 

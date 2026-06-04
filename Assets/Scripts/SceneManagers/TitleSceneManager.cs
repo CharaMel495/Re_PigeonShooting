@@ -15,26 +15,58 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         Exit
     }
 
+    [Header("タイトル画面")]
+    [SerializeField]
+    private GameObject _textObj;
+    
+    [Header("メインメニュー")]
     [SerializeField]
     private ButtonMenuController _titleMenu;
 
+    [Header("立札")]
+    [SerializeField]
+    private ImageWrapper _boardBG;
+    [SerializeField]
+    private ImageWrapper _boardFR;
+    [SerializeField]
+    private Sprite[] _inBoardSprites;
+
+    [Header("メッセージボックス")]
+    [SerializeField]
+    private ImageWrapper _talkBG;
+    [SerializeField]
+    private TalkData _talkData;
+    [SerializeField]
+    private TextWrapper _talkTextUI;
+    [SerializeField]
+    private ImageWrapper _talkFace;
+
+    [Header("難易度周りの追加UI")]
+    [SerializeField]
+    private TextWrapper _difficultyTextUI;
+    [SerializeField]
+    [TextArea]
+    private string[] _difficultyTexts;
+    [SerializeField]
+    private ChallengeData _challengeData;
+
+    [Header("スコアボード")]
     [SerializeField]
     private ScoreBoardController _scoreBoard;
 
+    [Header("クレジット画面")]
+    [SerializeField]
+    private ImageWrapper _creditImage;
+
+    [Header("システム系")]
     [SerializeField]
     private LoadingCutIn _loadingCutin;
 
-    [SerializeField]
-    private GameObject _textObj;
-
+    [Header("データ関係")]
     [SerializeField]
     private ScoreHolder _highScore;
-
     [SerializeField]
     private ScoreRanking _scoreData;
-
-    [SerializeField]
-    private ImageWrapper _creditImage;
 
     private CurrentState _state;
 
@@ -45,6 +77,22 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
     public override void Initialize()
     {
         _titleMenu.Initialize(CreateButtonFunc());
+
+        _talkTextUI.Initialize();
+        _talkTextUI.SetTextAlpha(0.0f);
+        _talkFace.Initialize();
+        _talkFace.SetImageAlpha(0.0f);
+        _talkBG.Initialize();
+        _talkBG.SetImageAlpha(0.0f);
+
+        _boardBG.Initialize();
+        _boardBG.SetImageAlpha(0.0f);
+        _boardFR.Initialize();
+        _boardFR.SetImageAlpha(0.0f);
+
+        _difficultyTextUI.Initialize();
+        _difficultyTextUI.SetText(_difficultyTexts[(int)_challengeData.ChallengeDifficulty]);
+        _difficultyTextUI.SetTextAlpha(0.0f);
 
         _creditImage.Initialize();
         _creditImage.SetImageAlpha(0.0f);
@@ -98,7 +146,7 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
                     // ゲーム開始
                     () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("MainGame")),
                     // 難易度変更
-                    null,
+                    ChangeDifficulty,
                     // チュートリアル開始
                     () => _loadingCutin.EnterCutin(() => SceneManager.LoadScene("Tutorial")),
                     // オプション
@@ -148,7 +196,17 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         if (_titleMenu.EnActive())
             _state = CurrentState.TitleMenu;
 
+        _difficultyTextUI.SetTextAlpha(1.0f);
+        _boardBG.SetImageAlpha(1.0f);
+        _boardFR.SetImageAlpha(1.0f);
+        _talkTextUI.SetTextAlpha(1.0f);
+        _talkFace.SetImageAlpha(1.0f);
+        _talkBG.SetImageAlpha(1.0f);
         _textObj.SetActive(false);
+
+        _boardFR.SetSprite(_inBoardSprites[_titleMenu.CurrentButton]);
+        _talkTextUI.SetText(_talkData.TitleTexts[_titleMenu.CurrentButton].Text);
+        _talkFace.SetSprite(_talkData.GetFaceSprite(_talkData.TitleTexts[_titleMenu.CurrentButton].FaceType));
     }
 
     private void CloseMenu()
@@ -156,17 +214,33 @@ public class TitleSceneManager : SceneManagerBase<TitleSceneManager>
         if (_titleMenu.DisActive())
             _state = CurrentState.Top;
 
+        _difficultyTextUI.SetTextAlpha(0.0f);
+        _boardBG.SetImageAlpha(0.0f);
+        _boardFR.SetImageAlpha(0.0f);
+        _talkTextUI.SetTextAlpha(0.0f);
+        _talkFace.SetImageAlpha(0.0f);
+        _talkBG.SetImageAlpha(0.0f);
         _textObj.SetActive(true);
     }
 
     private void MoveMenu(Direction dir)
     {
         _titleMenu.MoveButton(dir);
+        _boardFR.SetSprite(_inBoardSprites[_titleMenu.CurrentButton]);
+        _talkTextUI.SetText(_talkData.TitleTexts[_titleMenu.CurrentButton].Text);
+        _talkFace.SetSprite(_talkData.GetFaceSprite(_talkData.TitleTexts[_titleMenu.CurrentButton].FaceType));
     }
 
     private void SelectMenu()
     {
         _titleMenu.SelectButton();
+    }
+
+    private void ChangeDifficulty()
+    {
+        _challengeData.ChallengeDifficulty = (StageDifficulty)
+            (((int)_challengeData.ChallengeDifficulty + 1) % 3);
+        _difficultyTextUI.SetText(_difficultyTexts[(int)_challengeData.ChallengeDifficulty]);
     }
 
     private void OpenScoreBoard()
